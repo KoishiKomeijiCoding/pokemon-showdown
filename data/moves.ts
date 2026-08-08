@@ -13851,6 +13851,48 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { boost: { atk: 1 } },
 		contestType: "Clever",
 	},
+	mijotage: {
+        num: 10001,
+        accuracy: true,
+        basePower: 0,
+        category: "Status",
+        name: "Mijotage",
+        pp: 10,
+        priority: 0,
+        flags: { snatch: 1, metronome: 1 },
+        boosts: {
+            spa: 2,
+        },
+        volatileStatus: 'mijotage',
+        condition: {
+            onStart(pokemon) {
+                this.add('-start', pokemon, 'Mijotage');
+                const newatk = pokemon.storedStats.spa;
+                const newspa = pokemon.storedStats.atk;
+                pokemon.storedStats.atk = newatk;
+                pokemon.storedStats.spa = newspa;
+            },
+            onCopy(pokemon) {
+                const newatk = pokemon.storedStats.spa;
+                const newspa = pokemon.storedStats.atk;
+                pokemon.storedStats.atk = newatk;
+                pokemon.storedStats.spa = newspa;
+            },
+            onEnd(pokemon) {
+                const newatk = pokemon.storedStats.spa;
+                const newspa = pokemon.storedStats.atk;
+                pokemon.storedStats.atk = newatk;
+                pokemon.storedStats.spa = newspa;
+            },
+            onRestart(pokemon) {
+                pokemon.removeVolatile('Mijoatge');
+            },
+        },
+        target: "self",
+        type: "Psychic",
+        zMove: { boost: { atk: 1 } },
+        contestType: "Clever",
+    },
 	powertrip: {
 		num: 681,
 		accuracy: 100,
