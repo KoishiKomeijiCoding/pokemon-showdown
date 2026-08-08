@@ -21067,4 +21067,18 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Undiscovered"],
 		gen: 5,
 	},
+	zagamore: {
+		num: 10002,
+		name: "Zagamore",
+		types: ["Dark"],
+		gender: "N",
+		baseStats: { hp: 111, atk: 166, def: 100, spa: 24, spd: 100, spe: 99 },
+		abilities: { 0: "Dark Aura" },
+		heightm: 1.5,
+		weightkg: 61,
+		color: "White",
+		tags: ["Pokestar", "True Past", "Past Unobtainable"],
+		eggGroups: ["Undiscovered"],
+		gen: 5,
+	},
 };

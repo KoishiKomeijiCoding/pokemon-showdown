@@ -100326,6 +100326,26 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			terablast: ["9M"],
 		},
 	},
+	zagamore: {
+		learnset: {
+			explosion: ["9M"],
+			toxicspikes: ["9M"],
+			toxic: ["9M"],
+			morphing: ["9M"],
+			roar: ["9M"],
+			darkestlariat: ["9M"],
+			thunderclap: ["9M"],
+			thunderbolt: ["9M"],
+			mijotage: ["9M"],
+			knockoff: ["9M"],
+			substitute: ["9M"],
+			suckerpunch: ["9M"],
+			taunt: ["9M"],
+			terablast: ["9M"],
+			mijotage: ["9M"],
+			malveillancemax: ["9M"],
+		},
+	},
 	pokestarsmeargle: {
 		eventData: [
 			{generation: 5, level: 60, gender: "M", abilities: ["owntempo"], moves: ["mindreader", "guillotine", "tailwhip", "gastroacid"]},

@@ -689,6 +689,49 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "allAdjacentFoes",
 		type: "Ghost",
 	},
+	malveillancemax: {
+		num: 10003,
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		name: "Malveillance Max",
+		secondaries: [
+            {
+                chance: 10,
+                boosts: {
+					atk: -1,
+                    def: -1,
+					spa: -1,
+					spd: -1,
+					spe: -1,
+                },
+            }, {
+                chance: 30,
+                volatileStatus: 'flinch',
+            },
+			{
+				chance: 20,
+				status: 'par',
+			},
+			{
+				chance: 20,
+				status: 'brn',
+			},
+			{
+				chance: 20,
+				status: 'slp',
+			},
+			{
+				chance: 20,
+				status: 'frz',
+			},
+        ],
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, mirror: 1 },
+		target: "allAdjacentFoes",
+		type: "Dark",
+	},
 	attackorder: {
 		num: 454,
 		accuracy: 100,
@@ -13889,7 +13932,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
             },
         },
         target: "self",
-        type: "Psychic",
+        type: "Dark",
         zMove: { boost: { atk: 1 } },
         contestType: "Clever",
     },
