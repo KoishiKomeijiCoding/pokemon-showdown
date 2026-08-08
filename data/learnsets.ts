@@ -100336,7 +100336,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			darkestlariat: ["9M"],
 			thunderclap: ["9M"],
 			thunderbolt: ["9M"],
-			mijotage: ["9M"],
 			knockoff: ["9M"],
 			substitute: ["9M"],
 			suckerpunch: ["9M"],
