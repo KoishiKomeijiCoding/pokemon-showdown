@@ -21500,4 +21500,35 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { basePower: 180 },
 		contestType: "Beautiful",
 	},
+	cestlheuredesortirlespoubelles: {
+		num: 10008,
+		accuracy: 100,
+		basePower: 100,
+		category: "Physical",
+		isNonstandard: "Past",
+		name: "C'est l'heure de sortir les poubelles",
+		pp: 10,
+		priority: 0,
+		onHit(pokemon) {
+			let success = false;
+			for (const active of this.getAllActive()) {
+				if (active.removeVolatile('substitute')) success = true;
+			}
+			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			const sides = [pokemon.side, ...pokemon.side.foeSidesWithConditions()];
+			for (const side of sides) {
+				for (const sideCondition of removeAll) {
+					if (side.removeSideCondition(sideCondition)) {
+						this.add('-sideend', side, this.dex.conditions.get(sideCondition).name);
+						success = true;
+					}
+				}
+			}
+		},
+		flags: { protect: 1, mirror: 1, nonsky: 1 },
+		target: "allAdjacentFoes",
+		type: "Poison",
+		zMove: { basePower: 180 },
+		contestType: "Beautiful",
+	},
 }

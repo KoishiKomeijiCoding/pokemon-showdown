@@ -21137,7 +21137,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Undiscovered"],
 		gen: 5,
 	},
-	rayane: {
+	rayan: {
 		num: 10007,
 		name: "Rayane",
 		types: ["Normal"],
@@ -21151,4 +21151,18 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Undiscovered"],
 		gen: 5,
 	},
+	setokaiba: {
+		num: 10008,
+		name: "Seto Kaiba",
+		types: ["Poison","Fairy"],
+		gender: "N",
+		baseStats: { hp: 105, atk: 90, def: 80, spa: 90, spd: 80, spe: 70},
+		abilities: { 0: "Toxic Chain",1: "Liquid Ooze" },
+		heightm: 1.5,
+		weightkg: 61,
+		color: "Green",
+		tags: ["Pokestar", "True Past", "Past Unobtainable"],
+		eggGroups: ["Undiscovered"],
+		gen: 5,
+	}
 };
