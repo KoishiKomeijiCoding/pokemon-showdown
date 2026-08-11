@@ -21439,4 +21439,33 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Clever",
 	},
-};
+	cancer: {
+		num: 9997,
+		accuracy: 100,
+		basePower: 40,
+		category: "Special",
+		name: "Cancer",
+		pp: 15,
+		priority: 0,
+		flags: { protect: 1, mirror: 1 },
+		condition: {
+			noCopy: true,
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Cancer');
+			},
+			onResidualOrder: 13,
+			onResidual(pokemon) {
+				this.damage(pokemon.baseMaxhp / (pokemon.hasType(['Normal']) ? 2 : 4));
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Cancer');
+			},
+		},
+		secondary: {
+			chance: 100,
+			volatileStatus: 'cancer',
+		},
+		target: "normal",
+		type: "Rock",
+	},
+}
