@@ -21468,4 +21468,36 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Poison",
 	},
+	normalisator: {
+		num: 10006,
+		accuracy: 100,
+		basePower: 50,
+		category: "Physical",
+		isNonstandard: "Past",
+		name: "Normalisator",
+		pp: 10,
+		priority: 1,
+		volatileStatus: 'normalisator',
+		onTryHit(target) {
+			if (!this.queue.willMove(target) && target.activeTurns) return false;
+		},
+		condition: {
+			duration: 1,
+			onStart(target) {
+				this.add('-singleturn', target, 'move: normalisator');
+			},
+			onModifyTypePriority: -2,
+			onModifyType(move) {
+				if (move.id !== 'struggle') {
+					this.debug('Electrify making move type electric');
+					move.type = 'Normal';
+				}
+			},
+		},
+		flags: { protect: 1, mirror: 1, nonsky: 1 },
+		target: "allAdjacentFoes",
+		type: "Normal",
+		zMove: { basePower: 180 },
+		contestType: "Beautiful",
+	},
 }

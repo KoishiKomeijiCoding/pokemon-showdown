@@ -21137,4 +21137,18 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Undiscovered"],
 		gen: 5,
 	},
+	rayane: {
+		num: 10007,
+		name: "Rayane",
+		types: ["Normal"],
+		gender: "N",
+		baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 80},
+		abilities: { 0: "Normalize" },
+		heightm: 1.5,
+		weightkg: 61,
+		color: "Green",
+		tags: ["Pokestar", "True Past", "Past Unobtainable"],
+		eggGroups: ["Undiscovered"],
+		gen: 5,
+	},
 };
