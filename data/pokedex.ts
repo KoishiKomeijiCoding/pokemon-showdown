@@ -21081,4 +21081,18 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Undiscovered"],
 		gen: 5,
 	},
+	degueulassor: {
+		num: 10003,
+		name: "Dégueulassor",
+		types: ["Plante","Spectre"],
+		gender: "N",
+		baseStats: { hp: 140, atk: 100, def: 88, spa: 85, spd: 145, spe: 40 },
+		abilities: { 0: "Homochromie" },
+		heightm: 1.5,
+		weightkg: 61,
+		color: "Green",
+		tags: ["Pokestar", "True Past", "Past Unobtainable"],
+		eggGroups: ["Undiscovered"],
+		gen: 5,
+	},
 };

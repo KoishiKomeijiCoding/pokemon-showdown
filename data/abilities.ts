@@ -5695,4 +5695,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: -3,
 	},
+	homochromie: {
+		onStart(pokemon) {
+			const possibleTargets = pokemon.adjacentFoes().filter(t => !!t && t.hp);
+			if (!possibleTargets.length) return;
+			const target = this.sample(possibleTargets);
+			const types = target.getTypes(true);
+			if (!types.length) return;
+			if (types.join() === pokemon.getTypes().join()) return;
+			if (!pokemon.setType(types)) return;
+			this.add('-start', pokemon, 'typechange', types.join('/'), '[from] ability: Homochromie');
+		},
+		flags: {},
+		name: "Homochromie",
+		rating: 3,
+		num: 9999,
+	},
 };
