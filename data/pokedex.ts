@@ -21109,9 +21109,9 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Undiscovered"],
 		gen: 5,
 	},
-	rattumer: {
+	rattumeur: {
 		num: 10005,
-		name: "Rat-Tumer",
+		name: "Rat-Tumeur",
 		types: ["Normal","Poison"],
 		gender: "N",
 		baseStats: { hp: 230, atk: 30, def: 30, spa: 95, spd: 50, spe: 20},
