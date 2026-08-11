@@ -21083,7 +21083,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	},
 	degueulassor: {
 		num: 10003,
-		name: "Dégueulassor",
+		name: "Degueulassor",
 		types: ["Plante","Spectre"],
 		gender: "N",
 		baseStats: { hp: 140, atk: 100, def: 88, spa: 85, spd: 145, spe: 40 },
