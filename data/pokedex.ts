@@ -4122,7 +4122,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Water 1", "Field"],
 	},
 	quagsiremega: {
-		num: 460,
+		num: 195,
 		name: "Quagsire-Mega",
 		baseSpecies: "Quagsire",
 		forme: "Mega",
