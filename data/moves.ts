@@ -21442,7 +21442,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	cancer: {
 		num: 9997,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 80,
 		category: "Special",
 		name: "Cancer",
 		pp: 15,
@@ -21466,6 +21466,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			volatileStatus: 'cancer',
 		},
 		target: "normal",
-		type: "Rock",
+		type: "Poison",
 	},
 }
