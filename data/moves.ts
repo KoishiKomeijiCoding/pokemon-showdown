@@ -21421,4 +21421,22 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { basePower: 170 },
 		contestType: "Tough",
 	},
+	amnesia1g: {
+		num: 347,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Amnesia 1G",
+		pp: 20,
+		priority: 0,
+		flags: { snatch: 1, metronome: 1 },
+		boosts: {
+			spa: 2,
+			spd: 2,
+		},
+		target: "self",
+		type: "Psychic",
+		zMove: { effect: 'clearnegativeboost' },
+		contestType: "Clever",
+	},
 };

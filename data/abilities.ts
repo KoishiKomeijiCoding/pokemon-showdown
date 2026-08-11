@@ -5711,4 +5711,26 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 9999,
 	},
+	serenerock: {
+		onModifyMovePriority: -2,
+		onModifyMove(move) {
+			if (move.secondaries) {
+				this.debug('doubling secondary chance');
+				for (const secondary of move.secondaries) {
+					if (secondary.chance) secondary.chance *= 2;
+				}
+			}
+			if (move.self?.chance) move.self.chance *= 2;
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod > 0) {
+				this.debug('ce poke est broken');
+				return this.chainModify(0.5);
+			}
+		},
+		flags: {},
+		name: "Serene Rock",
+		rating: 3.5,
+		num: 9998,
+	},
 };

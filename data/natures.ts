@@ -114,8 +114,4 @@ export const Natures: import('../sim/dex-data').NatureDataTable = {
 		plus: 'spe',
 		minus: 'atk',
 	},
-	malveillant: {
-		name: "Malveillant",
-		plus: 'atk',
-	}
 };
