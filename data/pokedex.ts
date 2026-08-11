@@ -21095,9 +21095,9 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Undiscovered"],
 		gen: 5,
 	},
-	mewtow1g: {
+	mewtwo1g: {
 		num: 10004,
-		name: "Mewtow 1G",
+		name: "Mewtwo 1G",
 		types: ["Psychic"],
 		gender: "N",
 		baseStats: { hp: 128, atk: 133, def: 109, spa: 186, spd: 186, spe: 158 },
