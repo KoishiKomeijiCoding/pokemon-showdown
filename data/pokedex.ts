@@ -21139,7 +21139,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	},
 	rayan: {
 		num: 10007,
-		name: "Rayane",
+		name: "Rayan",
 		types: ["Normal"],
 		gender: "N",
 		baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 80},
