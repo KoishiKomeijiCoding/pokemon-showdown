@@ -21555,4 +21555,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { basePower: 180 },
 		contestType: "Beautiful",
 	},
+	chaise: {
+		num: 100010,
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		name: "Chaise",
+		pp: 15,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
+		secondary: {
+			chance: 20,
+			boosts: {
+				def: -1,
+			},
+		},
+		target: "normal",
+		type: "Steel",
+		contestType: "Clever",
+	},
 }

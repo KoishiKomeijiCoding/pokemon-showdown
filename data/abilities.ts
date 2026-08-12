@@ -5760,6 +5760,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
         rating: 3.5,
         num: 9997,
     },
+	motivation: {
+		onDamagingHit(damage, target, source, effect) {
+			this.boost({ atk: 1 });
+		},
+		flags: {},
+		name: "Motivation",
+		rating: 4,
+		num: 9996,
+	},
 	
 };
 	
