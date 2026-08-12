@@ -21508,7 +21508,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		isNonstandard: "Past",
 		name: "C'est l'heure de sortir les poubelles",
 		pp: 10,
-		priority: 0,
+		priority: -1,
 		onHit(pokemon) {
 			let success = false;
 			for (const active of this.getAllActive()) {
@@ -21527,7 +21527,31 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		flags: { protect: 1, mirror: 1, nonsky: 1 },
 		target: "allAdjacentFoes",
+		forceSwitch: true,
 		type: "Poison",
+		zMove: { basePower: 180 },
+		contestType: "Beautiful",
+	},
+	cendresdepompei: {
+		num: 10009,
+		accuracy: 150,
+		basePower: 75,
+		category: "Special",
+		isNonstandard: "Past",
+		name: "Cendres de Pompei",
+		pp: 10,
+		priority: 0,
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					spe: 1,
+				},
+			},
+		},
+		flags: { protect: 1, mirror: 1, nonsky: 1 },
+		target: "allAdjacentFoes",
+		type: "Fire",
 		zMove: { basePower: 180 },
 		contestType: "Beautiful",
 	},

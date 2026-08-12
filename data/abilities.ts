@@ -5733,4 +5733,34 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: 9998,
 	},
+	pompeibaby: {
+        onDamagingHitOrder: 29,
+        onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') {
+				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
+				return false;
+			}
+            if (['ashbaby'].includes(target.species.id) && damage >= target.hp && effect && effect.effectType === 'Move') {
+                this.add('-ability', target, 'Pompei Baby');
+                return target.hp - 1;
+            }
+        },
+        onResidual(pokemon) {
+            if (pokemon.baseSpecies.baseSpecies !== 'Ash Baby' || pokemon.transformed || !pokemon.hp) return;
+            if (pokemon.hp <= pokemon.maxhp/10) {
+				this.heal(pokemon.maxhp);
+                this.add('-activate', pokemon, 'ability: Pompei Baby');
+                pokemon.formeChange('Ash Baby Burned"', this.effect, true);
+                pokemon.formeRegression = true;
+				this.debug("help");
+            }
+        },
+        flags: {},
+        name: "Pompei Baby",
+        rating: 3.5,
+        num: 9997,
+    },
+	
 };
+	
+

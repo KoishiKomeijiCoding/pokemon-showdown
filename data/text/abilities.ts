@@ -1887,6 +1887,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 
 		activate: "  [POKEMON] endured the hit!",
 	},
+	onehp: {
+		name: "One HP",
+		desc: "If this Pokemon has exactly 1 HP, it survives one damaging move with 1 HP.",
+		shortDesc: "If this Pokemon has exactly 1 HP, it survives one damaging move with 1 HP.",
+		activate: "  [POKEMON] endured the hit!",
+	},
 	suctioncups: {
 		name: "Suction Cups",
 		shortDesc: "This Pokemon cannot be forced to switch out by another Pokemon's attack or item.",
