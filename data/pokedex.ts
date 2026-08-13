@@ -13782,7 +13782,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Field"],
 	},
 	incineroarmega: {
-		num: 727,
+		num: 10013,
 		name: "Incineroar-Mega",
 		baseSpecies: "Incineroar",
 		forme: "Mega",
