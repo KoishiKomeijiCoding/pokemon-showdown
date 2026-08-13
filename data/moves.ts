@@ -1649,9 +1649,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePowerCallback(pokemon, target, move) {
 			if (target.newlySwitched || this.queue.willMove(target)) {
 				this.debug('Bolt Beak damage boost');
+				this.add('-message', 'bolt beak boost');
 				return move.basePower * 2;
 			}
 			this.debug('Bolt Beak NOT boosted');
+			this.add('-message', 'bolt beak boost');
 			return move.basePower;
 		},
 		category: "Physical",
