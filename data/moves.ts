@@ -21536,8 +21536,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	cendresdepompei: {
 		num: 10009,
-		accuracy: 150,
-		basePower: 75,
+		accuracy: 75,
+		basePower: 150,
 		category: "Special",
 		isNonstandard: "Past",
 		name: "Cendres de Pompei",
@@ -21613,4 +21613,31 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
         zMove: { basePower: 180 },
         contestType: "Beautiful",
     },
+	fuckyou: {
+		num: 575,
+		accuracy: 100,
+		basePower: 40,
+		category: "Physical",
+		name: "Fuck you",
+		pp: 20,
+		priority: 3,
+		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
+		secondaries: [
+            {
+                chance: 100,
+                boosts: {
+					atk: -1,
+					spa: -1,
+                },
+            }, {
+                chance: 100,
+                volatileStatus: 'flinch',
+            },
+		],
+		selfSwitch: true,
+		target: "normal",
+		type: "Dark",
+		zMove: { effect: 'healreplacement' },
+		contestType: "Cool",
+	},
 }

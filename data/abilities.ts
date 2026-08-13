@@ -5802,6 +5802,40 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: 9996,
 	},
+	megaintimidate: {
+		onStart(pokemon) {
+			let activated = false;
+			for (const target of pokemon.adjacentFoes()) {
+				if (!activated) {
+					this.add('-ability', pokemon, 'Intimidate', 'boost');
+					activated = true;
+				}
+				if (target.volatiles['substitute']) {
+					this.add('-immune', target);
+				} else {
+					this.boost({ atk: -2 }, target, pokemon, null, true);
+				}
+			}
+		},
+		flags: {},
+		name: "Mega-Intimidate",
+		rating: 3.5,
+		num: 9995,
+	},
+	forcedentry: {
+		onSwitchIn(pokemon) {
+			const moveId = 'earthquake'; // ← Change this to any move you want!
+			const move = this.dex.getActiveMove(moveId);
+			if (move) {
+				this.actions.useMove(move, pokemon);
+				this.add('-ability', pokemon, 'Forced Entry');
+			}
+		},
+		flags: {},
+		name: "Forced Entry",
+		rating: 2.5,
+		num: 9994,
+	},//talent test vibe codé juste pour voir
 	
 };
 	
