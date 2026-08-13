@@ -21275,4 +21275,16 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Water 1", "Field"],
 	},
+	dodoria: {
+		num: 10015,
+		name: "Dodoria",
+		types: ["Psychic","Flying"],
+		genderRatio: { M: 0.875, F: 0.125 },
+		baseStats: { hp: 120, atk: 130, def: 80, spa: 70, spd: 75, spe: 125 },
+		abilities: { 0: "auuwoh"},
+		heightm: 1.7,
+		weightkg: 84.5,
+		color: "Blue",
+		eggGroups: ["Water 1", "Field"],
+	},
 };

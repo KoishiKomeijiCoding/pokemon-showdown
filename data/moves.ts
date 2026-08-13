@@ -21670,4 +21670,37 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+	chantdopera: {
+		num: 388,
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		name: "Chant d'opera",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, reflectable: 1, mirror: 1, allyanim: 1, metronome: 1,sound: 1 },
+		volatileStatus: 'confusion',
+		onTryImmunity(target) {
+			// Truant and Insomnia have special treatment; they fail before
+			// checking accuracy and will double Stomping Tantrum's BP
+			if (target.ability === 'truant' || target.ability === 'tangledfeet') {
+				return false;
+			}
+		},
+		onTryHit(target) {
+			if (target.getAbility().flags['cantsuppress']) {
+				return false;
+			}
+		},
+		onHit(target, source) {
+			const oldAbility = target.setAbility('tangledfeet');
+			if (!oldAbility) return oldAbility as false | null;
+			if (target.status === 'slp') target.cureStatus();
+		},
+		target: "allAdjacent",
+		type: "Normal",
+		zMove: { boost: { spe: 1 } },
+		contestType: "Clever",
+	},
+	
 }

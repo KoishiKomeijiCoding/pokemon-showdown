@@ -5861,7 +5861,42 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "ELECTRICITYYYY",
 		rating: 2.5,
 		num: 9994,
-	},//talent test vibe codé juste pour voir
+	},
+	auuwoh: {
+		onStart(pokemon) {
+				pokemon.addVolatile('metronome');
+				this.effectState.lastMove = '';
+				this.effectState.numConsecutive = 0;
+				this.add(`-message`,`commence le cmpt`);
+		},
+		onTryMove(pokemon, target, move) {
+				this.add('-message',`On essais le cmpt`);
+				if (move.callsMove) return;
+				if (this.effectState.lastMove === move.id && pokemon.moveLastTurnResult) {
+					this.add(`-message`,`On augmente le cmpt`);
+					this.effectState.numConsecutive++;
+				} else if (pokemon.volatiles['twoturnmove']) {
+					if (this.effectState.lastMove !== move.id) {
+						this.effectState.numConsecutive = 1;
+					} else {
+						this.effectState.numConsecutive++;
+					}
+				} else {
+					this.effectState.numConsecutive = 0;
+				}
+				this.effectState.lastMove = move.id;
+			},
+		onModifyDamage(damage, source, target, move) {
+				const dmgMod = [4096, 4915, 5734, 6553, 7372, 8192];
+				const numConsecutive = this.effectState.numConsecutive > 5 ? 5 : this.effectState.numConsecutive;
+				this.add(`-message`,`Current Metronome boost: ${dmgMod[numConsecutive]}/4096`);
+				return this.chainModify([dmgMod[numConsecutive], 4096]);
+			},
+		flags: {},
+		name: "auuwoh",
+		rating: 2.5,
+		num: 9994,
+	},
 	
 };
 	
