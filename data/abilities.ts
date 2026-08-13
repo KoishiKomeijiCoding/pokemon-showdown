@@ -5769,6 +5769,26 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 9996,
 	},
+	6767: {
+        onStart(pokemon) {
+            let activated = false;
+            for (const target of pokemon.side.foe.active) {
+                if (!target.hp) continue;
+                const targetHp = this.trunc(target.maxhp * 67 / 100);
+                if (target.hp === targetHp) continue;
+                if (!activated) {
+                    this.add('-activate', pokemon, 'ability: 6767');
+                    activated = true;
+                }
+                target.sethp(targetHp);
+                this.add('-sethp', target, target.getHealth, '[from] ability: 6767', '[silent]');
+            }
+        },
+        flags: {},
+        name: "6767",
+        rating: 3.5,
+        num: 9996,
+    },
 	
 };
 	

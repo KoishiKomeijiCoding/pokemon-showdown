@@ -21576,4 +21576,41 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Steel",
 		contestType: "Clever",
 	},
+	toutailier: {
+        num: 10010,
+        accuracy: 100,
+        basePower: 0,
+        category: "Status",
+        isNonstandard: "Past",
+        name: "Toutailier",
+        pp: 10,
+        priority: 0,
+        onHit(target, source, move) {    
+                    //this.add('-message', target.hp + "HP");
+                    if (target.hp/target.maxhp > 0.66 && target.hp/target.maxhp < 0.68) {    
+                        //this.add('-message',"perish song acivated'")    
+                        target.addVolatile('perishsong');
+                        this.add('-start', target, 'perish3', '[silent]');
+                    }
+        },
+        condition: {
+            duration: 4,
+            onEnd(target) {
+                this.add('-start', target, 'perish0');
+                target.faint();
+            },
+            onResidualOrder: 24,
+            onResidual(pokemon) {
+                if (pokemon.hp/pokemon.maxhp > 0.66 && pokemon.hp/pokemon.maxhp < 0.68) {    
+                    const duration = pokemon.volatiles['perishsong'].duration;
+                    this.add('-start', pokemon, `perish${duration}`);
+                }
+            },
+        },
+        flags: { protect: 1, mirror: 1, nonsky: 1 },
+        target: "allAdjacentFoes",
+        type: "Fire",
+        zMove: { basePower: 180 },
+        contestType: "Beautiful",
+    },
 }
