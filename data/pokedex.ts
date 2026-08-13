@@ -21208,4 +21208,18 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Undiscovered"],
 		gen: 5,
 	},
+	vergil: {
+		num: 10011,
+		name: "Vergil",
+		types: ["Steel"],
+		genderRatio: { M: 0.875, F: 0.125 },
+		baseStats: { hp: 84, atk: 111, def: 88, spa: 86, spd: 101, spe: 60 },
+		abilities: { 0: "Motivation"},
+		heightm: 1.7,
+		weightkg: 84.5,
+		color: "Blue",
+		prevo: "Prinplup",
+		evoLevel: 36,
+		eggGroups: ["Water 1", "Field"],
+	},
 };
