@@ -1649,9 +1649,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePowerCallback(pokemon, target, move) {
 			if (target.newlySwitched || this.queue.willMove(target)) {
 				this.debug('Bolt Beak damage boost');
+				this.add('-message', 'bolt beak boost');
 				return move.basePower * 2;
 			}
 			this.debug('Bolt Beak NOT boosted');
+			this.add('-message', 'bolt beak boost');
 			return move.basePower;
 		},
 		category: "Physical",
@@ -21547,6 +21549,43 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				boosts: {
 					spe: 1,
 				},
+			},
+		},
+		flags: { protect: 1, mirror: 1, nonsky: 1 },
+		target: "allAdjacentFoes",
+		type: "Fire",
+		zMove: { basePower: 180 },
+		contestType: "Beautiful",
+	},
+	toutailier: {
+		num: 10010,
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		isNonstandard: "Past",
+		name: "Toutailier",
+		pp: 10,
+		priority: 0,
+		onHit(target, source, move) {	
+					//this.add('-message', target.hp + "HP");
+					if (target.hp/target.maxhp > 0.66 && target.hp/target.maxhp < 0.68) {	
+						//this.add('-message',"perish song acivated'")	
+						target.addVolatile('perishsong');
+						this.add('-start', target, 'perish3', '[silent]');
+					}
+		},
+		condition: {
+			duration: 4,
+			onEnd(target) {
+				this.add('-start', target, 'perish0');
+				target.faint();
+			},
+			onResidualOrder: 24,
+			onResidual(pokemon) {
+				if (pokemon.hp/pokemon.maxhp > 0.66 && pokemon.hp/pokemon.maxhp < 0.68) {	
+					const duration = pokemon.volatiles['perishsong'].duration;
+					this.add('-start', pokemon, `perish${duration}`);
+				}
 			},
 		},
 		flags: { protect: 1, mirror: 1, nonsky: 1 },

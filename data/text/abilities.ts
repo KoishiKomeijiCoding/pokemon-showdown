@@ -1887,11 +1887,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 
 		activate: "  [POKEMON] endured the hit!",
 	},
-	onehp: {
-		name: "One HP",
-		desc: "If this Pokemon has exactly 1 HP, it survives one damaging move with 1 HP.",
-		shortDesc: "If this Pokemon has exactly 1 HP, it survives one damaging move with 1 HP.",
-		activate: "  [POKEMON] endured the hit!",
+	6767: {
+		name: "6767",
+		desc: "When this Pokemon switches in, all opposing active Pokemon are set to 67% of their maximum HP.",
+		shortDesc: "On switch-in, sets each opposing active Pokemon to 67% of max HP.",
 	},
 	suctioncups: {
 		name: "Suction Cups",
