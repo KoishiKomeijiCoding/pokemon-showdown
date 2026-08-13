@@ -5789,6 +5789,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
         rating: 3.5,
         num: 9996,
     },
+	hawkingroom: {
+		onStart(source) {
+			this.field.addPseudoWeather('trickroom', source);
+			this.field.addPseudoWeather('wonderroom', source);
+			this.field.addPseudoWeather('magicroom', source);
+			this.field.addPseudoWeather('gravity', source);
+			this.add('-message', 'Hawking utilise ses pouvoirs psychics pour mettre toute les rooms et la gravity !');
+		},
+		flags: {},
+		name: "Hawking Room",
+		rating: 3.5,
+		num: 9996,
+	},
 	
 };
 	

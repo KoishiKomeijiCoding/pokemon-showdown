@@ -101340,4 +101340,25 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			{generation: 5, level: 47, moves: ["darkpulse", "flamethrower", "hyperbeam", "icebeam"]},
 		],
 	},
+	stephenhawking: {
+		learnset: {
+			spacialrend: ["9M"],
+			roaroftime: ["9M"],
+			psychic: ["9M"],
+			futursight: ["9M"],
+			psystrike: ["9M"],
+			swift: ["9M"],
+			automize: ["9M"],
+			fissure: ["9M"],
+			beakblast: ["9M"],
+			shelltrap: ["9M"],
+			acupressure: ["9M"],
+			flashcannon: ["9M"],
+			terablast: ["9M"],
+			doomdesire: ["9M"],
+			thunder: ["9M"],
+			fireblast: ["9M"],
+		},
+
+	}
 };

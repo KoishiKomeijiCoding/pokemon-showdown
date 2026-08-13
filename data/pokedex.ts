@@ -21222,4 +21222,18 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 36,
 		eggGroups: ["Water 1", "Field"],
 	},
+	stephenhawking: {
+		num: 10012,
+		name: "Stephen Hawking",
+		types: ["Steel","Psychic"],
+		genderRatio: { M: 0.875, F: 0.125 },
+		baseStats: { hp: 65, atk: 30, def: 90, spa: 240, spd: 120, spe: 5 },
+		abilities: { 0: "Motivation"},
+		heightm: 1.7,
+		weightkg: 84.5,
+		color: "Blue",
+		prevo: "Prinplup",
+		evoLevel: 36,
+		eggGroups: ["Water 1", "Field"],
+	},
 };
