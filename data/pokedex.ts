@@ -21194,9 +21194,9 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Undiscovered"],
 		gen: 5,
 	},
-	67: {
+	sixseven: {
 		num: 10067,
-		name: "67",
+		name: "Sixseven",
 		types: ["Steel","Stellar"],
 		gender: "N",
 		baseStats: { hp: 67, atk: 67, def: 67, spa: 67, spd: 67, spe: 67},

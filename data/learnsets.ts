@@ -7969,7 +7969,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			xscissor: ["9M"],
 		},
 	},
-	67: {
+	sixseven: {
 		learnset: {
 			toutailier: ["9M"],
 			aerialace: ["9M"],
