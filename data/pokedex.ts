@@ -21197,7 +21197,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	67: {
 		num: 10067,
 		name: "67",
-		types: ["Steel"],
+		types: ["Steel","Stellar"],
 		gender: "N",
 		baseStats: { hp: 67, atk: 67, def: 67, spa: 67, spd: 67, spe: 67},
 		abilities: { 0: "6767" },
