@@ -21250,4 +21250,17 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 36,
 		eggGroups: ["Water 1", "Field"],
 	},
+	mortbontemps: {
+		num: 10013,
+		name: "Mortbontemps",
+		types: ["Fairy"],
+		genderRatio: { M: 0.875, F: 0.125 },
+		baseStats: { hp: 166, atk: 14, def: 143, spa: 143, spd: 143, spe: 120 },
+		abilities: { 0: "bienveillance"},
+		heightm: 1.7,
+		weightkg: 84.5,
+		color: "Blue",
+		evoLevel: 36,
+		eggGroups: ["Water 1", "Field"],
+	},
 };

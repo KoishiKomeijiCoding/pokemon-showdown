@@ -8455,7 +8455,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, reflectable: 1, distance: 1, heal: 1, allyanim: 1, metronome: 1, pulse: 1 },
 		onHit(target, source) {
 			let success = false;
-			if (source.hasAbility('megalauncher')) {
+			if (source.hasAbility('megalauncher') || source.hasAbility('bienveillance')) {
 				success = !!this.heal(this.modify(target.baseMaxhp, 0.75));
 			} else {
 				success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));

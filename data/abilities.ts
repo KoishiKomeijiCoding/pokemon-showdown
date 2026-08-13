@@ -5807,7 +5807,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			let activated = false;
 			for (const target of pokemon.adjacentFoes()) {
 				if (!activated) {
-					this.add('-ability', pokemon, 'Intimidate', 'boost');
+					this.add('-ability', pokemon, 'Mega-Intimidate', 'boost');
 					activated = true;
 				}
 				if (target.volatiles['substitute']) {
@@ -5836,6 +5836,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2.5,
 		num: 9994,
 	},//talent test vibe codé juste pour voir
+	bienveillance: {
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+				this.damage(source.baseMaxhp / 8, source, target);
+		},
+		flags: {},
+		name: "Bienveillance",
+		rating: 2.5,
+		num: 24
+	},
 	
 };
 	
