@@ -5772,7 +5772,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	6767: {
         onStart(pokemon) {
             let activated = false;
-            for (const target of pokemon.side.foe.active) {
+            for (const target of pokemon.adjacentFoes()) {
                 if (!target.hp) continue;
                 const targetHp = this.trunc(target.maxhp * 67 / 100);
                 if (target.hp === targetHp) continue;

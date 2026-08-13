@@ -706,23 +706,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					spe: -1,
                 },
             }, {
-                chance: 30,
+                chance: 20,
                 volatileStatus: 'flinch',
             },
 			{
-				chance: 20,
+				chance: 10,
 				status: 'par',
 			},
 			{
-				chance: 20,
+				chance: 10,
 				status: 'brn',
 			},
 			{
-				chance: 20,
+				chance: 10,
 				status: 'slp',
 			},
 			{
-				chance: 20,
+				chance: 10,
 				status: 'frz',
 			},
         ],
