@@ -21640,4 +21640,34 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { effect: 'healreplacement' },
 		contestType: "Cool",
 	},
+	bzzzzt: {
+		num: 87,
+		accuracy: 70,
+		basePower: 110,
+		category: "Special",
+		name: "Bzzzzt",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move, pokemon, target) {
+			switch (target?.effectiveWeather()) {
+			case 'raindance':
+			case 'primordialsea':
+				move.accuracy = true;
+				break;
+			case 'sunnyday':
+			case 'desolateland':
+				move.accuracy = 50;
+				break;
+			}
+		},
+		secondary: {
+			chance: 30,
+			status: 'par',
+		},
+		multihit: 2,
+		target: "randomNormal",
+		type: "Electric",
+		contestType: "Cool",
+	},
 }

@@ -21263,4 +21263,16 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 36,
 		eggGroups: ["Water 1", "Field"],
 	},
+	electrosorcier: {
+		num: 10014,
+		name: "Electro-Sorcier",
+		types: ["Electric"],
+		genderRatio: { M: 0.875, F: 0.125 },
+		baseStats: { hp: 82, atk: 79, def: 71, spa: 78, spd: 86, spe: 134 },
+		abilities: { 0: "ELECTRICITYYYY"},
+		heightm: 1.7,
+		weightkg: 84.5,
+		color: "Blue",
+		eggGroups: ["Water 1", "Field"],
+	},
 };

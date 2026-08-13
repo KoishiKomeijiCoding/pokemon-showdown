@@ -5846,6 +5846,22 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2.5,
 		num: 24
 	},
+	electricityyyy: {
+		onSwitchIn(pokemon) {
+			const moveId = 'thunder'; // ← Change this to any move you want!
+			const move = this.dex.getActiveMove(moveId);
+			this.add('-ability', pokemon, 'ELECTRICITYYYY');
+			for (const target of pokemon.adjacentFoes()) {
+				if (move) {
+					this.actions.useMove(move, pokemon,{ target: target });
+				}
+			}
+		},
+		flags: {},
+		name: "ELECTRICITYYYY",
+		rating: 2.5,
+		num: 9994,
+	},//talent test vibe codé juste pour voir
 	
 };
 	
