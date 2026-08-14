@@ -5899,7 +5899,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2.5,
 		num: 9994,
 	},
-	//random commentaire de test
+	//merde merde merde
 	
 };
 	
