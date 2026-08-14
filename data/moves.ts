@@ -5017,7 +5017,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Explosion",
 		pp: 5,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1, noparentalbond: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, noparentalbond: 1, explosive: 1 },
 		selfdestruct: "always",
 		target: "allAdjacent",
 		type: "Normal",
@@ -11930,7 +11930,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Mind Blown",
 		pp: 5,
 		priority: 0,
-		flags: { protect: 1, mirror: 1 },
+		flags: { protect: 1, mirror: 1,explosive: 1 },
 		mindBlownRecoil: true,
 		onMoveFail(target, source, move) {
 			if (move.multihit) return;
@@ -12185,7 +12185,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Misty Explosion",
 		pp: 5,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, explosive: 1 },
 		selfdestruct: "always",
 		onBasePower(basePower, source) {
 			if (this.field.isTerrain('mistyterrain') && source.isGrounded()) {
@@ -16093,7 +16093,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Self-Destruct",
 		pp: 5,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1, noparentalbond: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, noparentalbond: 1,explosive: 1 },
 		selfdestruct: "always",
 		target: "allAdjacent",
 		type: "Normal",
@@ -21738,20 +21738,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { snatch: 1, dance: 1, metronome: 1 },
-		boosts: {
-			atk: 2,
-		},
-		onHit(target) {
-			if (!this.canSwitch(target.side) || target.volatiles['commanded']) {
-				this.attrLastMove('[still]');
-				this.add('-fail', target);
-				return this.NOT_FAIL;
-			}
-		},
-		self: {
-			onHit(source) {
-				source.skipBeforeSwitchOutEventFlag = true;
-			},
+		onHit(pokemon) {
+			this.actions.useMove('swordsdance', pokemon);
+			this.actions.useMove('batonpass', pokemon);
 		},
 		target: "self",
 		type: "Dark",

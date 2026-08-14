@@ -5901,13 +5901,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	areyousure: {
 		onModifyMovePriority: 1,
 		onModifyMove(move, attacker, defender) {
-			this.add('-message',"Test 1")
 			if (attacker.species.baseSpecies !== 'Omni Man' || attacker.transformed) return;
-			this.add('-message',"Test 2")
 			if (move.category === 'Status' && move.id !== 'standreadyformyworm') return;
-			this.add('-message',"Test 3")
 			const targetForme = (move.id === 'standreadyformyworm' ? 'Omni Man-Worm' : 'Omni Man');
-			this.add('-message',targetForme)
 			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
 		},
 		onStart(pokemon) {
@@ -5928,6 +5924,29 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Are you sure ?",
 		rating: 3.5,
 		num: 22,
+	},
+	terrorisme: {
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['explosive']) {
+				this.add('-message',"moove boosté")
+				return this.chainModify(1.5);
+			}
+		},
+		onModifyMove(move,pokemon) {
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Fighting'] = true;
+				move.ignoreImmunity['Normal'] = true;
+			}
+			if (move.flags['explosive']) {
+				if (pokemon.getStat('spa', false, true) > pokemon.getStat('atk', false, true)) move.category = 'Special';
+			}
+		},
+		flags: {},
+		name: "Terrorisme",
+		rating: 3.5,
+		num: 173,
 	},
 	
 	
