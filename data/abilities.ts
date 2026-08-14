@@ -5901,9 +5901,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	areyousure: {
 		onModifyMovePriority: 1,
 		onModifyMove(move, attacker, defender) {
+			this.add('-message',"Test 1")
 			if (attacker.species.baseSpecies !== 'Omni Man' || attacker.transformed) return;
+			this.add('-message',"Test 2")
 			if (move.category === 'Status' && move.id !== 'standreadyformyworm') return;
-			const targetForme = (move.id === 'standreadyformyworm' ? 'Omni Man' : 'Omni Man-Worm');
+			this.add('-message',"Test 3")
+			const targetForme = (move.id === 'standreadyformyworm' ? 'Omni Man-Worm' : 'Omni Man');
+			this.add('-message',targetForme)
 			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
 		},
 		onStart(pokemon) {

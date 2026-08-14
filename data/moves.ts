@@ -21729,6 +21729,35 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Stellar",
 		contestType: "Cool",
 	},
+	moreofapettome: {
+		num: 14,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "More of a pet to me",
+		pp: 20,
+		priority: 0,
+		flags: { snatch: 1, dance: 1, metronome: 1 },
+		boosts: {
+			atk: 2,
+		},
+		onHit(target) {
+			if (!this.canSwitch(target.side) || target.volatiles['commanded']) {
+				this.attrLastMove('[still]');
+				this.add('-fail', target);
+				return this.NOT_FAIL;
+			}
+		},
+		self: {
+			onHit(source) {
+				source.skipBeforeSwitchOutEventFlag = true;
+			},
+		},
+		target: "self",
+		type: "Dark",
+		zMove: { effect: 'clearnegativeboost' },
+		contestType: "Beautiful",
+	},
 
 	
 }
