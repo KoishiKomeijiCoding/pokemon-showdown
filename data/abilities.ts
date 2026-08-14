@@ -5772,7 +5772,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	6767: {
         onStart(pokemon) {
             let activated = false;
-            for (const target of pokemon.side.foe.active) {
+            for (const target of pokemon.adjacentFoes()) {
                 if (!target.hp) continue;
                 const targetHp = this.trunc(target.maxhp * 67 / 100);
                 if (target.hp === targetHp) continue;
@@ -5870,10 +5870,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add(`-message`,`commence le cmpt`);
 		},
 		onTryMove(pokemon, target, move) {
-				this.add('-message',`On essais le cmpt`);
 				if (move.callsMove) return;
 				if (this.effectState.lastMove === move.id && pokemon.moveLastTurnResult) {
-					this.add(`-message`,`On augmente le cmpt`);
 					this.effectState.numConsecutive++;
 				} else if (pokemon.volatiles['twoturnmove']) {
 					if (this.effectState.lastMove !== move.id) {
@@ -5889,9 +5887,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyDamage(damage, source, target, move) {
 				const dmgMod = [4096, 4915, 5734, 6553, 7372, 8192];
 				const numConsecutive = this.effectState.numConsecutive > 5 ? 5 : this.effectState.numConsecutive;
-				this.add(`-message`,`Current Metronome boost: ${dmgMod[numConsecutive]}/4096`);
 				return this.chainModify([dmgMod[numConsecutive], 4096]);
 			},
+		onModifyMove(move, attacker) {
+			if (move.flags['sound']) {
+				move.category = 'Physical';
+			}
+		},
 		flags: {},
 		name: "auuwoh",
 		rating: 2.5,

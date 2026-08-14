@@ -697,7 +697,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Malveillance Max",
 		secondaries: [
             {
-                chance: 10,
+                chance: 5,
                 boosts: {
 					atk: -1,
                     def: -1,
@@ -706,23 +706,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					spe: -1,
                 },
             }, {
-                chance: 30,
+                chance: 25,
                 volatileStatus: 'flinch',
             },
 			{
-				chance: 20,
+				chance: 10,
 				status: 'par',
 			},
 			{
-				chance: 20,
+				chance: 10,
 				status: 'brn',
 			},
 			{
-				chance: 20,
+				chance: 10,
 				status: 'slp',
 			},
 			{
-				chance: 20,
+				chance: 10,
 				status: 'frz',
 			},
         ],
@@ -21383,8 +21383,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	tentencule: {
 		num: 9999,
-		accuracy: 75,
-		basePower: 95,
+		accuracy: 95,
+		basePower: 75,
 		category: "Physical",
 		name: "Tentencule",
 		pp: 10,
@@ -21543,14 +21543,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Cendres de Pompei",
 		pp: 10,
 		priority: 0,
-		secondary: {
-			chance: 100,
-			self: {
-				boosts: {
-					spe: 1,
-				},
-			},
-		},
 		flags: { protect: 1, mirror: 1, nonsky: 1 },
 		target: "allAdjacentFoes",
 		type: "Fire",
@@ -21622,6 +21614,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 3,
 		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
+		onTry(source) {
+			if (source.activeMoveActions > 1) {
+				this.hint("Fake Out only works on your first turn out.");
+				return false;
+			}
+		},
 		secondaries: [
             {
                 chance: 100,
@@ -21642,31 +21640,19 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	bzzzzt: {
 		num: 87,
-		accuracy: 70,
-		basePower: 110,
-		category: "Special",
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
 		name: "Bzzzzt",
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		onModifyMove(move, pokemon, target) {
-			switch (target?.effectiveWeather()) {
-			case 'raindance':
-			case 'primordialsea':
-				move.accuracy = true;
-				break;
-			case 'sunnyday':
-			case 'desolateland':
-				move.accuracy = 50;
-				break;
-			}
+		onHit(pokemon) {
+			const targets = pokemon.adjacentFoes();
+			this.actions.useMove('thunder', pokemon, { target: targets[Math.floor(Math.random() * targets.length)]});
+			this.actions.useMove('thunder', pokemon, { target: targets[Math.floor(Math.random() * targets.length)]});
 		},
-		secondary: {
-			chance: 30,
-			status: 'par',
-		},
-		multihit: 2,
-		target: "randomNormal",
+		target: "self",
 		type: "Electric",
 		contestType: "Cool",
 	},
