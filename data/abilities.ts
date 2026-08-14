@@ -5867,7 +5867,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.addVolatile('metronome');
 				this.effectState.lastMove = '';
 				this.effectState.numConsecutive = 0;
-				this.add(`-message`,`commence le cmpt`);
 		},
 		onTryMove(pokemon, target, move) {
 				if (move.callsMove) return;
@@ -5899,7 +5898,34 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2.5,
 		num: 9994,
 	},
-	//merde merde merde
+	areyousure: {
+		onModifyMovePriority: 1,
+		onModifyMove(move, attacker, defender) {
+			if (attacker.species.baseSpecies !== 'Omni Man' || attacker.transformed) return;
+			if (move.category === 'Status' && move.id !== 'standreadyformyworm') return;
+			const targetForme = (move.id === 'standreadyformyworm' ? 'Omni Man' : 'Omni Man-Worm');
+			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
+		},
+		onStart(pokemon) {
+			let activated = false;
+			for (const target of pokemon.adjacentFoes()) {
+				if (!activated) {
+					this.add('-ability', pokemon, 'Are you sure ?', 'boost');
+					activated = true;
+				}
+				if (target.volatiles['substitute']) {
+					this.add('-immune', target);
+				} else {
+					this.boost({ atk: -1 }, target, pokemon, null, true);
+				}
+			}
+		},
+		flags: {},
+		name: "Are you sure ?",
+		rating: 3.5,
+		num: 22,
+	},
+	
 	
 };
 	
