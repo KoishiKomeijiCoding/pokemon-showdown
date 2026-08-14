@@ -5929,7 +5929,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['explosive']) {
-				this.add('-message',"moove boosté")
 				return this.chainModify(1.5);
 			}
 		},
@@ -5947,6 +5946,45 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Terrorisme",
 		rating: 3.5,
 		num: 173,
+	},
+	grosserveur: {
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Water') {
+				if (!this.boost({ spa: 1 })) {
+					this.add('-immune', target, '[from] ability: Storm Drain');
+				}
+				return null;
+			}
+		},
+		onAnyRedirectTarget(target, source, source2, move) {
+			if (move.type !== 'Water' || move.flags['pledgecombo']) return;
+			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
+			if (this.validTarget(this.effectState.target, source, redirectTarget)) {
+				if (move.smartTarget) move.smartTarget = false;
+				if (this.effectState.target !== target) {
+					this.add('-activate', this.effectState.target, 'ability: Storm Drain');
+				}
+				return this.effectState.target;
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Electric') {
+				this.debug('Fire Mane boost');
+				return this.chainModify(1.3);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Electric') {
+				this.debug('Fire Mane boost');
+				return this.chainModify(1.3);
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Gros Serveur",
+		rating: 3,
+		num: 114,
 	},
 	
 	

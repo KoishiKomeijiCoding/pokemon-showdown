@@ -21747,6 +21747,146 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Beautiful",
 	},
+	vibecoding: {
+		num: 14,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Vibecoding",
+		pp: 20,
+		priority: 0,
+		flags: { snatch: 1, dance: 1, metronome: 1 },
+		onHit(target, source) {
+			const type = target.getTypes()
+			this.add('message',`${source.name} is thinking...`)
+			switch (type[0]) {
+			case 'Dark':
+				this.actions.useMove('moonblast', source, { target: target});
+				break;
+			case 'Normal':
+				if (type[1] != "ghost"){
+					this.actions.useMove('aurasphere', source, { target: target});
+				}
+				else {
+					this.actions.useMove('darkpulse', source, { target: target});
+				}
+				break;
+			case 'Water':
+				this.actions.useMove('energyball', source, { target: target});
+				break;
+			case 'Fire':
+				this.actions.useMove('scald', source, { target: target});
+				break;
+			case 'Electric':
+				if (type[1] != "flying"){
+					this.actions.useMove('earthpower', source, { target: target});
+				}
+				else {
+					this.actions.useMove('icebeam', source, { target: target});
+				}
+				break;
+			case 'Grass':
+				this.actions.useMove('flamethrower', source, { target: target});
+				break;
+			case 'Ice':
+				this.actions.useMove('flamethrower', source, { target: target});
+				break;
+			case 'Fighting':
+				this.actions.useMove('moonblast', source, { target: target});
+				break;
+			case 'Poison':
+				if (type[1] != "flying"){
+					this.actions.useMove('earthpower', source, { target: target});
+				}
+				else {
+					this.actions.useMove('icebeam', source, { target: target});
+				}
+				break;
+			case 'Ground':
+				this.actions.useMove('icebeam', source, { target: target});
+				break;
+			case 'Flying':
+				this.actions.useMove('icebeam', source, { target: target});
+				break;
+			case 'Psychic':
+				this.actions.useMove('darkpulse', source, { target: target});
+				break;
+			case 'Bug':
+				this.actions.useMove('flamethrower', source, { target: target});
+				break;
+			case 'Rock':
+				this.actions.useMove('scald', source, { target: target});
+				break;
+			case 'Ghost': 
+				this.actions.useMove('darkpulse', source, { target: target});
+				break;
+			case 'Dragon': 
+				this.actions.useMove('icebeam', source, { target: target});
+				break;
+			case 'Steel': 
+				this.actions.useMove('flamethrower', source, { target: target});
+				break;
+			case 'Fairy': 
+				this.actions.useMove('flashcannon', source, { target: target});
+				break;
+			default:
+				this.add('message',`Erreur : ${source.name} a crash et va maintenant s'autodétruire`)
+				this.actions.useMove('selfdestruct', source, { target: target});
+			}
+		},
+		target: "normal",
+		type: "Electric",
+		zMove: { effect: 'clearnegativeboost' },
+		contestType: "Beautiful",
+	},
+	dataserver: {
+		num: 604,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Data Server",
+		pp: 10,
+		priority: 0,
+		flags: { nonsky: 1, metronome: 1 },
+		terrain: 'dataserver',
+		condition: {
+			effectType: 'Terrain',
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasItem('terrainextender')) {
+					return 8;
+				}
+				this.add('-message',"test 1")
+				return 5;
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, attacker, defender, move) {
+				if (move.type === 'Electric' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+					return this.chainModify([5325, 4096]);
+				}
+				if (move.type === 'Water' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+					this.add('-message',"Une grande partie de l'au est absorbé par les data centers !")
+					return this.chainModify(0.1);
+				}
+			},
+			onFieldStart(field, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Data Server', '[from] ability: ' + effect.name, `[of] ${source}`);
+				} else {
+					this.add('-fieldstart', 'move: Data Server');
+				}
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 7,
+			onFieldEnd() {
+				this.add('-fieldend', 'move: Data Server');
+			},
+		},
+		target: "all",
+		type: "Steel",
+		zMove: { boost: { spe: 1 } },
+		contestType: "Clever",
+	},
 
 	
 }

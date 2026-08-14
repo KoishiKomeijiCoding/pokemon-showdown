@@ -21341,4 +21341,16 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Water 1", "Field"],
 		battleOnly: "omniman",
 	},
+	chatgpt: {
+		num: 10018,
+		name: "Chat GPT",
+		types: ["Electric"],
+		genderRatio: { M: 0.875, F: 0.125 },
+		baseStats: { hp: 100, atk: 20, def: 50, spa: 150, spd: 80, spe: 120 },
+		abilities: { 0: "Gros Serveur"},
+		heightm: 1.7,
+		weightkg: 84.5,
+		color: "Blue",
+		eggGroups: ["Water 1", "Field"],
+	},
 };
