@@ -21456,4 +21456,16 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Undiscovered"],
 		battleOnly: "Okina Matara",
 	},
+	fillepixiudesixansadopteeparunpdgruine: {
+		num: 20003,
+		name: "Fille Pixiu de six ans adoptée par un PDG ruiné",
+		types: ["Fairy", "Fire"],
+		genderRatio: { M: 0 , F: 1 },
+		baseStats: { hp: 55, atk: 117, def: 106, spa: 117, spd: 106, spe: 99 },
+		abilities: { 0: "Queenlt Majesty", "No limit", "Contrary" },
+		heightm: 1.22,
+		weightkg: 36.0,
+		color: "Red",
+		eggGroups: ["Human-Like"],
+		},
 };

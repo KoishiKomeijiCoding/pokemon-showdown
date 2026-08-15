@@ -102022,9 +102022,84 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
         },
     },
 	miradrip: {
+		learnset: {
 		bellydrum: ["9M"],
 		tailglow: ["9M"],
 		hypervoice: ["9M"],
 		fakeout: ["9M"],
+		},
+	},
+    fillepixiudesixansadopteeparunpdgruine: {
+        learnset: {
+            astonish: ["9L1"],
+            aurorabeam: ["9M"],          // Aurore
+            circlethrow: ["9M"],         // Circle Throw
+            chillingwater: ["9M"],        // Chilling Water
+            celebrate: ["9M"],           // Celebration
+            chargebeam: ["9M"],
+            closecombat: ["9M"],          // Close Combat
+            confuseray: ["9M", "9L14"],
+            dazzlinggleam: ["9M"],       // Dazzling Gleam (déjà présent)
+            dracometeor: ["9M"],         // Draco Météore
+            electroball: ["9M"],
+            endure: ["9M"],
+            fireblast: ["9M"],           // Fire Blast
+            flamethrower: ["9M"],        // Flamethrower
+            flareblitz: ["9M"],          // Flare Blitz
+            flashcannon: ["9M"],
+            fleurcannon: ["9M"],         // Fleur Cannon
+            fling: ["9M"],
+            focusblast: ["9M"],
+            focuspunch: ["9M"],
+            geomancy: ["9M"],            // Geomancy
+            gigaimpact: ["9M"],
+            hammerarm: ["9M"],           // Hammer Arm
+            healbell: ["9M"],            // Heal Bell
+            heavyslam: ["9M"],
+            hex: ["9M"],
+            hyperbeam: ["9M"],
+            ingrain: ["9M"],             // Ingrain
+            inferno: ["9M"],             // Inferno
+            ironhead: ["9M"],
+            lightscreen: ["9M"],
+            lowkick: ["9M"],
+            lowsweep: ["9M"],
+            makeitrain: ["9L56"],        // Make It Rain (déjà présent)
+            memento: ["9L70"],
+            metalsound: ["9M", "9L28"],
+            moonblast: ["9M"],           // Moonblast
+            nastyplot: ["9M", "9L63"],
+            nightshade: ["9M", "9L7"],
+            overdrive: ["9M"],           // Overdrive
+            overheat: ["9M"],            // Overheat
+            playrough: ["9M"],           // Play Rough
+            poltergeist: ["9M"],
+            powergem: ["9M", "9L49"],
+            protect: ["9M"],
+            psychic: ["9M"],
+            psyshock: ["9M"],
+            pyroball: ["9M"],            // Pyro Ball / L'attaque de pyrotecnik
+            recover: ["9L42"],
+            reflect: ["9M"],
+            rest: ["9M"],
+            sandstorm: ["9M"],
+            shadowball: ["9M", "9L35"],
+            sleeptalk: ["9M"],
+            spectralthief: ["9M"],       // L'attaque de Marshadow
+            steelbeam: ["9M"],
+            substitute: ["9M", "9L21"],
+            tackle: ["9L1"],
+            takedown: ["9M"],
+            terablast: ["9M"],
+            thief: ["9M"],
+            thunder: ["9M"],            // Thunder (déjà présent)
+            thunderbolt: ["9M"],
+            thunderpunch: ["9M"],
+            thunderwave: ["9M"],
+            trick: ["9M"],
+            uturn: ["9M"],              // Demi tour
+            victorydance: ["9M"],       // Victory Dance
+            voltswitch: ["9M"],         // Volt Switch
+            wildcharge: ["9M"],         // Wild Charge
 	},
 }
