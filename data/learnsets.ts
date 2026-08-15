@@ -102067,6 +102067,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
             makeitrain: ["9L56"],        // Make It Rain (déjà présent)
             memento: ["9L70"],
             metalsound: ["9M", "9L28"],
+			mindblow: ["9M"],
             moonblast: ["9M"],           // Moonblast
             nastyplot: ["9M", "9L63"],
             nightshade: ["9M", "9L7"],
@@ -102085,6 +102086,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
             sandstorm: ["9M"],
             shadowball: ["9M", "9L35"],
             sleeptalk: ["9M"],
+			spartk: ["9M"],
             spectralthief: ["9M"],       // L'attaque de Marshadow
             steelbeam: ["9M"],
             substitute: ["9M", "9L21"],
