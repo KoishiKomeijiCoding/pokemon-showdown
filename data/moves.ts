@@ -21887,6 +21887,65 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { boost: { spe: 1 } },
 		contestType: "Clever",
 	},
-
-	
-}
+	ceremoniesecrete: {
+		num: 1000,
+		accuracy: 100,
+		basePower: 55,
+		category: "Special",
+		name: "Secret Ceremony: Hidden Season",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
+		onModifyType(move, pokemon) {
+			switch (pokemon.effectiveWeather()) {
+			case 'sunnyday':
+			case 'desolateland':
+				move.type = 'Fire';
+				break;
+			case 'raindance':
+			case 'primordialsea':
+				move.type = 'Water';
+				break;
+			case 'sandstorm':
+				move.type = 'Rock';
+				break;
+			case 'hail':
+			case 'snowscape':
+				move.type = 'Ice';
+				break;
+			case 'deltastream':
+				move.type = 'Flying';
+				break;
+			}
+		},
+		onModifyMove(move, pokemon) {
+			switch (pokemon.effectiveWeather()) {
+			case 'sunnyday':
+			case 'desolateland':
+				move.basePower *= 2;
+				break;
+			case 'raindance':
+			case 'primordialsea':
+				move.basePower *= 2;
+				break;
+			case 'sandstorm':
+				move.basePower *= 2;
+				break;
+			case 'hail':
+			case 'snowscape':
+				move.basePower *= 2;
+				break;
+			case 'deltastream':
+				move.basePower *= 4;
+				move.target = 'allAdjacentFoes';
+				break;
+			}
+			this.debug(`BP: ${move.basePower}`);
+		},
+		target: "normal",
+		type: "Psychic",
+		zMove: { basePower: 170 },
+		maxMove: { basePower: 140 },
+		contestType: "Beautiful",
+	},
+};

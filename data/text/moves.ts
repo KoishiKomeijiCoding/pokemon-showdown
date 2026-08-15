@@ -7703,4 +7703,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Nearly always goes first. Always crits.",
 		},
 	},
+	ceremoniesecrete: {
+		name: 'Secret Ceremony: Hidden Season"',
+		shortDesc: "Power doubles and type varies in each weather.",
+	},
 };
