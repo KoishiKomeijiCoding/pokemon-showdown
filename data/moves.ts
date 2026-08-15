@@ -21764,7 +21764,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.actions.useMove('moonblast', source, { target: target});
 				break;
 			case 'Normal':
-				if (type[1] != "ghost"){
+				if (type[1] != "Ghost"){
 					this.actions.useMove('aurasphere', source, { target: target});
 				}
 				else {
@@ -21778,7 +21778,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.actions.useMove('scald', source, { target: target});
 				break;
 			case 'Electric':
-				if (type[1] != "flying"){
+				if (type[1] != "Flying"){
 					this.actions.useMove('earthpower', source, { target: target});
 				}
 				else {
@@ -21795,7 +21795,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.actions.useMove('moonblast', source, { target: target});
 				break;
 			case 'Poison':
-				if (type[1] != "flying"){
+				if (type[1] != "Flying"){
 					this.actions.useMove('earthpower', source, { target: target});
 				}
 				else {
@@ -21899,6 +21899,57 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Rock",
 		contestType: "Clever",
+	},
+	mangetesmorts: {
+		num: 73,
+		accuracy: 90,
+		basePower: 0,
+		category: "Status",
+		name: "Mange Tes Morts",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
+		volatileStatus: 'mangetesmorts',
+		condition: {
+			onStart(target) {
+				this.add('-start', target, 'move: Leech Seed');
+			},
+			onResidualOrder: 8,
+			onResidual(pokemon) {
+				const target = this.getAtSlot(pokemon.volatiles['mangetesmorts'].sourceSlot);
+				if (!target || target.fainted || target.hp <= 0) {
+					this.debug('Nothing to leech into');
+					return;
+				}
+				const damage = this.damage(pokemon.baseMaxhp / 8, pokemon, target);
+				if (damage) {
+					this.heal(damage, target, pokemon);
+				}
+			},
+		},
+		onTryImmunity(target) {
+			return !target.hasType('Ghost');
+		},
+		target: "normal",
+		type: "Ghost",
+		zMove: { effect: 'clearnegativeboost' },
+		contestType: "Clever",
+	},
+	boostlevel: {
+		num: 87,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Lost Level",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onHit(pokemon) {
+			pokemon.changeLevel(1)//augmente le level du poke de 1
+		},
+		target: "self",
+		type: "Electric",
+		contestType: "Cool",
 	},
 
 	

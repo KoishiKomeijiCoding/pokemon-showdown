@@ -52,7 +52,7 @@ export class Pokemon {
 	readonly name: string;
 	/** `` `${sideid}: ${name}` `` - used to refer to pokemon in the protocol */
 	readonly fullname: string;
-	readonly level: number;
+	level: number;
 	readonly gender: GenderName;
 	readonly happiness: number;
 	readonly pokeball: ID;
@@ -416,7 +416,7 @@ export class Pokemon {
 
 		// initialized in this.setSpecies(this.baseSpecies)
 		this.baseStoredStats = null!;
-		this.storedStats = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+		this.storedStats = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 }; //ici
 		this.boosts = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
 
 		this.baseAbility = toID(set.ability);
@@ -506,6 +506,31 @@ export class Pokemon {
 		this.clearVolatile();
 		this.hp = this.maxhp;
 	}
+
+	//sert à changer level d'un poke
+	changeLevel(number:number) {
+		this.set.level = this.set.level + number
+		this.level = this.level + number
+		
+		const stats = this.battle.spreadModify(this.species.baseStats, this.set);
+		if (this.species.maxHP) stats.hp = this.species.maxHP;
+
+		
+		this.baseMaxhp = stats.hp;
+		this.maxhp = stats.hp;
+		this.hp = stats.hp;
+		
+
+		if (!this.transformed) this.baseStoredStats = stats;
+		let statName: StatIDExceptHP;
+		for (statName in this.storedStats) {
+			this.storedStats[statName] = stats[statName];
+			if (this.modifiedStats) this.modifiedStats[statName] = stats[statName]; // Gen 1: Reset modified stats.
+		}
+
+		this.formeChange(this.species,null,true)
+	}
+
 
 	toJSON(): AnyObject {
 		return State.serializePokemon(this);
