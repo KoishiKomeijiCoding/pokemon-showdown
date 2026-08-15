@@ -6023,6 +6023,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 234,
 	},
+	pancake: {
+		onSourceAfterFaint(length, target, source, effect) {
+			source.changeLevel(1)
+		},
+		flags: {},
+		name: "Pancake",
+		rating: 3.5,
+		num: 224,
+	},
 	
 	
 };
