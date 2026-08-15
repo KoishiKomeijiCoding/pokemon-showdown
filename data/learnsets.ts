@@ -102021,4 +102021,10 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			ceremoniesecrete: ["9M"]
         },
     },
+	miradrip: {
+		bellydrum: ["9M"],
+		tailglow: ["9M"],
+		hypervoice: ["9M"],
+		fakeout: ["9M"],
+	}
 }
