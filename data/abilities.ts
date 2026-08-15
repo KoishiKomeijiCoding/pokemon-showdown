@@ -5986,7 +5986,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 114,
 	},
-	hiddenstarinfourseasons: {
+	/*hiddenstarinfourseasons: {
 		onStart(source) {
 			const weather = this.sample(['sunny day', 'rain dance', 'snowscape', 'sandstorm', 'deltastream']);
 			this.field.setWeather(weather);
@@ -6062,5 +6062,5 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Hidden Star in All Seasons",
 		rating: 4,
 		num: 1001
-	},
+	},*/
 };
