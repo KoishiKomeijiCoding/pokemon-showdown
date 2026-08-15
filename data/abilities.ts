@@ -5986,6 +5986,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 114,
 	},
+	musiquecool: {
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (pokemon.activeTurns) {
+				this.boost({ spa: 1 });
+			}
+		},
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['bullet']) {
+				return this.chainModify(1.3);
+			}
+		},
+		flags: {},
+		name: "Musique Cool",
+		rating: 4.5,
+		num: 3,
+	},
 	
 	
 };

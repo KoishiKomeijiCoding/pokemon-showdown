@@ -21887,6 +21887,19 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { boost: { spe: 1 } },
 		contestType: "Clever",
 	},
+	bowling: {
+		num: 247,
+		accuracy: 100,
+		basePower: 120,
+		category: "Special",
+		name: "Bowling",
+		pp: 15,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
+		target: "normal",
+		type: "Rock",
+		contestType: "Clever",
+	},
 
 	
 }

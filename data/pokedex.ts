@@ -21319,7 +21319,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Stellar","Fighting"],
 		baseForme: "Normal",
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 150, atk: 150, def: 100, spa: 20, spd: 80, spe: 100 },
+		baseStats: { hp: 150, atk: 130, def: 100, spa: 20, spd: 80, spe: 100 },
 		abilities: { 0: "Are you sure ?"},
 		heightm: 1.7,
 		weightkg: 84.5,
@@ -21344,7 +21344,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	chatgpt: {
 		num: 10018,
 		name: "Chat GPT",
-		types: ["Electric"],
+		types: ["Electric","Water"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 100, atk: 20, def: 50, spa: 150, spd: 80, spe: 120 },
 		abilities: { 0: "Gros Serveur"},
@@ -21353,4 +21353,17 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Water 1", "Field"],
 	},
+	boulistehero: {
+		num: 10019,
+		name: "Bouliste Hero",
+		types: ["Rock"],
+		genderRatio: { M: 0.875, F: 0.125 },
+		baseStats: { hp: 90, atk: 130, def: 110, spa: 45, spd: 110, spe: 95 },
+		abilities: { 0: "Musique Cool"},
+		heightm: 1.7,
+		weightkg: 84.5,
+		color: "Blue",
+		eggGroups: ["Water 1", "Field"],
+	},
+	
 };
