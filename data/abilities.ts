@@ -6017,7 +6017,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.actions.useMove(move, pokemon,{ target: target });
 				}
 			}
-			
 		},
 		flags: {},
 		name: "Chiantman",
