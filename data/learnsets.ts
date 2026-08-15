@@ -102026,5 +102026,5 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 		tailglow: ["9M"],
 		hypervoice: ["9M"],
 		fakeout: ["9M"],
-	}
+	},
 }
