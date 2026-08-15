@@ -6087,4 +6087,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4.5,
 		num: 3,
 	},
+	eruptionvolcanique: {
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			if (source.vesuveCounter >= 1) {
+				return;
+			}
+			source.vesuveCounter += 1;
+			this.actions.useMove('eruption', target);
+			this.actions.useMove('earthquake', target); //lors de la mort fait juste éruption mais pas earthquake (éruption fait 0 % du coup)
+			source.vesuveCounter = 0; 
+		},
+		flags: {},
+		name: "Eruption volcanique",
+		rating: 4,
+		num: 1002,
+	},
 };
