@@ -21443,7 +21443,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	},
 		okinamataraallseasons: {
 		num: 20002,
-		name: "Okina Matara (Toutes Saisons)",
+		name: "Okina Matara-All Seasons",
 		baseSpecies: "Okina Matara",
 		forme: "All Seasons",
 		types: ["Psychic", "Flying"],

@@ -5986,62 +5986,74 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 114,
 	},
-	/*hiddenstarinfourseasons: {
+	hiddenstarinfourseasons: {
 		onStart(source) {
-			const weather = this.sample(['sunny day', 'rain dance', 'snowscape', 'sandstorm', 'deltastream']);
+			let weather = this.sample(['sunnyday', 'raindance', 'snowscape', 'sandstorm', 'deltastream']);
+			const fdp = source.effectiveWeather() as string
+			while(weather === fdp) {
+				weather = this.sample(['sunny day', 'rain dance', 'snowscape', 'sandstorm', 'deltastream']);
+			}
 			this.field.setWeather(weather);
+			source.okinaCetteConne = true;
 		},
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(source) { // vibecode (trouver le bon order après)
-			const weather = this.sample(['sunny day', 'rain dance', 'snowscape', 'sandstorm', 'deltastream']);
+			if(source.okinaCetteConne) {
+				source.okinaCetteConne = false;
+				return;
+			}
+			let weather = this.sample(['sunnyday', 'raindance', 'snowscape', 'sandstorm', 'deltastream']);
+			const fdp = source.effectiveWeather() as string
+			while(weather === fdp) {
+				weather = this.sample(['sunny day', 'rain dance', 'snowscape', 'sandstorm', 'deltastream']);
+			}
 			this.field.setWeather(weather);	
 		},
-		onAnySetWeather(target, source, weather) {  // à vérifier
-			if (target !== source) {
-			return false; 
-			}
-		},
-		onStart(pokemon) { // y a ça dans le code de castform je le comprends pas
-			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
-		},
 		onWeatherChange(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Okina Matara' || pokemon.transformed) return;
+			let forme = null;
 			switch (pokemon.effectiveWeather()) {
 				case 'sunnyday':
 				case 'desolateland':
-					if (pokemon.species.id !== 'okinamatarasummer') forme = 'Okina Matara (Été)';
+					if (pokemon.species.id !== 'okinamatarasummer') forme = 'Okina Matara-Summer';
 					break;
 				case 'raindance':
 				case 'primordialsea':
-					if (pokemon.species.id !== 'okinamataraautumn') forme = 'Okina Matara (Automne)';
+					if (pokemon.species.id !== 'okinamataraautumn') forme = 'Okina Matara-Autumn';
 					break;
 				case 'hail':
 				case 'snowscape':
-					if (pokemon.species.id !== 'okinamatarawinter') forme = 'Okina Matara (Hiver)';
+					if (pokemon.species.id !== 'okinamatarawinter') forme = 'Okina Matara-Winter';
 					break;
 				case 'sandstorm':
-					if (pokemon.species.id !== 'okinamataraspring') forme = 'Okina Matara (Printemps)';
+					if (pokemon.species.id !== 'okinamataraspring') forme = 'Okina Matara-Spring';
 					break;
 				case 'deltastream':
-					if (pokemon.species.id !== 'okinamataraallseasons') forme = 'Okina Matara (Toutes saisons)';
+					if (pokemon.species.id !== 'okinamataraallseasons') forme = 'Okina Matara-All Seasons';
 					break;
 				default:
 					if (pokemon.species.id !== 'okinamatara') forme = 'Okina Matara';
 					break;
 				}
 			if (pokemon.isActive && forme) {
-				pokemon.formeChange(forme, this.effect, false, '0', '[msg]');
+				if (forme === 'Okina Matara-All Seasons' ) {
+					pokemon.formeChange(forme, this.effect, true, '0', '[msg]');
+				}
+				else {
+					pokemon.formeChange(forme, this.effect, false, '0', '[msg]');
+				}
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
-		name: "Hidden Star in Four Seasons",
+		name: "HiddenStar in FourSeasons",
 		rating: 4,
 		num: 1000,
 	},
 	hiddenstarinallseasons: {
 		onStart(source) {
 			this.field.setWeather('deltastream');
-			this.add('-sidestart', side, 'move: Tailwind');
+			this.actions.useMove('tailwind', source);
 		},
 		onAnySetWeather(target, source, weather) {
 			if (this.field.getWeather().id === 'deltastream') return false;
@@ -6056,11 +6068,23 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 			this.field.clearWeather();
-			this.add('-sideend', side, 'move: Tailwind');
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "Hidden Star in All Seasons",
 		rating: 4,
 		num: 1001
-	},*/
+	},
+	speedboost2: {
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (pokemon.activeTurns) {
+				this.boost({ spe: 2 });
+			}
+		},
+		flags: {},
+		name: "Speed Boost2",
+		rating: 4.5,
+		num: 3,
+	},
 };

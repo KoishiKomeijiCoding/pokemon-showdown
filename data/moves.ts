@@ -21887,12 +21887,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { boost: { spe: 1 } },
 		contestType: "Clever",
 	},
-	ceremoniesecrete: {
+	secretceremonyhiddenseason: {
 		num: 1000,
 		accuracy: 100,
 		basePower: 55,
 		category: "Special",
-		name: "Secret Ceremony: Hidden Season",
+		name: "Secret Ceremony Hidden Season",
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
