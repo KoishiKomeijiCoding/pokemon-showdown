@@ -57356,7 +57356,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			weatherball: ["8M"],
 		},
 	},
-	boulisthero: {
+	boulistehero: {
 		learnset: {
 			pyroball: ["9L0", "8L0"],
 			energyball: ["9M", "7M", "6M", "5M"],

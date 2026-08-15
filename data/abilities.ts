@@ -6004,6 +6004,26 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4.5,
 		num: 3,
 	},
+	chiantman: {
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'chiantman');
+			this.field.setTerrain('grassyterrain');
+			if (pokemon.chiantmanActivated) return;
+			pokemon.chiantmanActivated = true;
+			const moveId = 'leechseed'; 
+			const move = this.dex.getActiveMove(moveId);
+			for (const target of pokemon.adjacentFoes()) {
+				if (move) {
+					this.actions.useMove(move, pokemon,{ target: target });
+				}
+			}
+			
+		},
+		flags: {},
+		name: "Chiantman",
+		rating: 4,
+		num: 234,
+	},
 	
 	
 };
