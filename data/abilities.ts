@@ -5986,6 +5986,111 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 114,
 	},
+	hiddenstarinfourseasons: {
+		onStart(source) {
+			let weather = this.sample(['sunnyday', 'raindance', 'snowscape', 'sandstorm', 'deltastream']);
+			const fdp = source.effectiveWeather() as string
+			while(weather === fdp) {
+				weather = this.sample(['sunny day', 'rain dance', 'snowscape', 'sandstorm', 'deltastream']);
+			}
+			this.field.setWeather(weather);
+			source.okinaCetteConne = true;
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(source) { // vibecode (trouver le bon order après)
+			if(source.okinaCetteConne) {
+				source.okinaCetteConne = false;
+				return;
+			}
+			let weather = this.sample(['sunnyday', 'raindance', 'snowscape', 'sandstorm', 'deltastream']);
+			const fdp = source.effectiveWeather() as string
+			while(weather === fdp) {
+				weather = this.sample(['sunny day', 'rain dance', 'snowscape', 'sandstorm', 'deltastream']);
+			}
+			this.field.setWeather(weather);	
+		},
+		onWeatherChange(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Okina Matara' || pokemon.transformed) return;
+			let forme = null;
+			switch (pokemon.effectiveWeather()) {
+				case 'sunnyday':
+				case 'desolateland':
+					if (pokemon.species.id !== 'okinamatarasummer') forme = 'Okina Matara-Summer';
+					break;
+				case 'raindance':
+				case 'primordialsea':
+					if (pokemon.species.id !== 'okinamataraautumn') forme = 'Okina Matara-Autumn';
+					break;
+				case 'hail':
+				case 'snowscape':
+					if (pokemon.species.id !== 'okinamatarawinter') forme = 'Okina Matara-Winter';
+					break;
+				case 'sandstorm':
+					if (pokemon.species.id !== 'okinamataraspring') forme = 'Okina Matara-Spring';
+					break;
+				case 'deltastream':
+					if (pokemon.species.id !== 'okinamataraallseasons') forme = 'Okina Matara-All Seasons';
+					break;
+				default:
+					if (pokemon.species.id !== 'okinamatara') forme = 'Okina Matara';
+					break;
+				}
+			if (pokemon.isActive && forme) {
+				if (forme === 'Okina Matara-All Seasons' ) {
+					pokemon.formeChange(forme, this.effect, true, '0', '[msg]');
+				}
+				else {
+					pokemon.formeChange(forme, this.effect, false, '0', '[msg]');
+				}
+			}
+		},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
+		name: "HiddenStar in FourSeasons",
+		rating: 4,
+		num: 1000,
+	},
+	hiddenstarinallseasons: {
+		onStart(source) {
+			this.field.setWeather('deltastream');
+			this.actions.useMove('tailwind', source);
+		},
+		onAnySetWeather(target, source, weather) {
+			if (this.field.getWeather().id === 'deltastream') return false;
+		},
+		onEnd(pokemon) {
+			if (this.field.weatherState.source !== pokemon) return;
+			for (const target of this.getAllActive()) {
+				if (target === pokemon) continue;
+				if (target.hasAbility('deltastream')) {
+					this.field.weatherState.source = target;
+					return;
+				}
+			}
+			this.field.clearWeather();
+		},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
+		name: "Hidden Star in All Seasons",
+		rating: 4,
+		num: 1001
+	},
+	eruptionvolcanique: {
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			if (source.vesuveCounter >= 1) {
+				return;
+			}
+			source.vesuveCounter += 1;
+			this.actions.useMove('eruption', target);
+			this.actions.useMove('earthquake', target); //lors de la mort fait juste éruption mais pas earthquake (éruption fait 0 % du coup)
+			source.vesuveCounter = 0; 
+		},
+		flags: {},
+		name: "Eruption volcanique",
+		rating: 4,
+		num: 1002,
+	},
+};
 	musiquecool: {
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,

@@ -260,6 +260,8 @@ export class Pokemon {
 	heroMessageDisplayed: boolean;
 	swordBoost: boolean;
 	shieldBoost: boolean;
+	okinaCetteConne:boolean;
+	vesuveCounter:number;
 	chiantmanActivated: boolean;
 	syrupTriggered: boolean;
 	stellarBoostedTypes: string[];
@@ -479,6 +481,8 @@ export class Pokemon {
 		this.bondTriggered = false;
 		this.heroMessageDisplayed = false;
 		this.swordBoost = false;
+		this.okinaCetteConne = false;
+		this.vesuveCounter = 0;
 		this.chiantmanActivated = false;
 		this.shieldBoost = false;
 		this.syrupTriggered = false;
