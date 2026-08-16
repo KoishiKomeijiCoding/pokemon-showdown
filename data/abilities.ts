@@ -6025,6 +6025,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	pancake: {
 		onSourceAfterFaint(length, target, source, effect) {
+			this.add('-ability', source, 'Pancake');
 			source.changeLevel(1)
 		},
 		flags: {},
