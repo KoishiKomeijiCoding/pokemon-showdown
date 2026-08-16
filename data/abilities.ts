@@ -6090,7 +6090,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 1002,
 	},
-};
 	musiquecool: {
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,

@@ -21948,7 +21948,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		maxMove: { basePower: 140 },
 		contestType: "Beautiful",
 	},
-};
 	bowling: {
 		num: 247,
 		accuracy: 100,

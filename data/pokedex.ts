@@ -21494,7 +21494,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Red",
 		eggGroups: ["Undiscovered"],
 		},
-};
 	boulistehero: {
 		num: 10019,
 		name: "Bouliste Hero",
