@@ -6091,3 +6091,55 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 1002,
 	},
 };
+	musiquecool: {
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (pokemon.activeTurns) {
+				this.boost({ spa: 1 });
+			}
+		},
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['bullet']) {
+				return this.chainModify(1.3);
+			}
+		},
+		flags: {},
+		name: "Musique Cool",
+		rating: 4.5,
+		num: 3,
+	},
+	chiantman: {
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'chiantman');
+			this.field.setTerrain('grassyterrain');
+			if (pokemon.chiantmanActivated) return;
+			pokemon.chiantmanActivated = true;
+			const moveId = 'leechseed'; 
+			const move = this.dex.getActiveMove(moveId);
+			for (const target of pokemon.adjacentFoes()) {
+				if (move) {
+					this.actions.useMove(move, pokemon,{ target: target });
+				}
+			}
+		},
+		flags: {},
+		name: "Chiantman",
+		rating: 4,
+		num: 234,
+	},
+	pancake: {
+		onSourceAfterFaint(length, target, source, effect) {
+			this.add('-ability', source, 'Pancake');
+			source.changeLevel(1)
+		},
+		flags: {},
+		name: "Pancake",
+		rating: 3.5,
+		num: 224,
+	},
+	
+	
+};
+	
+
