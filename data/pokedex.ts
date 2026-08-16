@@ -21121,7 +21121,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 1.5,
 		weightkg: 61,
 		color: "White",
-		tags: ["Pokestar", "True Past", "Past Unobtainable"],
 		eggGroups: ["Undiscovered"],
 		gen: 5,
 	},
