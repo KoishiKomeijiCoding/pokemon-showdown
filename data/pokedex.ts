@@ -21476,7 +21476,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fairy", "Fire"],
 		genderRatio: { M: 0 , F: 1 },
 		baseStats: { hp: 55, atk: 117, def: 106, spa: 117, spd: 106, spe: 99 },
-		abilities: { 0: "Queenly Majesty", 1:"No limit", H:"Contrary" },
+		abilities: { 0: "Queenly Majesty", 1:"Sheer Force", H:"Contrary" },
 		heightm: 1.22,
 		weightkg: 36.0,
 		color: "Red",
