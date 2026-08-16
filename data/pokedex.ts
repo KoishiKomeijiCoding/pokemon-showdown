@@ -21472,7 +21472,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 20004,
 		name: "Vesuve",
 		types: ["Fire", "Ground"],
-		genderRatio: "N",
+		gender: "N",
 		baseStats: { hp: 255, atk: 80, def: 80, spa: 80, spd: 80, spe: 1 },
 		abilities: { 0: "Eruption volcanique" },
 		heightm: 1281.0,

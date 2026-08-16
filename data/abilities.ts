@@ -6074,19 +6074,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 1001
 	},
-	speedboost2: {
-		onResidualOrder: 28,
-		onResidualSubOrder: 2,
-		onResidual(pokemon) {
-			if (pokemon.activeTurns) {
-				this.boost({ spe: 2 });
-			}
-		},
-		flags: {},
-		name: "Speed Boost2",
-		rating: 4.5,
-		num: 3,
-	},
 	eruptionvolcanique: {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
