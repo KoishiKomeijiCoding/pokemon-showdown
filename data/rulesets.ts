@@ -25,6 +25,14 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause',
 		],
 	},
+	shitpost: {
+		effectType: 'ValidatorRule',
+		name: 'Standard',
+		desc: "The standard ruleset for all official Smogon singles tiers",
+		ruleset: [
+			'Standard',
+		],
+	},
 	standardnext: {
 		effectType: 'ValidatorRule',
 		name: 'Standard NEXT',

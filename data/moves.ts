@@ -21388,7 +21388,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Physical",
 		name: "Tentencule",
 		pp: 10,
-		flags: { contact: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nonsky: 1, metronome: 1, minimize: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, distance: 1, metronome: 1, minimize: 1 },
 		onModifyType(move, pokemon) {
 			const types = pokemon.getTypes();
 			let type = types[0];

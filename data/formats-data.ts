@@ -6254,4 +6254,9 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		isNonstandard: "Custom",
 		tier: "Illegal",
 	},
+	cheval: {
+		tier: "OUshitpost",
+		doublesTier: "(DUU)",
+		natDexTier: "RU",
+	}
 };
