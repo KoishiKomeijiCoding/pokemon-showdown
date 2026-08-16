@@ -21509,7 +21509,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	herominipekka: {
 		num: 10019,
 		name: "Hero Mini PEKKA",
-		types: ["Rock"],
+		types: ["Steel"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 70, atk: 160, def: 70, spa: 45, spd: 70, spe: 110 },
 		abilities: { 0: "Pancake"},

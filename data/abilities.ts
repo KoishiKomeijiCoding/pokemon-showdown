@@ -5740,19 +5740,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
 				return false;
 			}
-            if (['ashbaby'].includes(target.species.id) && damage >= target.hp && effect && effect.effectType === 'Move') {
+            if (['ashbaby'].includes(target.species.id) && damage >= target.hp && effect && effect.effectType === 'Move' && !target.transformed) {
                 this.add('-ability', target, 'Pompei Baby');
+				target.pompeiBaby = true
                 return target.hp - 1;
             }
         },
         onResidual(pokemon) {
             if (pokemon.baseSpecies.baseSpecies !== 'Ash Baby' || pokemon.transformed || !pokemon.hp) return;
-            if (pokemon.hp <= pokemon.maxhp/10) {
+            if (pokemon.pompeiBaby) {
 				this.heal(pokemon.maxhp);
                 this.add('-activate', pokemon, 'ability: Pompei Baby');
                 pokemon.formeChange('Ash Baby Burned"', this.effect, true);
                 pokemon.formeRegression = true;
-				this.debug("help");
+				pokemon.pompeiBaby = false
             }
         },
         flags: {},
@@ -5994,7 +5995,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				weather = this.sample(['sunny day', 'rain dance', 'snowscape', 'sandstorm', 'deltastream']);
 			}
 			this.field.setWeather(weather);
-			source.okinaCetteConne = true;
 		},
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
@@ -6009,6 +6009,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				weather = this.sample(['sunny day', 'rain dance', 'snowscape', 'sandstorm', 'deltastream']);
 			}
 			this.field.setWeather(weather);	
+		},//marche pas très bien rn
+		onEnd(pokemon) {
+			pokemon.okinaCetteConne = false; //nécessaire au cas ou on envoit Okina sur un switch in gratuit
 		},
 		onWeatherChange(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Okina Matara' || pokemon.transformed) return;
@@ -6111,7 +6114,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	chiantman: {
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'chiantman');
-			this.field.setTerrain('grassyterrain');
+			this.actions.useMove('grassyterrain', pokemon);
 			if (pokemon.chiantmanActivated) return;
 			pokemon.chiantmanActivated = true;
 			const moveId = 'leechseed'; 

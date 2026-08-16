@@ -102051,7 +102051,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
             bleakwindstorm: ["9M"],
             blizzard: ["9M"],
             bodyslam: ["9M"],
-            calmmnd: ["9M"],
+            calmmind: ["9M"],
             captivate: ["9M"],
             clearsmog: ["9M"],
             confide: ["9M"],
