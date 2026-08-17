@@ -20848,7 +20848,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gen: 9,
 	},
 	obliteryx: {
-		num: -80,
+		num: 10021,
 		name: "Obliteryx",
 		types: ["Dark", "Flying"],
 		baseStats: { hp: 102, atk: 128, def: 126, spa: 45, spd: 90, spe: 64 },
