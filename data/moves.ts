@@ -21576,7 +21576,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
         isNonstandard: "Past",
         name: "Toutailier",
         pp: 10,
-        priority: 0,
+        priority: 1,
         onHit(target, source, move) {    
                     //this.add('-message', target.hp + "HP");
                     if (target.hp/target.maxhp > 0.66 && target.hp/target.maxhp < 0.68) {    
@@ -21704,7 +21704,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	imomniingit: {
 		num: 860,
 		accuracy: 90,
-		basePower: 30,
+		basePower: 20,
 		category: "Physical",
 		name: "I'm omniing it",
 		pp: 10,
@@ -21839,8 +21839,28 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Beautiful",
 	},
+	deforestation: {
+		num: 293,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		isNonstandard: "Past",
+		name: "Deforestation",
+		pp: 20,
+		priority: 0,
+		flags: { snatch: 1, metronome: 1 },
+		onHit(target) {
+			this.field.clearTerrain();
+			this.add("-message","ChatGPT vire tout les terrains déjà existant !")
+			this.field.setTerrain("dataserver")
+		},
+		target: "self",
+		type: "Normal",
+		zMove: { boost: { evasion: 1 } },
+		contestType: "Clever",
+	},
 	dataserver: {
-		num: 604,
+		num: 10000,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -21856,7 +21876,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (source?.hasItem('terrainextender')) {
 					return 8;
 				}
-				this.add('-message',"test 1")
 				return 5;
 			},
 			onBasePowerPriority: 6,
@@ -21871,15 +21890,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Data Server', '[from] ability: ' + effect.name, `[of] ${source}`);
+					this.add('-fieldstart', 'terrain: Data Server', '[from] ability: ' + effect.name, `[of] ${source}`);
 				} else {
-					this.add('-fieldstart', 'move: Data Server');
+					this.add('-fieldstart', 'terrain: Data Server');
 				}
 			},
 			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
-				this.add('-fieldend', 'move: Data Server');
+				this.add('-fieldend', 'terrain: Data Server');
 			},
 		},
 		target: "all",
@@ -21887,6 +21906,30 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { boost: { spe: 1 } },
 		contestType: "Clever",
 	},
+	makedataserver: {
+		num: 87,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Make Data Server",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onHit(pokemon) {
+			this.add('-message',"je deviens fou")
+			this.add('-message',"hello ???" + this.field.terrain)
+			if (this.field.terrain === 'dataserver') {
+				return;
+
+			}
+			this.actions.useMove('deforestation', pokemon);
+			this.actions.useMove('dataserver', pokemon)
+		},
+		target: "self",
+		type: "Electric",
+		contestType: "Cool",
+	},
+
 	secretceremonyhiddenseason: {
 		num: 1000,
 		accuracy: 100,
@@ -21936,7 +21979,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				move.basePower *= 2;
 				break;
 			case 'deltastream':
-				move.basePower *= 4;
+				move.basePower *= 2;
 				move.target = 'allAdjacentFoes';
 				break;
 			}

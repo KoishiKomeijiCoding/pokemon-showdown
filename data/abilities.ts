@@ -5762,6 +5762,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
         num: 9997,
     },
 	motivation: {
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['slicing']) {
+				this.debug('Sharpness boost');
+				return this.chainModify(1.5);
+			}
+		},
 		onDamagingHit(damage, target, source, effect) {
 			this.boost({ atk: 1 });
 		},
@@ -5930,13 +5936,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['explosive']) {
-				return this.chainModify(1.5);
+				return this.chainModify(2);
 			}
 		},
 		onModifyMove(move,pokemon) {
 			if (!move.ignoreImmunity) move.ignoreImmunity = {};
 			if (move.ignoreImmunity !== true) {
-				move.ignoreImmunity['Fighting'] = true;
 				move.ignoreImmunity['Normal'] = true;
 			}
 			if (move.flags['explosive']) {
@@ -6114,7 +6119,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	chiantman: {
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'chiantman');
-			this.actions.useMove('grassyterrain', pokemon);
+			this.field.setTerrain('grassyterrain');
 			if (pokemon.chiantmanActivated) return;
 			pokemon.chiantmanActivated = true;
 			const moveId = 'leechseed'; 
@@ -6133,7 +6138,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	pancake: {
 		onSourceAfterFaint(length, target, source, effect) {
 			this.add('-ability', source, 'Pancake');
-			source.changeLevel(1)
+			source.changeLevel(5)
 		},
 		flags: {},
 		name: "Pancake",

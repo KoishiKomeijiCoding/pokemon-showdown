@@ -3393,7 +3393,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		section: "National Dex",
 	},
-	{
+	{//ici
 		name: "[Gen 9] National Dex",
 		mod: 'gen9',
 		ruleset: ['Standard NatDex', 'Terastal Clause'],

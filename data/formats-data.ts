@@ -6247,7 +6247,6 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "Illegal",
 	},
 	okinamatara: {
-		isNonstandard: "Custom",
 		tier: "shitpostou",
 	},
 	cheval: {
@@ -6328,5 +6327,8 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	},
 	incineroarmega: {
 		tier: "shitpostou"
+	},
+	mewtow1g: {
+		tier: "shitpostuber"
 	}
 };

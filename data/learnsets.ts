@@ -81954,6 +81954,8 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	vergil: {
 		learnset: {
+			aquacutter: ["9M"],
+			bitterblade:["9M"],
 			chaise:["9M"],
 			aerialace: ["8L25", "7M", "7L23"],
 			aircutter: ["8L20", "8S2", "7L1"],
@@ -101956,7 +101958,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	chatgpt: {
 		learnset: {
-			dataserver: ["9M"],
+			makedataserver: ["9M"],
 			vibecoding: ["9M"],
 			allyswitch: ["8M", "7T"],
 			barrier: ["7L1", "6L1", "5L1", "4L1"],
