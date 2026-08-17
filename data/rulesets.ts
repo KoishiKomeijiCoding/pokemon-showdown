@@ -31,7 +31,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'Shitpost',
 		desc: "Autorise le shitpost",
 		ruleset: [
-			'Standard AG',
+			'Standard AG', 'NatDex Mod',
 			'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause',
 		],
 	},

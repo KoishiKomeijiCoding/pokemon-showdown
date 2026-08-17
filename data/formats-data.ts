@@ -6252,9 +6252,69 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	},
 	okinamatara: {
 		isNonstandard: "Custom",
-		tier: "Illegal",
+		tier: "shitpostou",
 	},
 	cheval: {
 		tier: "shitpostou",
+	},
+	zagamore: {
+		tier : "shitpostou"
+	},
+	degueulassor: {
+		tier : "shitpostou"
+	},
+	rattumeur: {
+		tier : "shitpostou"
+	},
+	rayan: {
+		tier: "shitpostou"
+	},
+	doji: {
+		tier: "shitpostou"
+	},
+	ashbaby: {
+		tier: "shitpostou"
+	},
+	sixseven: {
+		tier: "shitpostou"
+	},
+	vergil: {
+		tier: "shitpostou"
+	},
+	stephenhawking: {
+		tier: "shitpostou"
+	},
+	mortbontemps: {
+		tier: "shitpostou"
+	},
+	electrosorcier: {
+		tier: "shitpostou"
+	},
+	dodoria: {
+		tier: "shitpostou"
+	},
+	glock: {
+		tier: "shitpostou"
+	},
+	omniman: {
+		tier: "shitpostou"
+	},
+	chatgpt: {
+		tier: "shitpostou"
+	},
+	miradrip: {
+		tier: "shitpostou"
+	},
+	fillepixiudesixans: {
+		tier: "shitpostou"
+	},
+	vesuve: {
+		tier: "shitpostou"
+	},
+	boulistehero: {
+		tier: "shitpostou"
+	},
+	herominipekka: {
+		tier: "shitpostou"
 	}
 };

@@ -21506,7 +21506,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Water 1", "Field"],
 	},
 	herominipekka: {
-		num: 10019,
+		num: 10020,
 		name: "Hero Mini PEKKA",
 		types: ["Steel"],
 		genderRatio: { M: 0.875, F: 0.125 },
