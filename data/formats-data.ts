@@ -6255,8 +6255,6 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "Illegal",
 	},
 	cheval: {
-		tier: "shitpost",
-		doublesTier: "(DUU)",
-		natDexTier: "RU",
+		tier: "shitpostou",
 	}
 };

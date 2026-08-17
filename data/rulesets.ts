@@ -24,13 +24,15 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			'Standard AG',
 			'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause',
 		],
+		banlist: ['ShitpostOU'],
 	},
 	shitpost: {
 		effectType: 'ValidatorRule',
-		name: 'Standard',
-		desc: "The standard ruleset for all official Smogon singles tiers",
+		name: 'Shitpost',
+		desc: "Autorise le shitpost",
 		ruleset: [
-			'Standard',
+			'Standard AG',
+			'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause',
 		],
 	},
 	standardnext: {

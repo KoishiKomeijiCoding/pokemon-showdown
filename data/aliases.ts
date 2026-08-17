@@ -6,7 +6,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	anythinggoes: "[Gen 9] Anything Goes",
 	ubers: "[Gen 9] Ubers",
 	uubers: "[Gen 9] Ubers UU",
-	shitpost: "[Gen 9] shitpost",
+	shitpostou: "[Gen 9] shitpostOU",
 	overused: "[Gen 9] OU",
 	underused: "[Gen 9] UU",
 	rarelyused: "[Gen 9] RU",

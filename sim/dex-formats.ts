@@ -1186,7 +1186,7 @@ export class DexFormats {
 					matches.push('pokemon:' + id);
 				}
 			}
-		}
+		} 
 		if (matches.length > 1) {
 			throw new Error(`More than one thing matches "${rule}"; please specify one of: ` + matches.join(', '));
 		}
