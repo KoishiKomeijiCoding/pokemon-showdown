@@ -60850,6 +60850,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	epstein: {
 		learnset: {
+			withthistreasureisummon: ["9M"],
 			imaginarytechnique: ["9M"],
 			domaineexpension: ["9M"],
 			makeitrain: ["9M"],

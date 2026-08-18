@@ -21978,8 +21978,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, metronome: 1 },
 		onHit(target) {
 			this.field.clearTerrain();
-			this.add("-message","ChatGPT vire tout les terrains déjà existant !")
-			this.field.setTerrain("dataserver")
+			this.add("-message",target.name + " vire tout les terrains déjà existant !")
 		},
 		target: "self",
 		type: "Normal",

@@ -261,6 +261,7 @@ export class Pokemon {
 	swordBoost: boolean;
 	shieldBoost: boolean;
 	okinaCetteConne:boolean;
+	epsteinPower:boolean;
 	pompeiBaby:boolean;
 	vesuveCounter:number;
 	chiantmanActivated: boolean;
@@ -483,6 +484,7 @@ export class Pokemon {
 		this.heroMessageDisplayed = false;
 		this.swordBoost = false;
 		this.okinaCetteConne = false;
+		this.epsteinPower = true;
 		this.pompeiBaby = false;
 		this.vesuveCounter = 0;
 		this.chiantmanActivated = false;
@@ -535,6 +537,7 @@ export class Pokemon {
 		}
 
 		this.formeChange(this.species,null,true)
+
 	}
 
 

@@ -5357,11 +5357,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.checkMoveMakesContact(move, source, target)) this.skillSwap(source, target);
 		},
 		onStart(pokemon) {
-			let activated = false;
-			const targets = pokemon.adjacentFoes()
-			targets[Math.floor(Math.random() * targets.length)].changeLevel(-1)
+			if (pokemon.epsteinPower) {
+				pokemon.epsteinPower = false
+				const targets = pokemon.adjacentFoes()
+				this.add('-ability', pokemon, 'Epstein Files');
+				targets[Math.floor(Math.random() * targets.length)].changeLevel(-1)
+			}
 		},
-		onTryHit(target, source, move) {
+		onResidual(pokemon) {
+			pokemon.epsteinPower = true
+		},
+		onModifyTarget(targetRelayVar, source) {
 			const targets = source.adjacentFoes()
 			const index = Math.floor(Math.random() * targets.length)
 			let min = targets[index].level
@@ -5372,7 +5378,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					min = target.level
 				}
 			}
-			target = current
+			targetRelayVar.target = current;
 		},
 		flags: {},
 		name: "Epstein Files",
