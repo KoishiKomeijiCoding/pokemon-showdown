@@ -53,7 +53,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 9999,
 		gen: 6,
-		isNonstandard: "CAP",
 	},
 	incineroarite: {
 		name: "Incineroarite",
@@ -65,7 +64,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 9998,
 		gen: 7,
-		isNonstandard: "CAP",
 	},
 	electrodite: {
 		name: "Electrodite",
@@ -77,7 +75,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 9997,
 		gen: 7,
-		isNonstandard: "CAP",
 	},
 	trevenanit: {
 		name: "Trevenanit",
@@ -89,7 +86,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 9996,
 		gen: 7,
-		isNonstandard: "CAP",
 	},
 
 	absolitez: {

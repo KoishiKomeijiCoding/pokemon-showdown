@@ -18459,6 +18459,87 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Cute",
 	},
+	withthistreasureisummon: {
+		num: 164,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "With this treasure I summon",
+		pp: 10,
+		priority: 0,
+		flags: { snatch: 1, nonsky: 1, metronome: 1 },
+		volatileStatus: 'withthistreasureisummon',
+		onTryHit(source) {
+			if (source.volatiles['withthistreasureisummon']) {
+				this.add('-fail', source, 'move: With this treasure I summon');
+				return this.NOT_FAIL;
+			}
+			if (source.hp <= source.maxhp / 4 || source.maxhp === 1) { // Shedinja clause
+				this.add('-fail', source, 'move: With this treasure I summon', '[weak]');
+				return this.NOT_FAIL;
+			}
+		},
+		onHit(target) {
+			this.boost({ spe: -2 }, target);
+			this.boost({ def: -2 }, target);
+			this.boost({ atk: -2 }, target);
+			this.boost({ spa: -2 }, target);
+			this.boost({ spd: -2 }, target);
+		},
+		condition: {
+			onStart(target, source, effect) {
+				if (effect?.id === 'shedtail') {
+					this.add('-start', target, 'With this treasure I summon', '[from] move: Shed Tail');
+				} else {
+					this.add('-start', target, 'With this treasure I summon');
+				}
+				this.effectState.hp = Math.floor(target.maxhp / 2);
+				if (target.volatiles['partiallytrapped']) {
+					this.add('-end', target, target.volatiles['partiallytrapped'].sourceEffect, '[partiallytrapped]', '[silent]');
+					delete target.volatiles['partiallytrapped'];
+				}
+			},
+			onTryPrimaryHitPriority: -1,
+			onTryPrimaryHit(target, source, move) {
+				if (target === source || move.flags['bypasssub'] || move.infiltrates) {
+					return;
+				}
+				let damage = this.actions.getDamage(source, target, move);
+				if (!damage && damage !== 0) {
+					this.add('-fail', source);
+					this.attrLastMove('[still]');
+					return null;
+				}
+				if (damage > target.volatiles['withthistreasureisummon'].hp) {
+					damage = target.volatiles['withthistreasureisummon'].hp as number;
+				}
+				target.volatiles['withthistreasureisummon'].hp -= damage;
+				source.lastDamage = damage;
+				if (target.volatiles['withthistreasureisummon'].hp <= 0) {
+					if (move.ohko) this.add('-ohko');
+					target.removeVolatile('withthistreasureisummon');
+				} else {
+					this.add('-activate', target, 'move: With this treasure I summon', '[damage]');
+				}
+				if (damage) {
+					this.actions.applyRecoilDamage(damage, move, source);
+				}
+				if (move.drain) {
+					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
+				}
+				this.singleEvent('AfterSubDamage', move, null, target, source, move, damage);
+				this.runEvent('AfterSubDamage', target, source, move, damage);
+				return this.HIT_SUBSTITUTE;
+			},
+			onEnd(target) {
+				this.add('-end', target, 'With this treasure I summon');
+			},
+		},
+		target: "self",
+		type: "Normal",
+		zMove: { effect: 'clearnegativeboost' },
+		contestType: "Cute",
+	},
 	subzeroslammer: {
 		num: 650,
 		accuracy: true,
@@ -21859,6 +21940,56 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { boost: { evasion: 1 } },
 		contestType: "Clever",
 	},
+	epsteinisland: {
+		num: 10000,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Epstein Island",
+		pp: 10,
+		priority: 0,
+		flags: { nonsky: 1, metronome: 1 },
+		terrain: 'epsteinisland',
+		condition: {
+			effectType: 'Terrain',
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, attacker, defender, move) {
+				if (move.type === 'Ground' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+					return this.chainModify([5325, 4096]);
+				}
+			},
+			onChangeBoost(boost, target, source, effect) {
+				if (effect && effect.id === 'zpower') return;
+				let i: BoostID;
+				for (i in boost) {
+					boost[i]! *= -1;
+			}
+		},
+			onFieldStart(field, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'terrain: Epstein Island', '[from] ability: ' + effect.name, `[of] ${source}`);
+				} else {
+					this.add('-fieldstart', 'terrain: Epstein Island');
+				}
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 7,
+			onFieldEnd() {
+				this.add('-fieldend', 'terrain: Epstein Island');
+			},
+		},
+		target: "all",
+		type: "Steel",
+		zMove: { boost: { spe: 1 } },
+		contestType: "Clever",
+	},
 	dataserver: {
 		num: 10000,
 		accuracy: true,
@@ -21905,6 +22036,26 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Steel",
 		zMove: { boost: { spe: 1 } },
 		contestType: "Clever",
+	},
+	domaineexpension: {
+		num: 87,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Domaine Expension",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onHit(pokemon) {
+			if (this.field.terrain === 'epsteinisland') {
+				return;
+			}
+			this.actions.useMove('deforestation', pokemon);
+			this.actions.useMove('epsteinisland', pokemon)
+		},
+		target: "self",
+		type: "Ground",
+		contestType: "Cool",
 	},
 	makedataserver: {
 		num: 87,
