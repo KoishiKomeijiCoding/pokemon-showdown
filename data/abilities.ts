@@ -5352,6 +5352,33 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2.5,
 		num: 254,
 	},
+	epsteinfiles: {
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target)) this.skillSwap(source, target);
+		},
+		onStart(pokemon) {
+			let activated = false;
+			const targets = pokemon.adjacentFoes()
+			targets[Math.floor(Math.random() * targets.length)].changeLevel(-1)
+		},
+		onTryHit(target, source, move) {
+			const targets = source.adjacentFoes()
+			const index = Math.floor(Math.random() * targets.length)
+			let min = targets[index].level
+			let current = targets[index]
+			for (const target of targets) {
+				if (target.level < min)  {
+					current = target
+					min = target.level
+				}
+			}
+			target = current
+		},
+		flags: {},
+		name: "Epstein Files",
+		rating: 2.5,
+		num: 254,
+	},
 	waterabsorb: {
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Water') {

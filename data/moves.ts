@@ -7886,6 +7886,46 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { boost: { spa: 1 } },
 		contestType: "Clever",
 	},
+	epsteintemple: {
+		num: 356,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Epstein Temple",
+		pp: 5,
+		priority: 0,
+		flags: { nonsky: 1, metronome: 1 },
+		pseudoWeather: 'epsteintemple',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				return 5;
+			},
+			onFieldStart(target, source) {
+				this.add('-fieldstart', 'move: Epstein Temple');
+			},
+			onFieldResidual() {
+				for (const pokemon of this.getAllActive()) {
+					console.log("on applique l'effet du temple")
+					if (!pokemon.hasType("Ground")) {
+						const stats: BoostID[] = ['atk' , 'def' ,'spa' , 'spd' ,'spe'];
+						const boost: SparseBoostsTable = {};
+						boost[stats[Math.floor(Math.random() * stats.length)]] = 1
+						this.boost(boost, pokemon);
+					}
+				}
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 2,
+			onFieldEnd() {
+				this.add('-fieldend', 'move: Epstein Temple');
+			},
+		},
+		target: "all",
+		type: "Psychic",
+		zMove: { boost: { spa: 1 } },
+		contestType: "Clever",
+	},
 	growl: {
 		num: 45,
 		accuracy: 100,
@@ -18480,6 +18520,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onHit(target) {
+			if (target.baseSpecies.baseSpecies === 'Epstein' || !target.transformed) {
+					target.formeChange("Epstein-Summoned", this.effect, false, '0', '[msg]');
+				}
 			this.boost({ spe: -2 }, target);
 			this.boost({ def: -2 }, target);
 			this.boost({ atk: -2 }, target);
@@ -18533,6 +18576,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onEnd(target) {
 				this.add('-end', target, 'With this treasure I summon');
+				if (target.baseSpecies.baseSpecies === 'Epstein' || !target.transformed) {
+					target.formeChange("Epstein", this.effect, false, '0', '[msg]');
+				}
 			},
 		},
 		target: "self",
@@ -21954,6 +22000,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
+				this.field.setWeather('sandstorm');
 				if (source?.hasItem('terrainextender')) {
 					return 8;
 				}
@@ -22052,6 +22099,26 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 			this.actions.useMove('deforestation', pokemon);
 			this.actions.useMove('epsteinisland', pokemon)
+		},
+		target: "self",
+		type: "Ground",
+		contestType: "Cool",
+	},
+	imaginarytechnique: {
+		num: 87,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Imaginary Technique",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onHit(pokemon) {
+			if (this.field.terrain === 'epsteinisland') {
+				return;
+			}
+			this.actions.useMove('sandstorm', pokemon);
+			this.actions.useMove('epsteintemple', pokemon)
 		},
 		target: "self",
 		type: "Ground",
