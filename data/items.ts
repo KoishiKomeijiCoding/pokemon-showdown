@@ -54,6 +54,17 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 9999,
 		gen: 6,
 	},
+	obliterite: {
+		name: "Obliterite",
+		spritenum: 576,
+		megaStone: { "Obliteryx": "Obliteryx-Mega" },
+		itemUser: ["Obliteryx"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 9995,
+		gen: 6,
+	},
 	incineroarite: {
 		name: "Incineroarite",
 		spritenum: 591,

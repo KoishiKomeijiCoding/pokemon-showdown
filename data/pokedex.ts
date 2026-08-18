@@ -20859,6 +20859,20 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Flying"],
 		gen: 9,
 	},
+	obliteryxmega: {
+		num: 10023,
+		name: "Obliteryx-Mega",
+		baseSpecies: "Quagsire",
+		forme: "Mega",
+		types: ["Water", "Ground"],
+		baseStats: { hp: 102, atk: 147, def: 131, spa: 55, spd: 113, spe: 95},
+		abilities: { 0: "Super Opportunist" },
+		heightm: 2.7,
+		weightkg: 185,
+		color: "Black",
+		eggGroups: ["Monster", "Grass"],
+		requiredItem: "Obliterite",
+	},
 	// NOTE: PokeStar "formes" are not actually formes and thus do not have a formeOrder
 	pokestarsmeargle: {
 		num: -5000,
