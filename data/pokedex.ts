@@ -20862,9 +20862,9 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	obliteryxmega: {
 		num: 10023,
 		name: "Obliteryx-Mega",
-		baseSpecies: "Quagsire",
+		baseSpecies: "Obliteryx",
 		forme: "Mega",
-		types: ["Water", "Ground"],
+		types: ["Dark", "Flying"],
 		baseStats: { hp: 102, atk: 147, def: 131, spa: 55, spd: 113, spe: 95},
 		abilities: { 0: "Super Opportunist" },
 		heightm: 2.7,

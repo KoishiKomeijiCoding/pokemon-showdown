@@ -7899,6 +7899,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
+				this.field.setWeather('sandstorm');
 				return 5;
 			},
 			onFieldStart(target, source) {
@@ -7906,7 +7907,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onFieldResidual() {
 				for (const pokemon of this.getAllActive()) {
-					console.log("on applique l'effet du temple")
 					if (!pokemon.hasType("Ground")) {
 						const stats: BoostID[] = ['atk' , 'def' ,'spa' , 'spd' ,'spe'];
 						const boost: SparseBoostsTable = {};
@@ -21999,7 +21999,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
-				this.field.setWeather('sandstorm');
 				if (source?.hasItem('terrainextender')) {
 					return 8;
 				}
@@ -22098,26 +22097,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 			this.actions.useMove('deforestation', pokemon);
 			this.actions.useMove('epsteinisland', pokemon)
-		},
-		target: "self",
-		type: "Ground",
-		contestType: "Cool",
-	},
-	imaginarytechnique: {
-		num: 87,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Imaginary Technique",
-		pp: 10,
-		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
-		onHit(pokemon) {
-			if (this.field.terrain === 'epsteinisland') {
-				return;
-			}
-			this.actions.useMove('sandstorm', pokemon);
-			this.actions.useMove('epsteintemple', pokemon)
 		},
 		target: "self",
 		type: "Ground",
