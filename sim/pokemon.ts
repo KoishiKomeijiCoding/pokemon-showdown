@@ -519,14 +519,14 @@ export class Pokemon {
 	changeLevel(number:number) {
 		this.set.level = this.set.level + number
 		this.level = this.level + number
+		const ability = this.ability
 		
 		const stats = this.battle.spreadModify(this.species.baseStats, this.set);
 		if (this.species.maxHP) stats.hp = this.species.maxHP;
 
-		
-		this.baseMaxhp = stats.hp;
+		/*this.baseMaxhp = stats.hp;
 		this.maxhp = stats.hp;
-		this.hp = stats.hp;
+		this.hp = stats.hp;*/
 		
 
 		if (!this.transformed) this.baseStoredStats = stats;
@@ -537,6 +537,7 @@ export class Pokemon {
 		}
 
 		this.formeChange(this.species,null,true)
+		this.setAbility(ability)
 
 	}
 

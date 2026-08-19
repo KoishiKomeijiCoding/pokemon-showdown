@@ -11,7 +11,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.modData('Items', i).onTakeItem = false;
 			if (item.isNonstandard === "Past" || item.isNonstandard === "Future") this.modData('Items', i).isNonstandard = null;
 			if (item.megaStone) {
-				if (item.name !=="Quagsireite" && item.name !== "Incineroarite" && item.name !== "Electrodite" && item.name !== "Trevenanit" && item.name !== "Obliterite") {
+				if (item.name !=="Quagsireite" 
+					&& item.name !== "Incineroarite" 
+					&& item.name !== "Electrodite" 
+					&& item.name !== "Trevenanit" 
+					&& item.name !== "Obliterite"
+					&& item.name !== "Congozelite") {
 					for (const megaEvo of Object.values(item.megaStone)) {
 						this.modData('FormatsData', this.toID(megaEvo)).isNonstandard = null;
 					}

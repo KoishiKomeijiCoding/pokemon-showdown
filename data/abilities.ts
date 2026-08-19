@@ -5401,7 +5401,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	epsteinfiles: {
 		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target)) this.skillSwap(source, target);
+			const sourceAbility = source.getAbility();
+			if (sourceAbility.flags['cantsuppress'] || sourceAbility.id === 'epsteinfiles') {
+				return;
+			}
+			if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
+				source.setAbility('epsteinfiles', target);
+			}
 		},
 		onStart(pokemon) {
 			if (pokemon.epsteinPower) {
@@ -6225,8 +6231,38 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: 224,
 	},
+	joyauxrare: {
+		onEffectiveness(typeMod, target, type, move) {
+			if (move.type !== 'Ground') return;
+			if (!target) return; // avoid crashing when called from a chat plugin
+			// ignore effectiveness if the target is Flying type and immune to Ground
+			if (!target.hasType('Flying')) {
+				return 0;
+			}
+			else {
+				return 1;
+			}
+		},
+		onHit(target, source, move) {
+				if (move.type !== 'Ground') return;
+				if (Math.random() * (100 - 0) + 0 < 33) {
+					this.add('-message',"La Mine du Congo a trouvé la pierre rare !")
+					source.setItem('Congozelite');
+				}
+				/*pokemon.lastItem = item.id;
+				pokemon.usedItemThisTurn = true;
+				this.add('-enditem', pokemon, item.name, '[from] move: Fling');
+				this.runEvent('AfterUseItem', pokemon, null, null, item);
+				pokemon.removeVolatile('fling');*/
+			},
+		flags: {},
+		name: "Joyaux Rare",
+		rating: 3.5,
+		num: 224,
+	},
+}
 	
 	
-};
+
 	
 

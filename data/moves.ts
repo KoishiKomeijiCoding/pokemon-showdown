@@ -7899,7 +7899,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				this.field.setWeather('sandstorm');
+				this.field.setWeather('sandstorm',source);
 				return 5;
 			},
 			onFieldStart(target, source) {
