@@ -15,6 +15,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		ruleset: [
 			'Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
 		],
+		banlist: ['Congozelite']
 	},
 	standard: {
 		effectType: 'ValidatorRule',

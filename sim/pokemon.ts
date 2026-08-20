@@ -261,10 +261,13 @@ export class Pokemon {
 	swordBoost: boolean;
 	shieldBoost: boolean;
 	okinaCetteConne:boolean;
+	canGemAlert:boolean;
 	epsteinPower:boolean;
 	pompeiBaby:boolean;
 	vesuveCounter:number;
 	chiantmanActivated: boolean;
+	corruption: Pokemon | null;
+	hascorrupted: Pokemon[];
 	syrupTriggered: boolean;
 	stellarBoostedTypes: string[];
 
@@ -484,6 +487,9 @@ export class Pokemon {
 		this.heroMessageDisplayed = false;
 		this.swordBoost = false;
 		this.okinaCetteConne = false;
+		this.corruption = null;
+		this.hascorrupted = [];
+		this.canGemAlert = true;
 		this.epsteinPower = true;
 		this.pompeiBaby = false;
 		this.vesuveCounter = 0;

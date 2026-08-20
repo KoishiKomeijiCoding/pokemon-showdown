@@ -6314,7 +6314,6 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	},
 	obliteryx: {
 		tier: "shitpostou",
-		isNonstandard: "CAP",
 	},
 	quagsiremega: {
 		tier: "shitpostou",
@@ -6326,6 +6325,12 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "shitpostou"
 	},
 	incineroarmega: {
+		tier: "shitpostou"
+	},
+	mineducongo: {
+		tier: "shitpostou"
+	},
+	epstein: {
 		tier: "shitpostou"
 	},
 	mewtow1g: {

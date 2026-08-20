@@ -6232,30 +6232,32 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 224,
 	},
 	joyauxrare: {
-		onEffectiveness(typeMod, target, type, move) {
-			if (move.type !== 'Ground') return;
-			if (!target) return; // avoid crashing when called from a chat plugin
-			// ignore effectiveness if the target is Flying type and immune to Ground
-			if (!target.hasType('Flying')) {
-				return 0;
-			}
-			else {
-				return 1;
+		onDamagePriority: 1,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Ground') {
+				return this.chainModify(1.5);
 			}
 		},
-		onHit(target, source, move) {
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Ground') {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifyMove(move, attacker) {
 				if (move.type !== 'Ground') return;
+				console.log("On essais")
+				
 				if (Math.random() * (100 - 0) + 0 < 33) {
+					console.log("on est censé trouvé la pierre")
 					this.add('-message',"La Mine du Congo a trouvé la pierre rare !")
-					source.setItem('Congozelite');
-				}
-				/*pokemon.lastItem = item.id;
-				pokemon.usedItemThisTurn = true;
-				this.add('-enditem', pokemon, item.name, '[from] move: Fling');
-				this.runEvent('AfterUseItem', pokemon, null, null, item);
-				pokemon.removeVolatile('fling');*/
-			},
-		flags: {},
+					attacker.setItem('Congozelite');
+					attacker.canMegaEvo = attacker.canMegaEvo === false ? false : this.actions.canMegaEvo(attacker)
+				}	
+		},
+		flags: {
+			failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1,
+			breakable: 1, notransform: 1,
+		},
 		name: "Joyaux Rare",
 		rating: 3.5,
 		num: 224,

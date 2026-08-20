@@ -13768,7 +13768,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.attrLastMove('[still]');
 					return false;
 				}
-			},
+			}, 
 		},
 		target: "normal",
 		type: "Bug",
@@ -18505,7 +18505,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "With this treasure I summon",
-		pp: 10,
+		pp: 1,
 		priority: 0,
 		flags: { snatch: 1, nonsky: 1, metronome: 1 },
 		volatileStatus: 'withthistreasureisummon',
@@ -18523,11 +18523,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (target.baseSpecies.baseSpecies === 'Epstein' || !target.transformed) {
 					target.formeChange("Epstein-Summoned", this.effect, false, '0', '[msg]');
 				}
-			this.boost({ spe: -2 }, target);
-			this.boost({ def: -2 }, target);
-			this.boost({ atk: -2 }, target);
-			this.boost({ spa: -2 }, target);
-			this.boost({ spd: -2 }, target);
+			this.boost({ spe: -1 }, target);
+			this.boost({ def: -1 }, target);
+			this.boost({ atk: -1 }, target);
+			this.boost({ spa: -1 }, target);
+			this.boost({ spd: -1 }, target);
 		},
 		condition: {
 			onStart(target, source, effect) {
@@ -22112,8 +22112,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onHit(pokemon) {
-			this.add('-message',"je deviens fou")
-			this.add('-message',"hello ???" + this.field.terrain)
 			if (this.field.terrain === 'dataserver') {
 				return;
 
@@ -22251,6 +22249,105 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+	gemalert: {
+		num: 588,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		isNonstandard: "Past",
+		name: "Gem Alert",
+		pp: 10,
+		priority: 4,
+		flags: { noassist: 1, failcopycat: 1, failinstruct: 1 },
+		stallingMove: true,
+		volatileStatus: 'gemalert',
+		onHit(pokemon) {
+			pokemon.addVolatile('followme');
+		},
+		condition: {
+            duration: 1,
+            onStart(pokemon) {
+                this.add('-singleturn', pokemon, 'move: Gem Alert');
+            },
+            onDamagingHit(damage, target, source, move) {
+				if (!target.canGemAlert) return;
+				target.canGemAlert = false;
+				this.actions.useMove('rockslide', target);
+				target.canGemAlert = true; //pour eviter les stacksoverflows
+			},
+            onSourceModifyDamage(damage, source, target, move) {
+					console.log("on repasse ici")       
+                    this.debug('Shadow Shield weaken');
+                    return this.chainModify(0.5);
+            },
+        },
+		target: "self",
+		type: "Ground",
+		zMove: { effect: 'clearnegativeboost' },
+		contestType: "Cool",
+	},
+	corruption: {
+		num: 588,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		isNonstandard: "Past",
+		name: "Corruption",
+		pp: 5,
+		priority: 4,
+		flags: { noassist: 1, failcopycat: 1, failinstruct: 1 },
+		stallingMove: true,
+		volatileStatus: 'corruption',
+		onTryHit(target, source, move) {
+			if (source.hascorrupted.includes(target)) {
+				this.add("-message",target.name + " a déjà était corrompue et refuse le deal !")
+				return false;
+			}
+		},
+		onHit(target,source) {
+			this.heal(target.baseMaxhp);
+			target.corruption = source;
+			source.hascorrupted.push(target)
+			const stats: BoostID[] = ["atk","def","spa","spd","spe"]
+			const randomStat = this.sample(stats);
+			const randomStat2 = this.sample(stats);
+			const boost: SparseBoostsTable = {};
+			if (randomStat === randomStat2) {
+				boost[randomStat] = 2;
+			}
+			else {
+				boost[randomStat] = 1;
+				boost[randomStat2] = 1;
+			}		
+			this.boost(boost,source);
+		},
+		condition: {
+            duration: 1,
+            onStart(pokemon) {
+                this.add('-singleturn', pokemon, 'move: Corruption');
+            },
+            onTryMove(source, target, move) {
+				if (target == source.corruption) {
+					this.add("-message",source.name + " est corrompue par " + target.name + " et ne peut pas attaquer!")
+					return false;
+				}
+			},
+			onEnd(pokemon) {
+				pokemon.corruption = null
+				this.add('-end', pokemon, 'Corruption', '[silent]');
+			},
+        },
+		target: "normal",
+		type: "Dark",
+		zMove: { effect: 'clearnegativeboost' },
+		contestType: "Cool",
+	},
+}
+
+
+
+
+
+
 
 	
-}
