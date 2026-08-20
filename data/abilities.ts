@@ -6247,12 +6247,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (move.type !== 'Ground') return;
 				console.log("On essais")
 				
-				if (Math.random() * (100 - 0) + 0 < 33) {
-					console.log("on est censé trouvé la pierre")
-					this.add('-message',"La Mine du Congo a trouvé la pierre rare !")
-					attacker.setItem('Congozelite');
-					attacker.canMegaEvo = attacker.canMegaEvo === false ? false : this.actions.canMegaEvo(attacker)
-				}	
+				if (attacker.species.id === 'mineducongo')
+					if (Math.random() * (100 - 0) + 0 < 33) {
+						console.log("on est censé trouvé la pierre")
+						this.add('-message',"La Mine du Congo a trouvé la pierre rare !")
+						attacker.setItem('Congozelite');
+						attacker.canMegaEvo = attacker.canMegaEvo === false ? false : this.actions.canMegaEvo(attacker)
+					}	
 		},
 		flags: {
 			failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1,

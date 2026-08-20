@@ -71503,6 +71503,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	herominipekka: {
 		learnset: {
+			pulverizingpancake: ["9M"],
 			aerialace: ["9M","8L12", "7M", "7L22", "6M", "6L22"],
 			afteryou: ["9M","7T", "6T"],
 			attract: ["9M","8M", "7M", "6M"],

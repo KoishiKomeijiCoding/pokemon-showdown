@@ -21611,9 +21611,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (!this.queue.willMove(target) && target.activeTurns) return false;
 		},
 		condition: {
-			duration: 1,
+			duration: 3,
 			onStart(target) {
-				this.add('-singleturn', target, 'move: normalisator');
+				this.add('-start', target, 'move: Normalisator');
 			},
 			onModifyTypePriority: -2,
 			onModifyType(move) {
@@ -21622,9 +21622,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					move.type = 'Normal';
 				}
 			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Normalisator');
+			},
 		},
 		flags: { protect: 1, mirror: 1, nonsky: 1 },
-		target: "allAdjacentFoes",
+		target: "normal",
 		type: "Normal",
 		zMove: { basePower: 180 },
 		contestType: "Beautiful",
@@ -21845,7 +21848,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	standreadyformyworm: {
 		num: 400,
 		accuracy: 100,
-		basePower: 70,
+		basePower: 120,
 		category: "Physical",
 		name: "Stand Ready For my Worm",
 		pp: 15,
