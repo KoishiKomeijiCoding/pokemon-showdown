@@ -21865,7 +21865,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					return this.chainModify([5325, 4096]);
 				}
 				if (move.type === 'Water' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
-					this.add('-message',"Une grande partie de l'au est absorbé par les data centers !")
+					this.add('-message',"Une grande partie de l'eau est absorbée par les data centers !")
 					return this.chainModify(0.1);
 				}
 			},
@@ -21948,20 +21948,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		maxMove: { basePower: 140 },
 		contestType: "Beautiful",
 	},
-};
-	bowling: {
-		num: 247,
-		accuracy: 100,
-		basePower: 120,
-		category: "Special",
-		name: "Bowling",
-		pp: 15,
-		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
-		target: "normal",
-		type: "Rock",
-		contestType: "Clever",
-	},
 	mangetesmorts: {
 		num: 73,
 		accuracy: 90,
@@ -22013,6 +21999,101 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+	fireboll: {
+		num: 200,
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		name: "Fireboll",
+		pp: 15,
+		priority: 0,
+		onHit(target, source, move) {
+			for (const ally of target.adjacentAllies()) {
+				this.damage(ally.baseMaxhp / 8, ally, source, this.dex.conditions.get('Flame Burst'));
+			}
+		},
+		onAfterSubDamage(damage, target, source, move) {
+			for (const ally of target.adjacentAllies()) {
+				this.damage(ally.baseMaxhp / 8, ally, source, this.dex.conditions.get('Flame Burst'));
+			}
+		},
+		flags: { protect: 1, mirror: 1, metronome: 1,  bullet: 1 },
+		target: "normal",
+		type: "Fire",
+		contestType: "Cool",
+	},
+	sortdeneant: {
+		num: 2000,
+		accuracy: true,
+		basePower: 0,
+		category: "Statuts",
+		name: "Sort de Neant",
+		pp: 1,
+		noPPBoosts: true,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onHit(pokemon) {
+			const targets = pokemon.adjacentFoes();
+			const hit1 = this.sample(["neantsimple", "neantmultiple"]);
+			const hit2 = this.sample(["neantsimple", "neantmultiple"]);
+			const hit3 = this.sample(["neantsimple", "neantmultiple"]);
+			this.actions.useMove(hit1, pokemon, targets);
+			this.actions.useMove(hit2, pokemon, targets);	
+			this.actions.useMove(hit3, pokemon, targets);
+			},
+		target: "self",
+		type: "Dark",
+		contestType: "Cool",
+	},
+	neantsimple: {
+		num: 2001,
+		accuracy: 100,
+		basePower: 150,
+		category: "Special",
+		name: "Neant Simple",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, mirror: 1 },
+		multiaccuracy: true,
+		target: "normal",
+		type: "Dark",
+		contestType: "Cool",
+	},
+	neantmultiple: {
+		num: 2002,
+		accuracy: 100,
+		basePower: 50,
+		category: "Special",
+		name: "Neant Multiple",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, mirror: 1 },
+		multiaccuracy: true,
+		target: "allAdjacentFoes",
+		type: "Dark",
+		contestType: "Cool",
+	},
+	magic: {
+		num: 2003,
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		name: "Magic",
+		pp: 1,
+		noPPBoosts: true,
+		priority: 1,
+		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, allyanim: 1, failencore: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 },
+		onHit(target, pokemon) {
+			return target.transformInto(pokemon);
+		},
+		target: "normal",
+		type: "Psychic",
+		contestType: "Clever",	
+	},
+};
 
-	
-}
+// moves du roi
+// Offre Speciale Joker (gagne +25 niveaux)
+// Boutique d'Emote (taunt tous les adversaires avec prio) (afficher un effet Ehehehaha)
+// Coffre Legendaire du Roi -> devient un perso de clash aléatoire 
+// pass royale / en talent +1 dans une stat aléatoire à la fin du tour

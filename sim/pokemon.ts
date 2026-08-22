@@ -261,6 +261,7 @@ export class Pokemon {
 	swordBoost: boolean;
 	shieldBoost: boolean;
 	okinaCetteConne:boolean;
+	bouclier: boolean;
 	vesuveCounter:number;
 	chiantmanActivated: boolean;
 	syrupTriggered: boolean;
@@ -482,6 +483,7 @@ export class Pokemon {
 		this.heroMessageDisplayed = false;
 		this.swordBoost = false;
 		this.okinaCetteConne = false;
+		this.bouclier = false;
 		this.vesuveCounter = 0;
 		this.chiantmanActivated = false;
 		this.shieldBoost = false;
