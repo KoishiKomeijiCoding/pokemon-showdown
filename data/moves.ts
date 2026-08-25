@@ -22345,6 +22345,30 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Cool",
 	},
+	wonderfulberry: {
+		num: 450,
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		name: "Bug Bite",
+		pp: 20,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onHit(target, source, move) {
+				const item = target.getItem();
+				if (source.hp && item.isBerry && target.takeItem(source)) {
+					this.add('-enditem', target, item.name, '[from] stealeat', '[move] Bug Bite', `[of] ${source}`);
+					if (this.singleEvent('Eat', item, target.itemState, source, source, move)) {
+						this.runEvent('EatItem', source, source, move, item);
+						if (item.id === 'leppaberry') target.staleness = 'external';
+					}
+					if (item.onEat) source.ateBerry = true;
+				}
+		},
+		target: "allAdjacentFoes",
+		type: "Bug",
+		contestType: "Cute",
+	},
 }
 
 
