@@ -5413,6 +5413,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.epsteinPower) {
 				pokemon.epsteinPower = false
 				const targets = pokemon.adjacentFoes()
+				if (!targets) return;
 				this.add('-ability', pokemon, 'Epstein Files');
 				targets[Math.floor(Math.random() * targets.length)].changeLevel(-1)
 			}
