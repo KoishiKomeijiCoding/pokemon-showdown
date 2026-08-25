@@ -268,6 +268,7 @@ export class Pokemon {
 	chiantmanActivated: boolean;
 	corruption: Pokemon | null;
 	hascorrupted: Pokemon[];
+	leftoCounter: number;
 	syrupTriggered: boolean;
 	stellarBoostedTypes: string[];
 
@@ -489,6 +490,7 @@ export class Pokemon {
 		this.okinaCetteConne = false;
 		this.corruption = null;
 		this.hascorrupted = [];
+		this.leftoCounter = 0;
 		this.canGemAlert = true;
 		this.epsteinPower = true;
 		this.pompeiBaby = false;

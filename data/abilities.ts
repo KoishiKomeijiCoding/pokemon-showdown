@@ -6246,11 +6246,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifyMove(move, attacker) {
 				if (move.type !== 'Ground') return;
-				console.log("On essais")
-				
 				if (attacker.species.id === 'mineducongo')
 					if (Math.random() * (100 - 0) + 0 < 33) {
-						console.log("on est censé trouvé la pierre")
 						this.add('-message',"La Mine du Congo a trouvé la pierre rare !")
 						attacker.setItem('Congozelite');
 						attacker.canMegaEvo = attacker.canMegaEvo === false ? false : this.actions.canMegaEvo(attacker)
@@ -6264,6 +6261,22 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: 224,
 	},
+	wonderfulsliceoflefto: {
+		onModifyMove(move, attacker,defender) {
+				if (defender?.item === "leftovers") {
+					const item = defender.takeItem();
+					attacker.leftoCounter = attacker.leftoCounter  + 1
+					this.add('-activate', attacker, 'ability: Wonderful Slice of Lefto')
+					this.add('-message',"Le chien vole les lefto de" + defender.name)
+				}
+		},
+		onResidual(pokemon) {
+			if (pokemon.leftoCounter == 0) return;
+			const heal = pokemon.baseMaxhp / 16.6
+			this.heal(heal*pokemon.leftoCounter)
+		},
+		name: "Wonderful Slice of Lefto",
+	}
 }
 	
 	

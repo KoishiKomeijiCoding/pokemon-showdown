@@ -21579,5 +21579,17 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Monster", "Grass"],
 		requiredItem: "Congozelite",
 	},
+	dogwithshirt: {
+		num: 10025,
+		name: "Dog With Shirt",
+		types: ["Normal"],
+		baseStats: { hp: 121, atk: 114, def: 84, spa: 63, spd: 72, spe: 124},
+		abilities: { 0: "Wonderful Slice of Lefto" },
+		heightm: 2.7,
+		weightkg: 185,
+		color: "Brown",
+		eggGroups: ["Monster", "Grass"],
+		requiredItem: "Congozelite",
+	},
 	
 };
