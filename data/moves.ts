@@ -22083,8 +22083,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		noPPBoosts: true,
 		priority: 1,
 		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, allyanim: 1, failencore: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 },
-		onHit(target, pokemon) {
-			return target.transformInto(pokemon);
+		onHit(target, source,moove) {
+			const lapins = ["diggersby","cinderace","lopunny","azumarill"]
+			target.formeChange(this.sample(lapins),moove,true, target.name + " est transformé en lapin !");//transforminto est forçément temporaire dcp on peut pas utiliser ça
+			target.moveSlots[Math.floor(Math.random() * (3 + 1))] =
+			{
+				move: "Bounce",
+				id: "bounce" as ID,
+				pp: 8,
+				maxpp: 8,
+				target: "normal",
+				disabled: false,
+				used: false,
+				virtual: true,
+			}; //on met Bounce dans le mooveset du poke de manière aléatoirement
 		},
 		target: "normal",
 		type: "Psychic",

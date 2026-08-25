@@ -6191,6 +6191,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return 0;
 			}
 		},
+		onTryHit(target, source, move) {
+			if (move.category === 'Status' && target !== source && this.effectState.shield) {
+				this.add('-immune', target, "[from] ability: I'm a Wizard");
+				return null;
+			}
+		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, breakable: 1, notransform: 1 },			
 		name: "I'm a Wizard",
 		rating: 3,

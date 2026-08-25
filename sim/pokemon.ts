@@ -1361,7 +1361,7 @@ export class Pokemon {
 				disabled: false,
 				used: false,
 				virtual: true,
-			});
+			}); // ici
 		}
 		let boostName: BoostID;
 		for (boostName in pokemon.boosts) {
