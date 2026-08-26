@@ -6295,7 +6295,46 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Cinq nuits chez Freddy",
 		rating: 2.5,
 		num: 9990,
-	}
+	},
+	imawizard: {
+        onSwitchOut(pokemon) {
+            if (pokemon.baseSpecies.baseSpecies !== 'Sorcier') return;
+            if (pokemon.species.forme === 'Base') {
+                pokemon.formeChange('Sorcier Evolue', this.effect, true);
+                return;
+                }
+            if (pokemon.species.forme === 'Evolution') {
+                pokemon.formeChange('Sorcier', this.effect, true);
+                return;
+                }
+            },
+        onSwitchIn(pokemon) {
+            if (pokemon.baseSpecies.baseSpecies !== 'Sorcier') return;
+            if (pokemon.species.forme === 'Evolution') {
+                this.add('-activate', pokemon, "ability: I'm a Wizard");
+                this.add('-start', pokemon, `bouclier`); 
+                this.effectState.shield = true;
+            }
+        },
+        onDamage(damage, target, source, effect) {
+            if (effect?.effectType === 'Move' && ['sorcierevolue'].includes(target.species.id) && this.effectState.shield) {
+                this.add('-activate', target, "ability: I'm a Wizard!");
+                this.effectState.shield = false;
+                this.add('-end', target, `bouclier`); 
+                return 0;
+            }
+        },
+        onTryHit(target, source, move) {
+            if (move.category === 'Status' && target !== source && this.effectState.shield) {
+                this.add('-immune', target, "[from] ability: I'm a Wizard");
+                return null;
+            }
+        },
+        flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, breakable: 1, notransform: 1 },            
+        name: "I'm a Wizard",
+        rating: 3,
+        num: 998,
+    },
 }
 	
 	
