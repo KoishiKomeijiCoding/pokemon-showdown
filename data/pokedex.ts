@@ -21602,7 +21602,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Monster", "Grass"],
 	},
 	sorcier: {
-        num: 1984,
+        num: 10984,
         name: "Sorcier",
         forme: "Base",
         types: ["Fire"],
@@ -21616,7 +21616,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
         formeOrder: ["Sorcier", "Sorcier Evolue"],
     },
     sorcierevolue: {
-        num: 1984,
+        num: 10984,
         name: "Sorcier Evolue",
         baseSpecies: "Sorcier",
         forme: "Evolution",
