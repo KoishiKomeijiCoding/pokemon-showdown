@@ -22350,7 +22350,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
-		name: "Bug Bite",
+		name: "Wonderful Berry",
 		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
@@ -22366,9 +22366,47 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 		},
 		target: "allAdjacentFoes",
-		type: "Bug",
+		type: "Normal",
 		contestType: "Cute",
 	},
+	screamer: {
+		num: 252,
+		accuracy: 90,
+		basePower: 80,
+		category: "Physical",
+		name: "Screamer",
+		pp: 10,
+		priority: 3,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1,cantusetwice: 1 },
+		secondary: {
+			chance: 100,
+			volatileStatus: 'flinch',
+		},
+		target: "allAdjacentFoes",
+		type: "Normal",
+		contestType: "Cute",
+	},
+	poweroutrage: {
+		num: 252,
+		accuracy: 100,
+		basePower: 40,
+		category: "Physical",
+		name: "Power Outrage",
+		pp: 10,
+		priority: 3,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onHit(source) {
+			this.field.addPseudoWeather('watersport',source)
+			this.field.addPseudoWeather('mudsport',source)
+		},
+		secondary: {
+			chance: 100,
+			volatileStatus: 'flinch',
+		},
+		target: "allAdjacentFoes",
+		type: "Ghost",
+		contestType: "Cute",
+	}
 }
 
 

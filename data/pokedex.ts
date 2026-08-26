@@ -21529,7 +21529,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Ground"],
 		baseForme: "jew",
 		genderRatio: { M: 1, F: 0 },
-		baseStats: { hp: 110, atk: 110, def: 110, spa: 80, spd: 110, spe: 90 },
+		baseStats: { hp: 90, atk: 90, def: 90, spa: 60, spd: 90, spe: 70 },
 		abilities: { 0: "Epstein Files" },
 		heightm: 1.50,
 		weightkg: 130.0,
@@ -21545,7 +21545,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Summoned",
 		types: ["Ground"],
 		genderRatio: { M: 0, F: 1 },
-		baseStats: { hp: 110, atk: 110, def: 110, spa: 80, spd: 110, spe: 90 },
+		baseStats: { hp: 90, atk: 90, def: 90, spa: 60, spd: 90, spe: 70 },
 		abilities: { 0: "Epstein Files" },
 		heightm: 1.50,
 		weightkg: 130.0,
@@ -21589,7 +21589,17 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 185,
 		color: "Brown",
 		eggGroups: ["Monster", "Grass"],
-		requiredItem: "Congozelite",
 	},
+	freddyfazbear: {
+		num: 10026,
+		name: "Freddy Fazbear",
+		types: ["Normal","Ghost"],
+		baseStats: { hp: 90, atk: 140, def: 140, spa: 45, spd: 100, spe: 50},
+		abilities: { 0: "Cinq nuits chez Freddy" },
+		heightm: 2.7,
+		weightkg: 185,
+		color: "Brown",
+		eggGroups: ["Monster", "Grass"],
+	}
 	
 };

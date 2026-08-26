@@ -6276,6 +6276,25 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.heal(heal*pokemon.leftoCounter)
 		},
 		name: "Wonderful Slice of Lefto",
+		rating: 2.5,
+		num: 9991,
+	},
+	cinqnuitschezfreddy: {
+		onSwitchIn(pokemon) {
+			const moveId = 'meanlook'; // ← Change this to any move you want!
+			const move = this.dex.getActiveMove(moveId);
+			this.add('-ability', pokemon, 'Cinq nuit chez Freddys');
+			for (const target of pokemon.adjacentFoes()) {
+				if (move) {
+					this.actions.useMove(move, pokemon,{ target: target });
+				}
+			}
+			this.field.addPseudoWeather("trickroom")
+		},
+		flags: {},
+		name: "Cinq nuits chez Freddy",
+		rating: 2.5,
+		num: 9990,
 	}
 }
 	
