@@ -6333,6 +6333,18 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	epstein: {
 		tier: "shitpostou"
 	},
+	dogwithshirt: {
+		tier: "shitpostou"
+	},
+	freddyfazbear: {
+		tier: "shitpostou"
+	},
+	sorcier: {
+		tier: "shitpostou"
+	},
+	arabintruder: {
+		tier: "shitpostou"
+	},
 	mewtow1g: {
 		tier: "shitpostuber"
 	}
