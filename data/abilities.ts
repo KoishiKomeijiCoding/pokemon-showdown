@@ -2429,6 +2429,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.actions.useMove("allahakbar",target)
 			}
 		},
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Dark') {
+				this.add('-immune', target, '[from] ability: Intrusion');
+				return null;
+			}
+		},
 		flags: {},
 		name: "Intrusion",
 		rating: 2.5,
@@ -6352,6 +6358,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
                 this.add('-activate', target, "ability: I'm a Wizard!");
                 this.effectState.shield = false;
                 this.add('-end', target, `bouclier`); 
+				this.actions.useMove("fireboll", target,{ target: source })
                 return 0;
             }
         },
