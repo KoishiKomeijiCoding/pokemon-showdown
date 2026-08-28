@@ -21629,5 +21629,16 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
         eggGroups: ["Human-Like"],
         battleOnly: "Sorcier",
     },
+	arabintruder: {
+			num: 10026,
+			name: "Arab Intruder",
+			types: ["Dark","Ghost"],
+			baseStats: { hp: 85, atk: 105, def: 70, spa: 90, spd: 150, spe: 75},
+			abilities: { 0: "Intusion" },
+			heightm: 2.7,
+			weightkg: 185,
+			color: "Brown",
+			eggGroups: ["Monster", "Grass"],
+	}
 	
 };

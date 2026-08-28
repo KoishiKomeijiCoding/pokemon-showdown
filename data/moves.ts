@@ -22279,8 +22279,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				target.canGemAlert = true; //pour eviter les stacksoverflows
 			},
             onSourceModifyDamage(damage, source, target, move) {
-					console.log("on repasse ici")       
-                    this.debug('Shadow Shield weaken');
                     return this.chainModify(0.5);
             },
         },
@@ -22459,6 +22457,102 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
         type: "Fire",
         contestType: "Cool",
     },
+	allahakbar: {
+		num: 153,
+		accuracy: 100,
+		basePower: 500,
+		category: "Physical",
+		name: "Allah Akbar",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, noparentalbond: 1, explosive: 1 },
+		selfdestruct: "always",
+		target: "allAdjacent",
+		type: "Normal",
+		contestType: "Beautiful",
+	},
+	coran: {
+		num: 201,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Coran",
+		pp: 10,
+		priority: 0,
+		flags: { metronome: 1, wind: 1 },
+		volatileStatus: 'coran',
+		condition: {
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Islamise');
+			},
+			onResidual(pokemon) {
+				if (Math.floor(Math.random() * (2 + 1)) == 2) {
+					this.add('-message', pokemon.name + " ne peut pas résister à l'envie de s'autodétruire !");
+					this.actions.useMove('allahakbar', pokemon);
+				}
+			},
+			onDamagingHit(damage, target, source, move) {
+				if (!target.hp && this.checkMoveMakesContact(move, source, target, true)) {
+					this.actions.useMove('allahakbar', target);
+				}
+			},
+		},
+		target: "normal",
+		type: "Dark",
+		zMove: { boost: { spe: 1 } },
+		contestType: "Tough",
+	},
+	musiquearabe: {
+		num: 180,
+		accuracy: 100,
+		basePower: 80,
+		category: "Status",
+		name: "Musique Arabe",
+		pp: 15,
+		priority: 0,
+		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, sound: 1 },
+		onHit(target) {
+			let move: Move | ActiveMove | null = target.lastMove;
+			if (!move || move.isZ) return false;
+			if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
+
+			const ppDeducted = target.deductPP(move.id, 8);
+			if (!ppDeducted) return false;
+			this.add("-activate", target, 'move: Spite', move.name, ppDeducted);
+			target.addVolatile('torment')
+		},
+		target: "normal",
+		type: "Ghost",
+		zMove: { effect: 'heal' },
+		contestType: "Tough",
+	},
+	dijihad: {
+		num: 201,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Dijihad",
+		pp: 10,
+		priority: 3,
+		flags: { metronome: 1, wind: 1 },
+		volatileStatus: 'dijihad',
+		onHit(target, source, move) {
+			return target.addVolatile('trapped', source, move, 'trapper');
+		},
+		condition: {
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Dijihad');
+			},
+			onSourceModifyDamage(damage, source, target, move) {
+					console.log("dammage doubled")
+                    return this.chainModify(2);
+            },
+		},
+		target: "normal",
+		type: "Dark",
+		zMove: { boost: { spe: 1 } },
+		contestType: "Tough",
+	},
 }
 
 

@@ -2403,6 +2403,37 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2.5,
 		num: 64,
 	},
+	intrusion: {
+		onTryHeal(relayVar,target,source,effet) {
+			console.log(`Heal is occurring: ${target} <- ${source} :: ${effet.id} :: ${relayVar}`);
+			this.damage(relayVar);
+			return 0;
+		},
+		onFoeTryHeal(relayVar,target,source,effet) {
+			console.log(`Heal is occurring: ${target} <- ${source} :: ${effet.id} :: ${relayVar}`);
+			this.damage(relayVar);
+			return 0;
+		},
+		/*onSourceTryHeal(damage, target, source, effect) {
+			console.log(`Heal is occurring: ${target} <- ${source} :: ${effect.id} :: ${damage}`);
+			this.damage(damage);
+			return 0;
+		
+		},*/
+		onModifyMove(move) {
+			move.infiltrates = true;
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (!target.hp) {
+				this.add('-ability', target, 'Intrusion');
+				this.actions.useMove("allahakbar",target)
+			}
+		},
+		flags: {},
+		name: "Intrusion",
+		rating: 2.5,
+		num: 64,
+	},
 	liquidvoice: {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
