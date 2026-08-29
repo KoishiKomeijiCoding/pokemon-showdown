@@ -595,15 +595,15 @@ export class Side {
 				break;
 			}
 			if (!targetType && ['', 'dynamax'].includes(event) && request.maxMoves) {
-				for (const [i, moveRequest] of request.maxMoves.maxMoves.entries()) {
-					if (moveid === moveRequest.move) {
-						moveid = request.moves[i].id;
-						moveSlot = i;
-						targetType = moveRequest.target;
-						event = 'dynamax';
-						break;
+					for (const [i, moveRequest] of request.maxMoves.maxMoves.entries()) {
+						if (moveid === moveRequest.move) {
+							moveid = request.moves[i].id;
+							moveSlot = i;
+							targetType = moveRequest.target;
+							event = 'dynamax';
+							break;
+						}
 					}
-				}
 			}
 			if (!targetType && ['', 'zmove'].includes(event) && request.canZMove) {
 				for (const [i, moveRequest] of request.canZMove.entries()) {

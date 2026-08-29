@@ -754,7 +754,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'Dynamax',
 		noCopy: true,
 		onStart(pokemon) {
-			this.effectState.turns = 0;
+			this.effectState.turns = 1;
 			pokemon.removeVolatile('minimize');
 			pokemon.removeVolatile('substitute');
 			if (pokemon.volatiles['torment']) {
@@ -792,7 +792,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			return null;
 		},
 		onResidualPriority: -100,
-		onResidual() {
+		onResidual(source) {
+			if (source.ability === "pouvoirgigamax" as ID) return;
 			this.effectState.turns++;
 		},
 		onEnd(pokemon) {

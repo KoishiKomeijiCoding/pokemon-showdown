@@ -1100,6 +1100,11 @@ export class Pokemon {
 			// Some pokemon species are unable to dynamax
 			if (this.species.cannotDynamax || this.illusion?.species.cannotDynamax) return;
 		}
+		
+		if (this.ability === 'pouvoirgigamax' || this.baseAbility === 'pouvoirgigamax') {
+        return; // Ne générez pas de maxMoves
+    }
+
 		const result: DynamaxOptions = { maxMoves: [] };
 		let atLeastOne = false;
 		for (const moveSlot of this.moveSlots) {

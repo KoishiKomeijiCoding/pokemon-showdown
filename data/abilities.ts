@@ -6241,4 +6241,32 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 998,
 	},
+		pouvoirgigamax: {
+		// Première partie : Le pokémon dynamaxe sur le switch.
+		// La condition 'Dynamax' a été modifiée pour rendre le Dynamax de ce talent infini.
+		// La ... '...' a été modifiée pour faire que le Dynamax de ce talent ne modifie pas les moves en moves Gmax.
+		onStart(pokemon) {
+			pokemon.addVolatile('Dynamax')
+		},
+		// Deuxième partie : Lors que le pokémon lance une attaque, il lance une attaque Gmax aléatoire en plus.
+		onAfterMove(source, target) {
+			const listeMovesGmax = [
+				'gmaxbefuddle', 'gmaxcannonade', 'gmaxcentiferno', 'gmaxchistrike', 'gmaxcuddle',
+				'gmaxdepletion', 'gmaxfinale', 'gmaxfoamburst', 'gmaxgoldrush', 'gmaxgravitas', 
+				'gmaxmalodor', 'gmaxmeltdown', , 'gmaxreplenish', 'gmaxresonance', 'gmaxsandblast', 
+				'gmaxsmite', 'gmaxsnooze', 'gmaxstunshock', 'gmaxsweetness', 'gmaxtartness', 
+				'gmaxterror', 'gmaxvinelash', 'gmaxvolcalith', 'gmaxvoltcrash', 'gmaxwildfire', 
+				'gmaxwindrage',
+				// 'gmaxsteelsurge', 'gmaxstonesurge'
+				// 'gmaxhydrosnipe', 'gmaxdrumsolo', 'gmaxfireball'
+				// 'gmaxoneblow', 'gmaxrapidflow', 
+			];
+			const moveGmaxSupplementaire = this.sample(listeMovesGmax);
+			this.actions.useMove(moveGmaxSupplementaire, source);
+		},
+		flags: {},
+		name: "Pouvoir Gigamax",
+		rating: 5,
+		num: 3000,
+	},
 };
