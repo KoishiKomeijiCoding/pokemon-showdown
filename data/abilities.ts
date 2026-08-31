@@ -6480,8 +6480,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				// 'gmaxhydrosnipe', 'gmaxdrumsolo', 'gmaxfireball'
 				// 'gmaxoneblow', 'gmaxrapidflow', 
 			];
+
 			const moveGmaxSupplementaire = this.sample(listeMovesGmax);
-			this.actions.useMove(moveGmaxSupplementaire, source); //Rudolf apprends à coder ptn de merde
+			if (moveGmaxSupplementaire != undefined) {
+				this.actions.useMove(moveGmaxSupplementaire, source); //Rudolf apprends à coder ptn de merde
+			}
 		},
 		flags: {},
 		name: "Pouvoir Gigamax",
