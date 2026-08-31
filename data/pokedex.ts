@@ -21693,7 +21693,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	regitube: {
 		num: 19850,
 		name: "Regitube",
-		types: ["Normal"],
+		types: ["Water"],
 		baseStats: { hp: 80, atk: 50, def: 100, spa: 200, spd: 100, spe: 50},
 		abilities: { 0: "Clear Body"},
 		heightm: 1.80,
