@@ -21645,7 +21645,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Kingratio",
 		types: ["Dark", "Steel"],
 		baseStats: { hp: 100, atk: 135, def: 120, spa: 60, spd: 85, spe: 50 },
-		abilities: { 0: "Ratio Supreme:"},
+		abilities: { 0: "Ratio Supreme"},
 		heightm: 2,
 		weightkg: 120,
 		color: "Black",
@@ -21691,7 +21691,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Human-Like"],
 	},
 	regitube: {
-		num: 1985,
+		num: 19850,
 		name: "Regitube",
 		types: ["Normal"],
 		baseStats: { hp: 80, atk: 50, def: 100, spa: 200, spd: 100, spe: 50},
