@@ -43,6 +43,11 @@ export const Tags: { [id: IDEntry]: TagData } = {
 		desc: "Legendaries usually only obtainable from events. Usually BST 600",
 		speciesFilter: species => species.tags.includes("Mythical"),
 	},
+	shitmon: {
+		name: "Shitmon",
+		desc: "Le shitpost",
+		speciesFilter: species => species.tags.includes("Shitmon"),
+	},
 	sublegendary: {
 		name: "Sub-Legendary",
 		desc: "Legendaries that aren't Restricted or Mythical. Usually BST 570 to 580.",
@@ -146,6 +151,10 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	uber: {
 		name: "Uber",
 		speciesFilter: species => species.tier === 'Uber' || species.tier === 'AG' || species.tier === '(AG)',
+	},
+	shitpostou: {
+		name: "ShitpostOU",
+		speciesFilter: species => species.tier === 'shitpostou',
 	},
 	ou: {
 		name: "OU",

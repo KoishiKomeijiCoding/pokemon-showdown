@@ -940,7 +940,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 	},
-
 	rolloutstorage: {
 		name: 'rolloutstorage',
 		duration: 2,

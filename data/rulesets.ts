@@ -15,6 +15,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		ruleset: [
 			'Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
 		],
+		banlist: ['Congozelite']
 	},
 	standard: {
 		effectType: 'ValidatorRule',
@@ -22,6 +23,16 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: "The standard ruleset for all official Smogon singles tiers (Ubers, OU, etc.)",
 		ruleset: [
 			'Standard AG',
+			'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause',
+		],
+		banlist: ['ShitpostOU'],
+	},
+	shitpost: {
+		effectType: 'ValidatorRule',
+		name: 'Shitpost',
+		desc: "Autorise le shitpost",
+		ruleset: [
+			'Standard AG', 'NatDex Mod',
 			'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause',
 		],
 	},

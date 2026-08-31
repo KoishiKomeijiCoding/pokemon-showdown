@@ -6178,10 +6178,6 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		isNonstandard: "CAP",
 		tier: "Illegal",
 	},
-	obliteryx: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
 	pokestarsmeargle: {
 		isNonstandard: "Custom",
 		tier: "Illegal",
@@ -6251,7 +6247,105 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "Illegal",
 	},
 	okinamatara: {
-		isNonstandard: "Custom",
-		tier: "Illegal",
+		tier: "shitpostou",
 	},
+	cheval: {
+		tier: "shitpostou",
+	},
+	zagamore: {
+		tier : "shitpostou"
+	},
+	degueulassor: {
+		tier : "shitpostou"
+	},
+	rattumeur: {
+		tier : "shitpostou"
+	},
+	rayan: {
+		tier: "shitpostou"
+	},
+	doji: {
+		tier: "shitpostou"
+	},
+	ashbaby: {
+		tier: "shitpostou"
+	},
+	sixseven: {
+		tier: "shitpostou"
+	},
+	vergil: {
+		tier: "shitpostou"
+	},
+	stephenhawking: {
+		tier: "shitpostou"
+	},
+	mortbontemps: {
+		tier: "shitpostou"
+	},
+	electrosorcier: {
+		tier: "shitpostou"
+	},
+	dodoria: {
+		tier: "shitpostou"
+	},
+	glock: {
+		tier: "shitpostou"
+	},
+	omniman: {
+		tier: "shitpostou"
+	},
+	chatgpt: {
+		tier: "shitpostou"
+	},
+	miradrip: {
+		tier: "shitpostou"
+	},
+	fillepixiudesixans: {
+		tier: "shitpostou"
+	},
+	vesuve: {
+		tier: "shitpostou"
+	},
+	boulistehero: {
+		tier: "shitpostou"
+	},
+	herominipekka: {
+		tier: "shitpostou"
+	},
+	obliteryx: {
+		tier: "shitpostou",
+	},
+	quagsiremega: {
+		tier: "shitpostou",
+	},
+	electrodemega: {
+		tier: "shitpostou",
+	},
+	trevenantmega: {
+		tier: "shitpostou"
+	},
+	incineroarmega: {
+		tier: "shitpostou"
+	},
+	mineducongo: {
+		tier: "shitpostou"
+	},
+	epstein: {
+		tier: "shitpostou"
+	},
+	dogwithshirt: {
+		tier: "shitpostou"
+	},
+	freddyfazbear: {
+		tier: "shitpostou"
+	},
+	sorcier: {
+		tier: "shitpostou"
+	},
+	arabintruder: {
+		tier: "shitpostou"
+	},
+	mewtow1g: {
+		tier: "shitpostuber"
+	}
 };

@@ -261,9 +261,15 @@ export class Pokemon {
 	swordBoost: boolean;
 	shieldBoost: boolean;
 	okinaCetteConne:boolean;
+	canGemAlert:boolean;
+	epsteinPower:boolean;
+	pompeiBaby:boolean;
 	bouclier: boolean;
 	vesuveCounter:number;
 	chiantmanActivated: boolean;
+	corruption: Pokemon | null;
+	hascorrupted: Pokemon[];
+	leftoCounter: number;
 	syrupTriggered: boolean;
 	stellarBoostedTypes: string[];
 
@@ -483,6 +489,12 @@ export class Pokemon {
 		this.heroMessageDisplayed = false;
 		this.swordBoost = false;
 		this.okinaCetteConne = false;
+		this.corruption = null;
+		this.hascorrupted = [];
+		this.leftoCounter = 0;
+		this.canGemAlert = true;
+		this.epsteinPower = true;
+		this.pompeiBaby = false;
 		this.bouclier = false;
 		this.vesuveCounter = 0;
 		this.chiantmanActivated = false;
@@ -517,14 +529,14 @@ export class Pokemon {
 	changeLevel(number:number) {
 		this.set.level = this.set.level + number
 		this.level = this.level + number
+		const ability = this.ability
 		
 		const stats = this.battle.spreadModify(this.species.baseStats, this.set);
 		if (this.species.maxHP) stats.hp = this.species.maxHP;
 
-		
-		this.baseMaxhp = stats.hp;
+		/*this.baseMaxhp = stats.hp;
 		this.maxhp = stats.hp;
-		this.hp = stats.hp;
+		this.hp = stats.hp;*/
 		
 
 		if (!this.transformed) this.baseStoredStats = stats;
@@ -535,6 +547,8 @@ export class Pokemon {
 		}
 
 		this.formeChange(this.species,null,true)
+		this.setAbility(ability)
+
 	}
 
 

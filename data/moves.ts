@@ -7886,6 +7886,46 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { boost: { spa: 1 } },
 		contestType: "Clever",
 	},
+	epsteintemple: {
+		num: 356,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Epstein Temple",
+		pp: 5,
+		priority: 0,
+		flags: { nonsky: 1, metronome: 1 },
+		pseudoWeather: 'epsteintemple',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				this.field.setWeather('sandstorm',source);
+				return 5;
+			},
+			onFieldStart(target, source) {
+				this.add('-fieldstart', 'move: Epstein Temple');
+			},
+			onFieldResidual() {
+				for (const pokemon of this.getAllActive()) {
+					if (!pokemon.hasType("Ground")) {
+						const stats: BoostID[] = ['atk' , 'def' ,'spa' , 'spd' ,'spe'];
+						const boost: SparseBoostsTable = {};
+						boost[stats[Math.floor(Math.random() * stats.length)]] = 1
+						this.boost(boost, pokemon);
+					}
+				}
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 2,
+			onFieldEnd() {
+				this.add('-fieldend', 'move: Epstein Temple');
+			},
+		},
+		target: "all",
+		type: "Psychic",
+		zMove: { boost: { spa: 1 } },
+		contestType: "Clever",
+	},
 	growl: {
 		num: 45,
 		accuracy: 100,
@@ -13728,7 +13768,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.attrLastMove('[still]');
 					return false;
 				}
-			},
+			}, 
 		},
 		target: "normal",
 		type: "Bug",
@@ -18459,6 +18499,93 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Cute",
 	},
+	withthistreasureisummon: {
+		num: 164,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "With this treasure I summon",
+		pp: 1,
+		priority: 0,
+		flags: { snatch: 1, nonsky: 1, metronome: 1 },
+		volatileStatus: 'withthistreasureisummon',
+		onTryHit(source) {
+			if (source.volatiles['withthistreasureisummon']) {
+				this.add('-fail', source, 'move: With this treasure I summon');
+				return this.NOT_FAIL;
+			}
+			if (source.hp <= source.maxhp / 4 || source.maxhp === 1) { // Shedinja clause
+				this.add('-fail', source, 'move: With this treasure I summon', '[weak]');
+				return this.NOT_FAIL;
+			}
+		},
+		onHit(target) {
+			if (target.baseSpecies.baseSpecies === 'Epstein' || !target.transformed) {
+					target.formeChange("Epstein-Summoned", this.effect, false, '0', '[msg]');
+				}
+			this.boost({ spe: -1 }, target);
+			this.boost({ def: -1 }, target);
+			this.boost({ atk: -1 }, target);
+			this.boost({ spa: -1 }, target);
+			this.boost({ spd: -1 }, target);
+		},
+		condition: {
+			onStart(target, source, effect) {
+				if (effect?.id === 'shedtail') {
+					this.add('-start', target, 'With this treasure I summon', '[from] move: Shed Tail');
+				} else {
+					this.add('-start', target, 'With this treasure I summon');
+				}
+				this.effectState.hp = Math.floor(target.maxhp / 2);
+				if (target.volatiles['partiallytrapped']) {
+					this.add('-end', target, target.volatiles['partiallytrapped'].sourceEffect, '[partiallytrapped]', '[silent]');
+					delete target.volatiles['partiallytrapped'];
+				}
+			},
+			onTryPrimaryHitPriority: -1,
+			onTryPrimaryHit(target, source, move) {
+				if (target === source || move.flags['bypasssub'] || move.infiltrates) {
+					return;
+				}
+				let damage = this.actions.getDamage(source, target, move);
+				if (!damage && damage !== 0) {
+					this.add('-fail', source);
+					this.attrLastMove('[still]');
+					return null;
+				}
+				if (damage > target.volatiles['withthistreasureisummon'].hp) {
+					damage = target.volatiles['withthistreasureisummon'].hp as number;
+				}
+				target.volatiles['withthistreasureisummon'].hp -= damage;
+				source.lastDamage = damage;
+				if (target.volatiles['withthistreasureisummon'].hp <= 0) {
+					if (move.ohko) this.add('-ohko');
+					target.removeVolatile('withthistreasureisummon');
+				} else {
+					this.add('-activate', target, 'move: With this treasure I summon', '[damage]');
+				}
+				if (damage) {
+					this.actions.applyRecoilDamage(damage, move, source);
+				}
+				if (move.drain) {
+					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
+				}
+				this.singleEvent('AfterSubDamage', move, null, target, source, move, damage);
+				this.runEvent('AfterSubDamage', target, source, move, damage);
+				return this.HIT_SUBSTITUTE;
+			},
+			onEnd(target) {
+				this.add('-end', target, 'With this treasure I summon');
+				if (target.baseSpecies.baseSpecies === 'Epstein' || !target.transformed) {
+					target.formeChange("Epstein", this.effect, false, '0', '[msg]');
+				}
+			},
+		},
+		target: "self",
+		type: "Normal",
+		zMove: { effect: 'clearnegativeboost' },
+		contestType: "Cute",
+	},
 	subzeroslammer: {
 		num: 650,
 		accuracy: true,
@@ -19522,6 +19649,35 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 110,
 		category: "Special",
 		name: "Thunder",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move, pokemon, target) {
+			switch (target?.effectiveWeather()) {
+			case 'raindance':
+			case 'primordialsea':
+				move.accuracy = true;
+				break;
+			case 'sunnyday':
+			case 'desolateland':
+				move.accuracy = 50;
+				break;
+			}
+		},
+		secondary: {
+			chance: 30,
+			status: 'par',
+		},
+		target: "normal",
+		type: "Electric",
+		contestType: "Cool",
+	},
+	zap: {
+		num: 87,
+		accuracy: 70,
+		basePower: 110,
+		category: "Special",
+		name: "Zap",
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
@@ -21388,7 +21544,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Physical",
 		name: "Tentencule",
 		pp: 10,
-		flags: { contact: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nonsky: 1, metronome: 1, minimize: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, distance: 1, metronome: 1, minimize: 1 },
 		onModifyType(move, pokemon) {
 			const types = pokemon.getTypes();
 			let type = types[0];
@@ -21484,9 +21640,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (!this.queue.willMove(target) && target.activeTurns) return false;
 		},
 		condition: {
-			duration: 1,
+			duration: 3,
 			onStart(target) {
-				this.add('-singleturn', target, 'move: normalisator');
+				this.add('-start', target, 'move: Normalisator');
 			},
 			onModifyTypePriority: -2,
 			onModifyType(move) {
@@ -21495,9 +21651,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					move.type = 'Normal';
 				}
 			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Normalisator');
+			},
 		},
 		flags: { protect: 1, mirror: 1, nonsky: 1 },
-		target: "allAdjacentFoes",
+		target: "normal",
 		type: "Normal",
 		zMove: { basePower: 180 },
 		contestType: "Beautiful",
@@ -21509,8 +21668,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "C'est l'heure de sortir les poubelles",
-		pp: 10,
-		priority: -1,
+		pp: 5,
+		priority: 0,
 		onHit(pokemon) {
 			let success = false;
 			for (const active of this.getAllActive()) {
@@ -21559,9 +21718,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
 		secondary: {
-			chance: 20,
-			boosts: {
-				def: -1,
+			chance: 100,
+			self: {
+				boosts: {
+					def: 1,
+				},
 			},
 		},
 		target: "normal",
@@ -21576,7 +21737,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
         isNonstandard: "Past",
         name: "Toutailier",
         pp: 10,
-        priority: 0,
+        priority: 1,
         onHit(target, source, move) {    
                     //this.add('-message', target.hp + "HP");
                     if (target.hp/target.maxhp > 0.66 && target.hp/target.maxhp < 0.68) {    
@@ -21704,7 +21865,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	imomniingit: {
 		num: 860,
 		accuracy: 90,
-		basePower: 30,
+		basePower: 20,
 		category: "Physical",
 		name: "I'm omniing it",
 		pp: 10,
@@ -21718,7 +21879,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	standreadyformyworm: {
 		num: 400,
 		accuracy: 100,
-		basePower: 70,
+		basePower: 120,
 		category: "Physical",
 		name: "Stand Ready For my Worm",
 		pp: 15,
@@ -21839,8 +22000,77 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Beautiful",
 	},
+	deforestation: {
+		num: 293,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		isNonstandard: "Past",
+		name: "Deforestation",
+		pp: 20,
+		priority: 0,
+		flags: { snatch: 1, metronome: 1 },
+		onHit(target) {
+			this.field.clearTerrain();
+			this.add("-message",target.name + " vire tout les terrains déjà existant !")
+		},
+		target: "self",
+		type: "Normal",
+		zMove: { boost: { evasion: 1 } },
+		contestType: "Clever",
+	},
+	epsteinisland: {
+		num: 10000,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Epstein Island",
+		pp: 10,
+		priority: 0,
+		flags: { nonsky: 1, metronome: 1 },
+		terrain: 'epsteinisland',
+		condition: {
+			effectType: 'Terrain',
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, attacker, defender, move) {
+				if (move.type === 'Ground' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+					return this.chainModify([5325, 4096]);
+				}
+			},
+			onChangeBoost(boost, target, source, effect) {
+				if (effect && effect.id === 'zpower') return;
+				let i: BoostID;
+				for (i in boost) {
+					boost[i]! *= -1;
+			}
+		},
+			onFieldStart(field, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'terrain: Epstein Island', '[from] ability: ' + effect.name, `[of] ${source}`);
+				} else {
+					this.add('-fieldstart', 'terrain: Epstein Island');
+				}
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 7,
+			onFieldEnd() {
+				this.add('-fieldend', 'terrain: Epstein Island');
+			},
+		},
+		target: "all",
+		type: "Steel",
+		zMove: { boost: { spe: 1 } },
+		contestType: "Clever",
+	},
 	dataserver: {
-		num: 604,
+		num: 10000,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -21856,7 +22086,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (source?.hasItem('terrainextender')) {
 					return 8;
 				}
-				this.add('-message',"test 1")
 				return 5;
 			},
 			onBasePowerPriority: 6,
@@ -21871,21 +22100,62 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Data Server', '[from] ability: ' + effect.name, `[of] ${source}`);
+					this.add('-fieldstart', 'terrain: Data Server', '[from] ability: ' + effect.name, `[of] ${source}`);
 				} else {
-					this.add('-fieldstart', 'move: Data Server');
+					this.add('-fieldstart', 'terrain: Data Server');
 				}
 			},
 			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
-				this.add('-fieldend', 'move: Data Server');
+				this.add('-fieldend', 'terrain: Data Server');
 			},
 		},
 		target: "all",
 		type: "Steel",
 		zMove: { boost: { spe: 1 } },
 		contestType: "Clever",
+	},
+	domaineexpension: {
+		num: 87,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Domaine Expension",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onHit(pokemon) {
+			if (this.field.terrain === 'epsteinisland') {
+				return;
+			}
+			this.actions.useMove('deforestation', pokemon);
+			this.actions.useMove('epsteinisland', pokemon)
+		},
+		target: "self",
+		type: "Ground",
+		contestType: "Cool",
+	},
+	makedataserver: {
+		num: 87,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Make Data Server",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onHit(pokemon) {
+			if (this.field.terrain === 'dataserver') {
+				return;
+
+			}
+			this.actions.useMove('deforestation', pokemon);
+			this.actions.useMove('dataserver', pokemon)
+		},
+		target: "self",
+		type: "Electric",
+		contestType: "Cool",
 	},
 	secretceremonyhiddenseason: {
 		num: 1000,
@@ -21936,7 +22206,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				move.basePower *= 2;
 				break;
 			case 'deltastream':
-				move.basePower *= 4;
+				move.basePower *= 2;
 				move.target = 'allAdjacentFoes';
 				break;
 			}
@@ -21947,6 +22217,19 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { basePower: 170 },
 		maxMove: { basePower: 140 },
 		contestType: "Beautiful",
+	},
+	bowling: {
+		num: 247,
+		accuracy: 100,
+		basePower: 120,
+		category: "Special",
+		name: "Bowling",
+		pp: 15,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
+		target: "normal",
+		type: "Rock",
+		contestType: "Clever",
 	},
 	mangetesmorts: {
 		num: 73,
@@ -21999,101 +22282,4 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Electric",
 		contestType: "Cool",
 	},
-	fireboll: {
-		num: 200,
-		accuracy: 100,
-		basePower: 100,
-		category: "Special",
-		name: "Fireboll",
-		pp: 15,
-		priority: 0,
-		onHit(target, source, move) {
-			for (const ally of target.adjacentAllies()) {
-				this.damage(ally.baseMaxhp / 8, ally, source, this.dex.conditions.get('Flame Burst'));
-			}
-		},
-		onAfterSubDamage(damage, target, source, move) {
-			for (const ally of target.adjacentAllies()) {
-				this.damage(ally.baseMaxhp / 8, ally, source, this.dex.conditions.get('Flame Burst'));
-			}
-		},
-		flags: { protect: 1, mirror: 1, metronome: 1,  bullet: 1 },
-		target: "normal",
-		type: "Fire",
-		contestType: "Cool",
-	},
-	sortdeneant: {
-		num: 2000,
-		accuracy: true,
-		basePower: 0,
-		category: "Statuts",
-		name: "Sort de Neant",
-		pp: 1,
-		noPPBoosts: true,
-		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
-		onHit(pokemon) {
-			const targets = pokemon.adjacentFoes();
-			const hit1 = this.sample(["neantsimple", "neantmultiple"]);
-			const hit2 = this.sample(["neantsimple", "neantmultiple"]);
-			const hit3 = this.sample(["neantsimple", "neantmultiple"]);
-			this.actions.useMove(hit1, pokemon, targets);
-			this.actions.useMove(hit2, pokemon, targets);	
-			this.actions.useMove(hit3, pokemon, targets);
-			},
-		target: "self",
-		type: "Dark",
-		contestType: "Cool",
-	},
-	neantsimple: {
-		num: 2001,
-		accuracy: 100,
-		basePower: 150,
-		category: "Special",
-		name: "Neant Simple",
-		pp: 5,
-		priority: 0,
-		flags: { protect: 1, mirror: 1 },
-		multiaccuracy: true,
-		target: "normal",
-		type: "Dark",
-		contestType: "Cool",
-	},
-	neantmultiple: {
-		num: 2002,
-		accuracy: 100,
-		basePower: 50,
-		category: "Special",
-		name: "Neant Multiple",
-		pp: 5,
-		priority: 0,
-		flags: { protect: 1, mirror: 1 },
-		multiaccuracy: true,
-		target: "allAdjacentFoes",
-		type: "Dark",
-		contestType: "Cool",
-	},
-	magic: {
-		num: 2003,
-		accuracy: 100,
-		basePower: 0,
-		category: "Status",
-		name: "Magic",
-		pp: 1,
-		noPPBoosts: true,
-		priority: 1,
-		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, allyanim: 1, failencore: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 },
-		onHit(target, pokemon) {
-			return target.transformInto(pokemon);
-		},
-		target: "normal",
-		type: "Psychic",
-		contestType: "Clever",	
-	},
-};
-
-// moves du roi
-// Offre Speciale Joker (gagne +25 niveaux)
-// Boutique d'Emote (taunt tous les adversaires avec prio) (afficher un effet Ehehehaha)
-// Coffre Legendaire du Roi -> devient un perso de clash aléatoire 
-// pass royale / en talent +1 dans une stat aléatoire à la fin du tour
+}

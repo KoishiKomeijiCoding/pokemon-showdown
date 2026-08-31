@@ -2403,6 +2403,43 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2.5,
 		num: 64,
 	},
+	intrusion: {
+		onTryHeal(relayVar,target,source,effet) {
+			console.log(`Heal is occurring: ${target} <- ${source} :: ${effet.id} :: ${relayVar}`);
+			this.damage(relayVar);
+			return 0;
+		},
+		onFoeTryHeal(relayVar,target,source,effet) {
+			console.log(`Heal is occurring: ${target} <- ${source} :: ${effet.id} :: ${relayVar}`);
+			this.damage(relayVar);
+			return 0;
+		},
+		/*onSourceTryHeal(damage, target, source, effect) {
+			console.log(`Heal is occurring: ${target} <- ${source} :: ${effect.id} :: ${damage}`);
+			this.damage(damage);
+			return 0;
+		
+		},*/
+		onModifyMove(move) {
+			move.infiltrates = true;
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (!target.hp) {
+				this.add('-ability', target, 'Intrusion');
+				this.actions.useMove("allahakbar",target)
+			}
+		},
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Dark') {
+				this.add('-immune', target, '[from] ability: Intrusion');
+				return null;
+			}
+		},
+		flags: {},
+		name: "Intrusion",
+		rating: 2.5,
+		num: 64,
+	},
 	liquidvoice: {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
@@ -3072,6 +3109,53 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		flags: {},
 		name: "Opportunist",
+		rating: 3,
+		num: 290,
+	},
+	superopportunist: {
+		onFoeAfterBoost(boost, target, source, effect) {
+			if (effect?.name === 'Opportunist' || effect?.name === 'Mirror Herb') return;
+			if (!this.effectState.boosts) this.effectState.boosts = {} as SparseBoostsTable;
+			const boostPlus = this.effectState.boosts;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! > 0) {
+					boostPlus[i] = (boostPlus[i] || 0) + boost[i]! + boost[i]!;
+				}
+			}
+		},
+		onAnySwitchInPriority: -3,
+		onAnySwitchIn() {
+			if (!this.effectState.boosts) return;
+			this.boost(this.effectState.boosts, this.effectState.target);
+			delete this.effectState.boosts;
+		},
+		onAnyAfterMega() {
+			if (!this.effectState.boosts) return;
+			this.boost(this.effectState.boosts, this.effectState.target);
+			delete this.effectState.boosts;
+		},
+		onAnyAfterTerastallization() {
+			if (!this.effectState.boosts) return;
+			this.boost(this.effectState.boosts, this.effectState.target);
+			delete this.effectState.boosts;
+		},
+		onAnyAfterMove() {
+			if (!this.effectState.boosts) return;
+			this.boost(this.effectState.boosts, this.effectState.target);
+			delete this.effectState.boosts;
+		},
+		onResidualOrder: 29,
+		onResidual(pokemon) {
+			if (!this.effectState.boosts) return;
+			this.boost(this.effectState.boosts, this.effectState.target);
+			delete this.effectState.boosts;
+		},
+		onEnd() {
+			delete this.effectState.boosts;
+		},
+		flags: {},
+		name: "Super Opportunist",
 		rating: 3,
 		num: 290,
 	},
@@ -5352,6 +5436,46 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2.5,
 		num: 254,
 	},
+	epsteinfiles: {
+		onDamagingHit(damage, target, source, move) {
+			const sourceAbility = source.getAbility();
+			if (sourceAbility.flags['cantsuppress'] || sourceAbility.id === 'epsteinfiles') {
+				return;
+			}
+			if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
+				source.setAbility('epsteinfiles', target);
+			}
+		},
+		onStart(pokemon) {
+			if (pokemon.epsteinPower) {
+				pokemon.epsteinPower = false
+				const targets = pokemon.adjacentFoes()
+				if (!targets) return;
+				this.add('-ability', pokemon, 'Epstein Files');
+				targets[Math.floor(Math.random() * targets.length)].changeLevel(-1)
+			}
+		},
+		onResidual(pokemon) {
+			pokemon.epsteinPower = true
+		},
+		onModifyTarget(targetRelayVar, source) {
+			const targets = source.adjacentFoes()
+			const index = Math.floor(Math.random() * targets.length)
+			let min = targets[index].level
+			let current = targets[index]
+			for (const target of targets) {
+				if (target.level < min)  {
+					current = target
+					min = target.level
+				}
+			}
+			targetRelayVar.target = current;
+		},
+		flags: {},
+		name: "Epstein Files",
+		rating: 2.5,
+		num: 254,
+	},
 	waterabsorb: {
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Water') {
@@ -5740,19 +5864,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
 				return false;
 			}
-            if (['ashbaby'].includes(target.species.id) && damage >= target.hp && effect && effect.effectType === 'Move') {
+            if (['ashbaby'].includes(target.species.id) && damage >= target.hp && effect && effect.effectType === 'Move' && !target.transformed) {
                 this.add('-ability', target, 'Pompei Baby');
+				target.pompeiBaby = true
                 return target.hp - 1;
             }
         },
         onResidual(pokemon) {
             if (pokemon.baseSpecies.baseSpecies !== 'Ash Baby' || pokemon.transformed || !pokemon.hp) return;
-            if (pokemon.hp <= pokemon.maxhp/10) {
+            if (pokemon.pompeiBaby) {
 				this.heal(pokemon.maxhp);
                 this.add('-activate', pokemon, 'ability: Pompei Baby');
                 pokemon.formeChange('Ash Baby Burned"', this.effect, true);
                 pokemon.formeRegression = true;
-				this.debug("help");
+				pokemon.pompeiBaby = false
             }
         },
         flags: {},
@@ -5761,6 +5886,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
         num: 9997,
     },
 	motivation: {
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['slicing']) {
+				this.debug('Sharpness boost');
+				return this.chainModify(1.5);
+			}
+		},
 		onDamagingHit(damage, target, source, effect) {
 			this.boost({ atk: 1 });
 		},
@@ -5848,7 +5979,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	electricityyyy: {
 		onSwitchIn(pokemon) {
-			const moveId = 'thunder'; // ← Change this to any move you want!
+			const moveId = 'zap'; // ← Change this to any move you want!
 			const move = this.dex.getActiveMove(moveId);
 			this.add('-ability', pokemon, 'ELECTRICITYYYY');
 			for (const target of pokemon.adjacentFoes()) {
@@ -5929,13 +6060,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['explosive']) {
-				return this.chainModify(1.5);
+				return this.chainModify(2);
 			}
 		},
 		onModifyMove(move,pokemon) {
 			if (!move.ignoreImmunity) move.ignoreImmunity = {};
 			if (move.ignoreImmunity !== true) {
-				move.ignoreImmunity['Fighting'] = true;
 				move.ignoreImmunity['Normal'] = true;
 			}
 			if (move.flags['explosive']) {
@@ -5994,7 +6124,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				weather = this.sample(['sunny day', 'rain dance', 'snowscape', 'sandstorm', 'deltastream']);
 			}
 			this.field.setWeather(weather);
-			source.okinaCetteConne = true;
 		},
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
@@ -6009,6 +6138,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				weather = this.sample(['sunny day', 'rain dance', 'snowscape', 'sandstorm', 'deltastream']);
 			}
 			this.field.setWeather(weather);	
+		},//marche pas très bien rn
+		onEnd(pokemon) {
+			pokemon.okinaCetteConne = false; //nécessaire au cas ou on envoit Okina sur un switch in gratuit
 		},
 		onWeatherChange(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Okina Matara' || pokemon.transformed) return;
@@ -6130,13 +6262,185 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	pancake: {
 		onSourceAfterFaint(length, target, source, effect) {
 			this.add('-ability', source, 'Pancake');
-			source.changeLevel(1)
+			source.heal(source.baseMaxhp / 3);
+			source.changeLevel(5)
 		},
 		flags: {},
 		name: "Pancake",
 		rating: 3.5,
 		num: 224,
 	},
+	joyauxrare: {
+		onDamagePriority: 1,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Ground') {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Ground') {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifyMove(move, attacker) {
+				if (move.type !== 'Ground') return;
+				if (attacker.species.id === 'mineducongo')
+					if (Math.random() * (100 - 0) + 0 < 33) {
+						this.add('-message',"La Mine du Congo a trouvé la pierre rare !")
+						attacker.setItem('Congozelite');
+						attacker.canMegaEvo = attacker.canMegaEvo === false ? false : this.actions.canMegaEvo(attacker)
+					}	
+		},
+		name: "Joyaux Rare",
+		rating: 3.5,
+		num: 224,
+	},
+	wonderfulsliceoflefto: {
+		onModifyMove(move, attacker,defender) {
+				if (defender?.item === "leftovers") {
+					const item = defender.takeItem();
+					attacker.leftoCounter = attacker.leftoCounter  + 1
+					this.add('-activate', attacker, 'ability: Wonderful Slice of Lefto')
+					this.add('-message',"Le chien vole les lefto de" + defender.name)
+				}
+		},
+		onResidual(pokemon) {
+			if (pokemon.leftoCounter == 0) return;
+			const heal = pokemon.baseMaxhp / 16.6
+			this.heal(heal*pokemon.leftoCounter)
+		},
+		onFoeTryMove(target, source, move) {
+			const armorTailHolder = this.effectState.target
+			if (Math.floor(Math.random() * (10 + 0)) == 2) {
+				this.attrLastMove('[still]');
+				this.add('cant', armorTailHolder, 'ability: Wonderful Slice of Lefto', move, `[of] ${target}`);
+				return false;
+			}
+		},
+		name: "Wonderful Slice of Lefto",
+		rating: 2.5,
+		num: 9991,
+	},
+	cinqnuitschezfreddy: {
+		onSwitchIn(pokemon) {
+			const moveId = 'meanlook'; // ← Change this to any move you want!
+			const move = this.dex.getActiveMove(moveId);
+			this.add('-ability', pokemon, 'Cinq nuit chez Freddys');
+			for (const target of pokemon.adjacentFoes()) {
+				if (move) {
+					this.actions.useMove(move, pokemon,{ target: target });
+				}
+			}
+			this.field.addPseudoWeather("trickroom")
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === "fire") {
+				return this.chainModify(2);
+			}
+		},
+		flags: {},
+		name: "Cinq nuits chez Freddy",
+		rating: 2.5,
+		num: 9990,
+	},
+	imawizard: {
+        onSwitchOut(pokemon) {
+            if (pokemon.baseSpecies.baseSpecies !== 'Sorcier') return;
+            if (pokemon.species.forme === 'Base') {
+                pokemon.formeChange('Sorcier Evolue', this.effect, true);
+                return;
+                }
+            if (pokemon.species.forme === 'Evolution') {
+                pokemon.formeChange('Sorcier', this.effect, true);
+                return;
+                }
+            },
+        onSwitchIn(pokemon) {
+            if (pokemon.baseSpecies.baseSpecies !== 'Sorcier') return;
+            if (pokemon.species.forme === 'Evolution') {
+                this.add('-activate', pokemon, "ability: I'm a Wizard");
+                this.add('-start', pokemon, `bouclier`); 
+                this.effectState.shield = true;
+            }
+        },
+        onDamage(damage, target, source, effect) {
+            if (effect?.effectType === 'Move' && ['sorcierevolue'].includes(target.species.id) && this.effectState.shield) {
+                this.add('-activate', target, "ability: I'm a Wizard!");
+                this.effectState.shield = false;
+                this.add('-end', target, `bouclier`); 
+				this.actions.useMove("fireboll", target,{ target: source })
+                return 0;
+            }
+        },
+        onTryHit(target, source, move) {
+            if (move.category === 'Status' && target !== source && this.effectState.shield) {
+                this.add('-immune', target, "[from] ability: I'm a Wizard");
+                return null;
+            }
+        },
+        flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, breakable: 1, notransform: 1 },            
+        name: "I'm a Wizard",
+        rating: 3,
+        num: 998,
+    },
+	normalnormalize: {
+		onModifyTypePriority: 1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'hiddenpower', 'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'struggle', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (!(move.isZ && move.category !== 'Status') &&
+				// TODO: Figure out actual interaction
+				(!noModifyType.includes(move.id) || this.activeMove?.isMax) && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Normal';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+		},
+			onModifyMove(move) {
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Fighting'] = true;
+				move.ignoreImmunity['Normal'] = true;
+			}
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (effect.name === 'Intimidate' && boost.atk) {
+				delete boost.atk;
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Scrappy', `[of] ${target}`);
+			}
+		},
+		flags: {},
+		name: "Normal Normalize",
+		rating: 0,
+		num: 96,
+	},
+	mercredi: {
+		onModifyTypePriority: 1,
+			onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Poison') {
+				if (!this.boost({ spa: 1 })) {
+					this.add('-immune', target, '[from] ability: Mercredi');
+					this.actions.useMove("cestlheuredesortirlespoubelles", target,{ target: source })
+				}
+				return null;
+			}
+		},
+		flags: {},
+		name: "Mercredi",
+		rating: 0,
+		num: 96,
+	},
+}
+	
+	
+
+	
+
+
 	ratiosupreme: {
 		onStart(pokemon) {
 			if (pokemon.side.totalFainted) {

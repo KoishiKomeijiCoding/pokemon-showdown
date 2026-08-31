@@ -53,7 +53,28 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 9999,
 		gen: 6,
-		isNonstandard: "CAP",
+	},
+	congozelite: {
+		name: "Congozelite",
+		spritenum: 576,
+		megaStone: { "Mine du Congo": "Mine du Congo-Mega" },
+		itemUser: ["Mine du Congo"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 9994,
+		gen: 6,
+	},
+	obliterite: {
+		name: "Obliterite",
+		spritenum: 504,
+		megaStone: { "Obliteryx": "Obliteryx-Mega" },
+		itemUser: ["Obliteryx"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 9995,
+		gen: 6,
 	},
 	incineroarite: {
 		name: "Incineroarite",
@@ -65,7 +86,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 9998,
 		gen: 7,
-		isNonstandard: "CAP",
 	},
 	electrodite: {
 		name: "Electrodite",
@@ -77,7 +97,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 9997,
 		gen: 7,
-		isNonstandard: "CAP",
 	},
 	trevenanit: {
 		name: "Trevenanit",
@@ -89,7 +108,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 9996,
 		gen: 7,
-		isNonstandard: "CAP",
 	},
 
 	absolitez: {
