@@ -6434,9 +6434,61 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 0,
 		num: 96,
 	},
-}
-	
-	
+	ratiosupreme: {
+		onStart(pokemon) {
+			if (pokemon.side.totalFainted) {
+				this.add('-activate', pokemon, 'ability: Ratio Supreme');
+				const fallen = Math.min(pokemon.side.totalFainted, 5);
+				this.add('-start', pokemon, `fallen${fallen}`, '[silent]');
+				this.effectState.fallen = fallen;
+			}
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, `fallen${this.effectState.fallen}`, '[silent]');
+		},
+		onModifyAccuracyPriority: -1,
+		onModifyAccuracy(accuracy, target) {
+			if (typeof accuracy !== 'number') return;
+			if (this.effectState.fallen) {
+				const accMod = [1.0, 0.9, 0.8, 0.7, 0.6, 0.5];
+				this.debug('Tangled Feet - decreasing accuracy');
+				return this.chainModify(accMod[this.effectState.fallen]);
+			}
+		},
+		flags: {},
+		name: "Ratio Suprême",
+		rating: 4,
+		num: 999,
+	},
+	pouvoirgigamax: {
+		// Première partie : Le pokémon dynamaxe sur le switch.
+		// La condition 'Dynamax' a été modifiée pour rendre le Dynamax de ce talent infini.
+		// La ... '...' a été modifiée pour faire que le Dynamax de ce talent ne modifie pas les moves en moves Gmax.
+		onStart(pokemon) {
+			pokemon.addVolatile('Dynamax')
+		},
+		// Deuxième partie : Lors que le pokémon lance une attaque, il lance une attaque Gmax aléatoire en plus.
+		onAfterMove(source, target) {
+			const listeMovesGmax = [
+				'gmaxbefuddle', 'gmaxcannonade', 'gmaxcentiferno', 'gmaxchistrike', 'gmaxcuddle',
+				'gmaxdepletion', 'gmaxfinale', 'gmaxfoamburst', 'gmaxgoldrush', 'gmaxgravitas', 
+				'gmaxmalodor', 'gmaxmeltdown', , 'gmaxreplenish', 'gmaxresonance', 'gmaxsandblast', 
+				'gmaxsmite', 'gmaxsnooze', 'gmaxstunshock', 'gmaxsweetness', 'gmaxtartness', 
+				'gmaxterror', 'gmaxvinelash', 'gmaxvolcalith', 'gmaxvoltcrash', 'gmaxwildfire', 
+				'gmaxwindrage',
+				// 'gmaxsteelsurge', 'gmaxstonesurge'
+				// 'gmaxhydrosnipe', 'gmaxdrumsolo', 'gmaxfireball'
+				// 'gmaxoneblow', 'gmaxrapidflow', 
+			];
 
-	
-
+			const moveGmaxSupplementaire = this.sample(listeMovesGmax);
+			if (moveGmaxSupplementaire != undefined) {
+				this.actions.useMove(moveGmaxSupplementaire, source); //Rudolf apprends à coder ptn de merde
+			}
+		},
+		flags: {},
+		name: "Pouvoir Gigamax",
+		rating: 5,
+		num: 3000,
+	},
+};

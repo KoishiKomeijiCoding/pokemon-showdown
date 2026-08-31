@@ -404,7 +404,9 @@ export class BattleActions {
 			this.battle.runEvent('ModifyType', pokemon, target, move, move);
 		}
 		if (maxMove || (move.category !== 'Status' && sourceEffect && (sourceEffect as ActiveMove).isMax)) {
-			move = this.getActiveMaxMove(move, pokemon);
+			if (pokemon.ability !== "pouvoirgigamax") { // fait que le move utilisé soit le normal
+				move = this.getActiveMaxMove(move, pokemon);
+			}
 		}
 
 		if (this.battle.activeMove) {
@@ -1482,6 +1484,7 @@ export class BattleActions {
 
 	getMaxMove(move: Move, pokemon: Pokemon) {
 		if (typeof move === 'string') move = this.dex.moves.get(move);
+		// if (pokemon.ability === "pouvoirgigamax" as ID) return move; // visuel uniquement
 		if (move.name === 'Struggle') return move;
 		if (pokemon.gigantamax && pokemon.canGigantamax && move.category !== 'Status') {
 			const gMaxMove = this.dex.moves.get(pokemon.canGigantamax);

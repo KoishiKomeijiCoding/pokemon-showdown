@@ -264,6 +264,7 @@ export class Pokemon {
 	canGemAlert:boolean;
 	epsteinPower:boolean;
 	pompeiBaby:boolean;
+	bouclier: boolean;
 	vesuveCounter:number;
 	chiantmanActivated: boolean;
 	corruption: Pokemon | null;
@@ -494,6 +495,7 @@ export class Pokemon {
 		this.canGemAlert = true;
 		this.epsteinPower = true;
 		this.pompeiBaby = false;
+		this.bouclier = false;
 		this.vesuveCounter = 0;
 		this.chiantmanActivated = false;
 		this.shieldBoost = false;
@@ -1112,6 +1114,11 @@ export class Pokemon {
 			// Some pokemon species are unable to dynamax
 			if (this.species.cannotDynamax || this.illusion?.species.cannotDynamax) return;
 		}
+		
+		if (this.ability === 'pouvoirgigamax' || this.baseAbility === 'pouvoirgigamax') {
+        return; // Ne générez pas de maxMoves
+    }
+
 		const result: DynamaxOptions = { maxMoves: [] };
 		let atLeastOne = false;
 		for (const moveSlot of this.moveSlots) {
