@@ -792,8 +792,10 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			return null;
 		},
 		onResidualPriority: -100,
-		onResidual() {
-			this.effectState.turns++;
+		onResidual(pokemon) {
+			if(pokemon.ability === "pouvoirdynamax") {
+				this.effectState.turns++;
+			}
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Dynamax');

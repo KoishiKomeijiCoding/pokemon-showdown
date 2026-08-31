@@ -19672,6 +19672,35 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+	zap: {
+		num: 87,
+		accuracy: 70,
+		basePower: 110,
+		category: "Special",
+		name: "Zap",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move, pokemon, target) {
+			switch (target?.effectiveWeather()) {
+			case 'raindance':
+			case 'primordialsea':
+				move.accuracy = true;
+				break;
+			case 'sunnyday':
+			case 'desolateland':
+				move.accuracy = 50;
+				break;
+			}
+		},
+		secondary: {
+			chance: 30,
+			status: 'par',
+		},
+		target: "normal",
+		type: "Electric",
+		contestType: "Cool",
+	},
 	thunderbolt: {
 		num: 85,
 		accuracy: 100,
@@ -21639,8 +21668,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "C'est l'heure de sortir les poubelles",
-		pp: 10,
-		priority: -1,
+		pp: 5,
+		priority: 0,
 		onHit(pokemon) {
 			let success = false;
 			for (const active of this.getAllActive()) {
@@ -21689,9 +21718,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
 		secondary: {
-			chance: 20,
-			boosts: {
-				def: -1,
+			chance: 100,
+			self: {
+				boosts: {
+					def: 1,
+				},
 			},
 		},
 		target: "normal",
@@ -22443,12 +22474,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
         pp: 15,
         priority: 0,
         onHit(target, source, move) {
-            for (const ally of target.adjacentAllies()) {
+            for (const ally of target.adjacentFoes()) {
                 this.damage(ally.baseMaxhp / 8, ally, source, this.dex.conditions.get('Flame Burst'));
             }
         },
         onAfterSubDamage(damage, target, source, move) {
-            for (const ally of target.adjacentAllies()) {
+            for (const ally of target.adjacentFoes()) {
                 this.damage(ally.baseMaxhp / 8, ally, source, this.dex.conditions.get('Flame Burst'));
             }
         },
@@ -22460,7 +22491,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	allahakbar: {
 		num: 153,
 		accuracy: 100,
-		basePower: 500,
+		basePower: 300,
 		category: "Physical",
 		name: "Allah Akbar",
 		pp: 5,
@@ -22486,7 +22517,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-start', pokemon, 'Islamise');
 			},
 			onResidual(pokemon) {
-				if (Math.floor(Math.random() * (2 + 1)) == 2) {
+				if (Math.floor(Math.random() * (3 + 1)) == 2) {
 					this.add('-message', pokemon.name + " ne peut pas résister à l'envie de s'autodétruire !");
 					this.actions.useMove('allahakbar', pokemon);
 				}
@@ -22506,7 +22537,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		num: 180,
 		accuracy: 100,
 		basePower: 80,
-		category: "Status",
+		category: "Special",
 		name: "Musique Arabe",
 		pp: 15,
 		priority: 0,

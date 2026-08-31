@@ -7971,6 +7971,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	sixseven: {
 		learnset: {
+			psywave: ["7V"],
 			toutailier: ["9M"],
 			aerialace: ["9M"],
 			amnesia: ["9M", "8M"],

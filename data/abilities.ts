@@ -5979,7 +5979,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	electricityyyy: {
 		onSwitchIn(pokemon) {
-			const moveId = 'thunder'; // ← Change this to any move you want!
+			const moveId = 'zap'; // ← Change this to any move you want!
 			const move = this.dex.getActiveMove(moveId);
 			this.add('-ability', pokemon, 'ELECTRICITYYYY');
 			for (const target of pokemon.adjacentFoes()) {
@@ -6262,6 +6262,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	pancake: {
 		onSourceAfterFaint(length, target, source, effect) {
 			this.add('-ability', source, 'Pancake');
+			source.heal(source.baseMaxhp / 3);
 			source.changeLevel(5)
 		},
 		flags: {},
@@ -6290,10 +6291,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 						attacker.canMegaEvo = attacker.canMegaEvo === false ? false : this.actions.canMegaEvo(attacker)
 					}	
 		},
-		flags: {
-			failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1,
-			breakable: 1, notransform: 1,
-		},
 		name: "Joyaux Rare",
 		rating: 3.5,
 		num: 224,
@@ -6312,6 +6309,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const heal = pokemon.baseMaxhp / 16.6
 			this.heal(heal*pokemon.leftoCounter)
 		},
+		onFoeTryMove(target, source, move) {
+			const armorTailHolder = this.effectState.target
+			if (Math.floor(Math.random() * (10 + 0)) == 2) {
+				this.attrLastMove('[still]');
+				this.add('cant', armorTailHolder, 'ability: Wonderful Slice of Lefto', move, `[of] ${target}`);
+				return false;
+			}
+		},
 		name: "Wonderful Slice of Lefto",
 		rating: 2.5,
 		num: 9991,
@@ -6327,6 +6332,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 			this.field.addPseudoWeather("trickroom")
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === "fire") {
+				return this.chainModify(2);
+			}
 		},
 		flags: {},
 		name: "Cinq nuits chez Freddy",
@@ -6373,6 +6383,57 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
         rating: 3,
         num: 998,
     },
+	normalnormalize: {
+		onModifyTypePriority: 1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'hiddenpower', 'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'struggle', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (!(move.isZ && move.category !== 'Status') &&
+				// TODO: Figure out actual interaction
+				(!noModifyType.includes(move.id) || this.activeMove?.isMax) && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Normal';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+		},
+			onModifyMove(move) {
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Fighting'] = true;
+				move.ignoreImmunity['Normal'] = true;
+			}
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (effect.name === 'Intimidate' && boost.atk) {
+				delete boost.atk;
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Scrappy', `[of] ${target}`);
+			}
+		},
+		flags: {},
+		name: "Normal Normalize",
+		rating: 0,
+		num: 96,
+	},
+	mercredi: {
+		onModifyTypePriority: 1,
+			onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Poison') {
+				if (!this.boost({ spa: 1 })) {
+					this.add('-immune', target, '[from] ability: Mercredi');
+					this.actions.useMove("cestlheuredesortirlespoubelles", target,{ target: source })
+				}
+				return null;
+			}
+		},
+		flags: {},
+		name: "Mercredi",
+		rating: 0,
+		num: 96,
+	},
 }
 	
 	
