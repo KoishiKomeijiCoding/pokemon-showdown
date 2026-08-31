@@ -6434,13 +6434,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 0,
 		num: 96,
 	},
-}
-	
-	
-
-	
-
-
 	ratiosupreme: {
 		onStart(pokemon) {
 			if (pokemon.side.totalFainted) {
@@ -6467,85 +6460,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 999,
 	},
-	imawizard: {
-		onSwitchOut(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Sorcier') return;
-			if (pokemon.species.forme === 'Base') {
-				pokemon.formeChange('Sorcier Evolue', this.effect, true);
-				}
-			if (pokemon.species.forme === 'Evolution') {
-				pokemon.formeChange('Sorcier', this.effect, true);
-				}
-			},
-		onSwitchIn(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Sorcier') return;
-			if (pokemon.species.forme === 'Evolution') {
-				this.add('-activate', pokemon, "ability: I'm a Wizard");
-				}
-			},
-		onStart(pokemon) {
-			if (pokemon.species.forme === "Evolution") {
-				this.add('-activate', pokemon, "ability: I'm a Wizard");
-				this.add('-start', pokemon, `bouclier`, '[silent]'); // là je veux afficher un effet "Bouclier" comme kingambit jsp comment faire t'as réussi avec Epstein je crois je sais plus
-				pokemon.bouclier = true;
-			}
-		},
-		onTryHit(target, source, move) { // ne fonctionne pas
-			if (target.species.id !== 'sorcierevolue') return;
-			if (move.category === 'Status' && target !== source && target.bouclier) { 
-				this.add('-immune', target, "[from] ability: I'm a Wizard");
-				return null;
-			}
-		},
-		onDamagePriority: 1,
-        onDamage(damage, target, source, effect) {
-			if (target.species.id !== 'sorcierevolue') return;
-            if (effect?.effectType === 'Move' && target.bouclier) {
-                this.add('-activate', target, "ability: I'm a Wizard");
-                pokemon.bouclier = false;
-                this.actions.useMove("fireboll", source)
-                return 0;
-            }
-            else {
-                this.add('-activate', target, "ability: I'm a Wizard");
-                return 0;
-            }
-        },
-		onCriticalHit(target, type, move) {
-			if (target.species.id !== 'sorcierevolue') return;
-			if (!target) return;
-			if (!target.bouclier) return;
-			if (target.volatiles['substitute'] && !(move.flags['bypasssub'] || move.infiltrates)) return;
-			if (!target.runImmunity(move)) return;
-			return false;
-		},
-		onEffectiveness(typeMod, target, type, move) {
-			if (target.species.id !== 'sorcierevolue') return;
-			if (!target) return;
-			if (!target.bouclier) return;
-			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
-			if (hitSub) return;
-			if (!target.runImmunity(move)) return;
-			return 0;
-		},
-		onUpdate(pokemon) {
-			if (pokemon.species.id === 'sorcierevolue' && !pokemon.bouclier) {
-				this.add('-end', pokemon, `bouclier`, '[silent]');
-			}
-		},
-		onEnd(pokemon) {
-			if (pokemon.species.id !== 'sorcierevolue') return;
-			if (pokemon.bouclier) {
-			this.add('-end', pokemon, `bouclier`, '[silent]');
-			pokemon.bouclier = false;
-			}
-		},
-		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, breakable: 1, notransform: 1 },			
-		name: "I'm a Wizard",
-		rating: 3,
-		num: 998,
-	},
-		pouvoirgigamax: {
+	pouvoirgigamax: {
 		// Première partie : Le pokémon dynamaxe sur le switch.
 		// La condition 'Dynamax' a été modifiée pour rendre le Dynamax de ce talent infini.
 		// La ... '...' a été modifiée pour faire que le Dynamax de ce talent ne modifie pas les moves en moves Gmax.
@@ -6566,7 +6481,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				// 'gmaxoneblow', 'gmaxrapidflow', 
 			];
 			const moveGmaxSupplementaire = this.sample(listeMovesGmax);
-			this.actions.useMove(moveGmaxSupplementaire, source);
+			this.actions.useMove(moveGmaxSupplementaire, source); //Rudolf apprends à coder ptn de merde
 		},
 		flags: {},
 		name: "Pouvoir Gigamax",
