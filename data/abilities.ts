@@ -6501,12 +6501,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBeforeMovePriority: 9,
 		onBeforeMove(pokemon) {
 			if (pokemon.removeVolatile('aurafarming')) {
+				this.boost({ spe: 1,spa: 1, atk: 1,def: 1,spd: 1 });
 				this.add('cant', pokemon, 'ability: Aura Farming');
 				return false;
 			}
 			pokemon.addVolatile('aurafarming');
-			this.boost({ spe: 1,spa: 1, atk: 1,def: 1,spd: 1 });
-
 		},
 		condition: {},
 		flags: {},

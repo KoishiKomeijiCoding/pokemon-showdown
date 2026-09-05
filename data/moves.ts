@@ -22470,12 +22470,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
         priority: 0,
         onHit(target, source, move) {
             for (const ally of target.adjacentFoes()) {
-                this.damage(ally.baseMaxhp / 8, ally, source, this.dex.conditions.get('Flame Burst'));
+				if (ally != source) this.damage(ally.baseMaxhp / 8, ally, source, this.dex.conditions.get('Flame Burst'));
             }
         },
         onAfterSubDamage(damage, target, source, move) {
             for (const ally of target.adjacentFoes()) {
-                this.damage(ally.baseMaxhp / 8, ally, source, this.dex.conditions.get('Flame Burst'));
+                if (ally != source) this.damage(ally.baseMaxhp / 8, ally, source, this.dex.conditions.get('Flame Burst'));
             }
         },
         flags: { protect: 1, mirror: 1, metronome: 1,  bullet: 1 },
