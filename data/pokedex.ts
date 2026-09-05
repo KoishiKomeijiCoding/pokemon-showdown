@@ -21701,4 +21701,15 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Human-Like"],
 	},
+	piccolo: {
+		num: 19850,
+		name: "Piccolo",
+		types: ["Fighting","Psychic"],
+		baseStats: { hp: 75, atk: 100, def: 60, spa: 110, spd: 80, spe: 80},
+		abilities: { 0: "Aura Farming"},
+		heightm: 1.80,
+		weightkg: 90,
+		color: "Blue",
+		eggGroups: ["Human-Like"],
+	}
 };
