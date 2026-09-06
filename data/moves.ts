@@ -22028,9 +22028,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { nonsky: 1, metronome: 1 },
-		terrain: 'epsteinisland',
+		pseudoWeather:'epsteinisland',
 		condition: {
-			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -22053,15 +22052,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'terrain: Epstein Island', '[from] ability: ' + effect.name, `[of] ${source}`);
+					this.add('-fieldstart', 'Epstein Island', '[from] ability: ' + effect.name, `[of] ${source}`);
 				} else {
-					this.add('-fieldstart', 'terrain: Epstein Island');
+					this.add('-fieldstart', 'Epstein Island');
 				}
 			},
 			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
-				this.add('-fieldend', 'terrain: Epstein Island');
+				this.add('-fieldend', 'Epstein Island');
 			},
 		},
 		target: "all",
@@ -22078,9 +22077,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { nonsky: 1, metronome: 1 },
-		terrain: 'dataserver',
+		pseudoWeather: 'dataserver',
 		condition: {
-			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -22100,15 +22098,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'terrain: Data Server', '[from] ability: ' + effect.name, `[of] ${source}`);
+					this.add('-fieldstart', 'Data Server', '[from] ability: ' + effect.name, `[of] ${source}`);
 				} else {
-					this.add('-fieldstart', 'terrain: Data Server');
+					this.add('-fieldstart', 'Data Server');
 				}
 			},
 			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
-				this.add('-fieldend', 'terrain: Data Server');
+				this.add('-fieldend', 'Data Server');
 			},
 		},
 		target: "all",
@@ -22129,7 +22127,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (this.field.terrain === 'epsteinisland') {
 				return;
 			}
-			this.actions.useMove('deforestation', pokemon);
 			this.actions.useMove('epsteinisland', pokemon)
 		},
 		target: "self",
@@ -22383,6 +22380,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		onHit(target, source, move) {
+				console.log(target)
 				const item = target.getItem();
 				if (source.hp && item.isBerry && target.takeItem(source)) {
 					this.add('-enditem', target, item.name, '[from] stealeat', '[move] Bug Bite', `[of] ${source}`);

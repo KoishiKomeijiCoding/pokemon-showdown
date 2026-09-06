@@ -6297,12 +6297,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	wonderfulsliceoflefto: {
 		onModifyMove(move, attacker,defender) {
-				if (defender?.item === "leftovers") {
-					const item = defender.takeItem();
+			for (const target of attacker.adjacentFoes()) {
+				if (target?.item === "leftovers") {
+					const item = target.takeItem();
 					attacker.leftoCounter = attacker.leftoCounter  + 1
 					this.add('-activate', attacker, 'ability: Wonderful Slice of Lefto')
-					this.add('-message',"Le chien vole les lefto de" + defender.name)
+					this.add('-message',"Le chien vole les lefto de" + target.name)
 				}
+			}
 		},
 		onResidual(pokemon) {
 			if (pokemon.leftoCounter == 0) return;
