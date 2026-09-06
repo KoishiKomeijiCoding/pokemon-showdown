@@ -6515,4 +6515,25 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 999,
 	},
+	executiondalwaysfurrious: {
+		onStart(pokemon) {
+			let activated = false;
+			for (const target of pokemon.adjacentFoes()) {
+				if (!activated) {
+					this.add('-ability', pokemon, 'Execution d\'Always Furrious', 'boost');
+					activated = true;
+				}
+				if (target.volatiles['substitute']) {
+					this.add('-immune', target);
+				} else {
+					this.boost({ atk: +2 }, target, pokemon, null, true);
+				}
+			}
+			this.boost({ atk: 2 }, pokemon);
+		},
+		flags: {},
+		name: "Execution d'Always Furrious",
+		rating: 3.5,
+		num: 9995,
+	},
 };

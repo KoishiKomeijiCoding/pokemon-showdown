@@ -21711,5 +21711,17 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 90,
 		color: "Blue",
 		eggGroups: ["Human-Like"],
-	}
+	},
+	leloup: {
+		num: 19850,
+		name: "Le Loup",
+		types: ["Dark"],
+		baseStats: { hp: 100, atk: 130, def: 60, spa: 40, spd: 100, spe: 120},
+		abilities: { 0: "Execution Publique"},
+		heightm: 1.80,
+		weightkg: 90,
+		color: "Blue",
+		eggGroups: ["Human-Like"],
+	},
+
 };

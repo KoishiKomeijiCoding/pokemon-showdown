@@ -22577,4 +22577,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { boost: { spe: 1 } },
 		contestType: "Tough",
 	},
+	executionpublique: {
+		num: 817,
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		name: "Execution Publique",
+		pp: 5,
+		priority: 0,
+		onHit(target) {
+			target.addVolatile('followme');
+		},
+		flags: { contact: 1, protect: 1, mirror: 1, punch: 1 },
+		willCrit: true,
+		target: "normal",
+		type: "Dark",
+	}
 }
