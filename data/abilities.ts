@@ -6536,4 +6536,68 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: 9995,
 	},
+    aislop: { // WIP
+		onResidualOrder: 50,
+		onResidualSubOrder: 1,
+		onResidual(pokemon) {
+			const shitpostMoves = [
+				'executionpublique', 'poweroutrage', 'screamer', 'corruption', 'gemalert',
+				'magic', 'fireboll', 'mangetesmorts', 'bowling',
+				'secretceremonyhiddenseason', 'dataserver',
+				'vibecoding', 'moreofapettome', 'standreadyformyworm', 'imomniingit',
+				'balles', 'chantdopera', 'bzzzzt', 'fuckyou', 'toutailier', 'chaise', 
+				'cendresdepompei', 'cestlheuredesortirlespoubelles', 'normalisator',
+				'cancer', 'amnesia1g', 'tentencule', 'allahakbar', 'musiquearabe',
+				'coran', 'dijihad', 'wonderfulberry', 'epsteintemple',
+				'withthistreasureisummon', 'domaineexpension', 'malveillancemax', 'brainrot',
+				'aislop'
+			];
+			const newMove = this.sample(shitpostMoves);
+			// getMoveData(newMove)
+			// target.moveSlots[Math.floor(Math.random() * (3 + 1))] =
+			//   {
+					// ok là l'objectif c'est de changer un move 
+				// },
+		},
+		flags: {},
+		name: "AI Slop",
+		rating: 0,
+		num: 3001,
+	},
+	poteglace: {
+		onSwitchIn(pokemon) {
+			const moveId = 'icywind';
+			const move = this.dex.getActiveMove(moveId);
+			this.actions.useMove(move, pokemon)
+		},
+		onStart(pokemon) {
+			// j'aimerais bien faire un compteur d'elixir 
+			// qui reflète pokemon.activeTurns
+			// mais j'avoue je comprends pas trop le code pour faire ça (c'est secondaire mais ce serait cool)
+			// donc vibecode pour l'instant
+			const elixir = pokemon.activeTurns;
+			this.add('-start', pokemon, `elixir${elixir}`);
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (pokemon.activeTurns > 2) {
+				this.add('-activate', pokemon, "ability: Pote Glace");
+				// this.add('-end', pokemon, `elixir${elixir}`);
+				for (const target of pokemon.foes()) {
+						target.trySetStatus('frz', pokemon);
+				}
+				pokemon.formeChange("darmanitangalarzen");
+			}
+			const elixir = pokemon.activeTurns;
+			this.add('-start', pokemon, `elixir${elixir}`);
+		},
+		onEnd(pokemon) {
+			// this.add('-end', pokemon, `elixir${elixir}`);
+		},
+		flags: {},
+		name: "Pote Glace",
+		rating: 2,
+		num: 3002,
+	},
 };

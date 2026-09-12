@@ -21723,5 +21723,26 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Human-Like"],
 	},
-
+	tungtungtungsahur: {
+		num: 1986,
+		name: "Tung Tung Tung Sahur",
+		types: ["Grass"],
+		baseStats: { hp: 90, atk: 90, def: 140, spa: 90, spd: 90, spe: 70 },
+		abilities: { 0: "AI Slop"},
+		heightm: 1.70,
+		weightkg: 60,
+		color: "Brown",
+		eggGroups: ["Human-Like"],
+	},
+	sorcierdeglaceheros: {
+		num: 1988,
+		name: "Sorcier de glace Heros",
+		types: ["Ice"],
+		baseStats: { hp: 71, atk: 34, def: 84, spa: 52, spd: 98, spe: 63 },
+		abilities: { 0: "Pote Glace"},
+		heightm: 1.72,
+		weightkg: 75,
+		color: "Blue",
+		eggGroups: ["Human-Like"],
+	},
 };
