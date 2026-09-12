@@ -102967,7 +102967,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			overheat: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			protect: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			raindance: ["9M"],
-			rest: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			return: ["7M", "6M", "5M", "4M", "3M"],
 			roar: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			rockpolish: ["7M", "6M", "5M", "4M"],
