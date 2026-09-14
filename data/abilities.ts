@@ -6539,25 +6539,28 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
     aislop: { // WIP
 		onResidualOrder: 50,
 		onResidualSubOrder: 1,
-		onResidual(pokemon) {
-			const shitpostMoves = [
-				'executionpublique', 'poweroutrage', 'screamer', 'corruption', 'gemalert',
-				'magic', 'fireboll', 'mangetesmorts', 'bowling',
-				'secretceremonyhiddenseason', 'dataserver',
-				'vibecoding', 'moreofapettome', 'standreadyformyworm', 'imomniingit',
-				'balles', 'chantdopera', 'bzzzzt', 'fuckyou', 'toutailier', 'chaise', 
-				'cendresdepompei', 'cestlheuredesortirlespoubelles', 'normalisator',
-				'cancer', 'amnesia1g', 'tentencule', 'allahakbar', 'musiquearabe',
-				'coran', 'dijihad', 'wonderfulberry', 'epsteintemple',
-				'withthistreasureisummon', 'domaineexpension', 'malveillancemax', 'brainrot',
-				'aislop'
-			];
-			const newMove = this.sample(shitpostMoves);
-			// getMoveData(newMove)
-			// target.moveSlots[Math.floor(Math.random() * (3 + 1))] =
-			//   {
-					// ok là l'objectif c'est de changer un move 
-				// },
+		onDamagingHit(damage, target, source, move) {
+			const moves = this.dex.moves.all().filter(move => (
+				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
+				move.flags['shitpost']
+			));
+			let randomMove;
+			if (moves.length) {
+				moves.sort((a, b) => a.num - b.num);
+				randomMove = this.sample(moves);
+			}
+			if (!randomMove) return false;
+			source.moveSlots[Math.floor(Math.random() * (3 + 1))] = 
+			{
+				id : randomMove.id,
+				move : randomMove.name,
+				pp : randomMove.pp,
+				maxpp : randomMove.pp,
+				disabled: false,
+				used: false,
+			} //Pour une raison obscure l'objet move n'intègre pas l'interface MoveSlot, dcp je fais ça à la main
+			this.add('-ability', target, 'AI Slop');
+			this.add('-message', `${source.name} a reçu ${randomMove.name} !`);
 		},
 		flags: {},
 		name: "AI Slop",
@@ -6569,14 +6572,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const moveId = 'icywind';
 			const move = this.dex.getActiveMove(moveId);
 			this.actions.useMove(move, pokemon)
-		},
-		onStart(pokemon) {
-			// j'aimerais bien faire un compteur d'elixir 
-			// qui reflète pokemon.activeTurns
-			// mais j'avoue je comprends pas trop le code pour faire ça (c'est secondaire mais ce serait cool)
-			// donc vibecode pour l'instant
 			const elixir = pokemon.activeTurns;
-			this.add('-start', pokemon, `elixir${elixir}`);
+			this.add('-activate', pokemon, `ability: Pote Glace`);
+			this.add('-start', pokemon, `elixir: ${elixir}`,'[silent]');
 		},
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
@@ -6590,10 +6588,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.formeChange("darmanitangalarzen");
 			}
 			const elixir = pokemon.activeTurns;
-			this.add('-start', pokemon, `elixir${elixir}`);
+			this.add('-end', pokemon, `elixir: ${elixir-1}`, '[silent]') 
+			//j'ai pas l'impression qu'on peut modifier un compteur existant dcp on supprime l'ancien et on en refait pour créer l'illusion 
+			//j'ai mis en silent mais stv que ça soit plus visible on peut faire ça :
+			//this.add('-activate', pokemon, `ability: Pote Glace`);
+			//this.add('-message', `${pokemon.name} a gagné un elixir !`);
+			this.add('-start', pokemon, `elixir: ${elixir}`,'[silent]');
 		},
 		onEnd(pokemon) {
-			// this.add('-end', pokemon, `elixir${elixir}`);
+			// this.add('-end', pokemon, `elixir${elixir}`); //jsp ça sert à quoi loool (en vrais surement pour neutralizing gaz)
 		},
 		flags: {},
 		name: "Pote Glace",

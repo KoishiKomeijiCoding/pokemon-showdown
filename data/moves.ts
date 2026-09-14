@@ -21544,7 +21544,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Physical",
 		name: "Tentencule",
 		pp: 10,
-		flags: { contact: 1, protect: 1, mirror: 1, distance: 1, metronome: 1, minimize: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, distance: 1, metronome: 1, minimize: 1, shitpost:1},
 		onModifyType(move, pokemon) {
 			const types = pokemon.getTypes();
 			let type = types[0];
@@ -21587,7 +21587,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Amnesia 1G",
 		pp: 20,
 		priority: 0,
-		flags: { snatch: 1, metronome: 1 },
+		flags: { snatch: 1, metronome: 1,shitpost:1 },
 		boosts: {
 			spa: 2,
 			spd: 2,
@@ -21605,7 +21605,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Cancer",
 		pp: 15,
 		priority: 0,
-		flags: { protect: 1, mirror: 1 },
+		flags: { protect: 1, mirror: 1,shitpost:1 },
 		condition: {
 			noCopy: true,
 			onStart(pokemon) {
@@ -21655,7 +21655,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-end', pokemon, 'Normalisator');
 			},
 		},
-		flags: { protect: 1, mirror: 1, nonsky: 1 },
+		flags: { protect: 1, mirror: 1, nonsky: 1,shitpost:1 },
 		target: "normal",
 		type: "Normal",
 		zMove: { basePower: 180 },
@@ -21686,7 +21686,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			}
 		},
-		flags: { protect: 1, mirror: 1, nonsky: 1 },
+		flags: { protect: 1, mirror: 1, nonsky: 1,shitpost:1 },
 		target: "allAdjacentFoes",
 		forceSwitch: true,
 		type: "Poison",
@@ -21702,7 +21702,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Cendres de Pompei",
 		pp: 10,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, nonsky: 1 },
+		flags: { protect: 1, mirror: 1, nonsky: 1, shitpost: 1 },
 		target: "allAdjacentFoes",
 		type: "Fire",
 		zMove: { basePower: 180 },
@@ -21716,7 +21716,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Chaise",
 		pp: 15,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1, shitpost: 1 },
 		secondary: {
 			chance: 100,
 			self: {
@@ -21760,7 +21760,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
                 }
             },
         },
-        flags: { protect: 1, mirror: 1, nonsky: 1 },
+        flags: { protect: 1, mirror: 1, nonsky: 1, shitpost: 1 },
         target: "allAdjacentFoes",
         type: "Fire",
         zMove: { basePower: 180 },
@@ -21774,7 +21774,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Fuck you",
 		pp: 20,
 		priority: 3,
-		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
+		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1,shitpost:1 },
 		onTry(source) {
 			if (source.activeMoveActions > 1) {
 				this.hint("Fake Out only works on your first turn out.");
@@ -21807,7 +21807,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Bzzzzt",
 		pp: 10,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, shitpost:1},
 		onHit(pokemon) {
 			const targets = pokemon.adjacentFoes();
 			this.actions.useMove('thunder', pokemon, { target: targets[Math.floor(Math.random() * targets.length)]});
@@ -21825,7 +21825,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Chant d'opera",
 		pp: 10,
 		priority: 0,
-		flags: { protect: 1, reflectable: 1, mirror: 1, allyanim: 1, metronome: 1,sound: 1 },
+		flags: { protect: 1, reflectable: 1, mirror: 1, allyanim: 1, metronome: 1,sound: 1,shitpost:1 },
 		volatileStatus: 'confusion',
 		onTryImmunity(target) {
 			// Truant and Insomnia have special treatment; they fail before
@@ -21857,7 +21857,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Balles",
 		pp: 5,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, punch: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, punch: 1,shitpost:1 },
 		willCrit: true,
 		target: "normal",
 		type: "Steel",
@@ -21870,7 +21870,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "I'm omniing it",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, slicing: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, slicing: 1, shitpost: 1 },
 		multihit: 10,
 		multiaccuracy: true,
 		target: "normal",
@@ -21884,7 +21884,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Stand Ready For my Worm",
 		pp: 15,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1, shitpost: 1 },
 		critRatio: 3,
 		target: "normal",
 		type: "Stellar",
@@ -21898,7 +21898,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "More of a pet to me",
 		pp: 20,
 		priority: 0,
-		flags: { snatch: 1, dance: 1, metronome: 1 },
+		flags: { snatch: 1, dance: 1, metronome: 1, shitpost: 1 },
 		onHit(pokemon) {
 			this.actions.useMove('swordsdance', pokemon);
 			this.actions.useMove('batonpass', pokemon);
@@ -21916,7 +21916,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Vibecoding",
 		pp: 20,
 		priority: 0,
-		flags: { snatch: 1, dance: 1, metronome: 1 },
+		flags: { snatch: 1, dance: 1, metronome: 1, shitpost: 1 },
 		onHit(target, source) {
 			const type = target.getTypes()
 			this.add('message',`${source.name} is thinking...`)
@@ -22009,7 +22009,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Deforestation",
 		pp: 20,
 		priority: 0,
-		flags: { snatch: 1, metronome: 1 },
+		flags: { snatch: 1, metronome: 1, shitpost: 1 },
 		onHit(target) {
 			this.field.clearTerrain();
 			this.add("-message",target.name + " vire tout les terrains déjà existant !")
@@ -22027,7 +22027,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Epstein Island",
 		pp: 10,
 		priority: 0,
-		flags: { nonsky: 1, metronome: 1 },
+		flags: { nonsky: 1, metronome: 1, shitpost: 1 },
 		pseudoWeather:'epsteinisland',
 		condition: {
 			duration: 5,
@@ -22076,7 +22076,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Data Server",
 		pp: 10,
 		priority: 0,
-		flags: { nonsky: 1, metronome: 1 },
+		flags: { nonsky: 1, metronome: 1, shitpost: 1 },
 		pseudoWeather: 'dataserver',
 		condition: {
 			duration: 5,
@@ -22122,7 +22122,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Domaine Expension",
 		pp: 10,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
 		onHit(pokemon) {
 			if (this.field.terrain === 'epsteinisland') {
 				return;
@@ -22141,7 +22141,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Make Data Server",
 		pp: 10,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
 		onHit(pokemon) {
 			if (this.field.terrain === 'dataserver') {
 				return;
@@ -22162,7 +22162,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Secret Ceremony Hidden Season",
 		pp: 10,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1, shitpost: 1 },
 		onModifyType(move, pokemon) {
 			switch (pokemon.effectiveWeather()) {
 			case 'sunnyday':
@@ -22223,7 +22223,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Bowling",
 		pp: 15,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1, shitpost: 1 },
 		target: "normal",
 		type: "Rock",
 		contestType: "Clever",
@@ -22236,11 +22236,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Mange Tes Morts",
 		pp: 10,
 		priority: 0,
-		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
+		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1, shitpost: 1 },
 		volatileStatus: 'mangetesmorts',
 		condition: {
 			onStart(target) {
-				this.add('-start', target, 'move: Leech Seed');
+				this.add('-start', target, 'move: Mange Tes Morts');
 			},
 			onResidualOrder: 8,
 			onResidual(pokemon) {
@@ -22271,9 +22271,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Lost Level",
 		pp: 10,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
 		onHit(pokemon) {
-			pokemon.changeLevel(1)//augmente le level du poke de 1
+			pokemon.changeLevel(5)//augmente le level du poke de 1
 		},
 		target: "self",
 		type: "Electric",
@@ -22288,7 +22288,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Gem Alert",
 		pp: 10,
 		priority: 4,
-		flags: { noassist: 1, failcopycat: 1, failinstruct: 1 },
+		flags: { noassist: 1, failcopycat: 1, failinstruct: 1, shitpost: 1 },
 		stallingMove: true,
 		volatileStatus: 'gemalert',
 		onHit(pokemon) {
@@ -22323,7 +22323,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Corruption",
 		pp: 5,
 		priority: 4,
-		flags: { noassist: 1, failcopycat: 1, failinstruct: 1 },
+		flags: { noassist: 1, failcopycat: 1, failinstruct: 1,shitpost: 1},
 		stallingMove: true,
 		volatileStatus: 'corruption',
 		onTryHit(target, source, move) {
@@ -22378,7 +22378,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Wonderful Berry",
 		pp: 20,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1,shitpost: 1 },
 		onHit(target, source, move) {
 				console.log(target)
 				const item = target.getItem();
@@ -22403,7 +22403,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Screamer",
 		pp: 10,
 		priority: 3,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1,cantusetwice: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1,cantusetwice: 1, shitpost: 1 },
 		secondary: {
 			chance: 100,
 			volatileStatus: 'flinch',
@@ -22420,7 +22420,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Power Outrage",
 		pp: 10,
 		priority: 3,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
 		onHit(source) {
 			this.field.addPseudoWeather('watersport',source)
 			this.field.addPseudoWeather('mudsport',source)
@@ -22438,7 +22438,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
         pp: 1,
         noPPBoosts: true,
         priority: 1,
-        flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, allyanim: 1, failencore: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 },
+        flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, allyanim: 1, failencore: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 ,shitpost: 1},
         onHit(target, source, moove) {
             const lapins = ["diggersby","cinderace","lopunny","azumarill"]
             target.formeChange(this.sample(lapins),moove,true, target.name + " est transformé en lapin !");//transforminto est forçément temporaire dcp on peut pas utiliser ça
@@ -22476,7 +22476,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
                 if (ally != source) this.damage(ally.baseMaxhp / 8, ally, source, this.dex.conditions.get('Flame Burst'));
             }
         },
-        flags: { protect: 1, mirror: 1, metronome: 1,  bullet: 1 },
+        flags: { protect: 1, mirror: 1, metronome: 1,  bullet: 1, shitpost: 1},
         target: "normal",
         type: "Fire",
         contestType: "Cool",
@@ -22489,7 +22489,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Allah Akbar",
 		pp: 5,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1, noparentalbond: 1, explosive: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, noparentalbond: 1, explosive: 1, shitpost: 1 },
 		selfdestruct: "always",
 		target: "allAdjacent",
 		type: "Normal",
@@ -22503,7 +22503,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Coran",
 		pp: 10,
 		priority: 0,
-		flags: { metronome: 1, wind: 1 },
+		flags: { metronome: 1, wind: 1, shitpost: 1 },
 		volatileStatus: 'coran',
 		condition: {
 			onStart(pokemon) {
@@ -22534,7 +22534,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Musique Arabe",
 		pp: 15,
 		priority: 0,
-		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, sound: 1 },
+		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, sound: 1, shitpost: 1 },
 		onHit(target) {
 			let move: Move | ActiveMove | null = target.lastMove;
 			if (!move || move.isZ) return false;
@@ -22558,7 +22558,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Dijihad",
 		pp: 10,
 		priority: 3,
-		flags: { metronome: 1, wind: 1 },
+		flags: { metronome: 1, wind: 1, shitpost: 1 },
 		volatileStatus: 'dijihad',
 		onHit(target, source, move) {
 			return target.addVolatile('trapped', source, move, 'trapper');
@@ -22588,7 +22588,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onHit(target) {
 			target.addVolatile('followme');
 		},
-		flags: { contact: 1, protect: 1, mirror: 1, punch: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, punch: 1, shitpost: 1 },
 		willCrit: true,
 		target: "normal",
 		type: "Dark",
@@ -22601,7 +22601,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	name: "Brainrot",
 	pp: 40,
 	priority: 3,
-	flags: { protect: 1, mirror: 1, metronome: 1},
+	flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
     onTryHit(target) {
 		if (target.getAbility().flags['cantsuppress']) {
 			return false;
