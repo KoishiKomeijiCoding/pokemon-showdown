@@ -5835,25 +5835,28 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 9999,
 	},
-	serenerock: {
-		onModifyMovePriority: -2,
-		onModifyMove(move) {
-			if (move.secondaries) {
-				this.debug('doubling secondary chance');
-				for (const secondary of move.secondaries) {
-					if (secondary.chance) secondary.chance *= 2;
-				}
-			}
-			if (move.self?.chance) move.self.chance *= 2;
-		},
+	mecaniques1g: {
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.getMoveHitData(move).typeMod > 0) {
 				this.debug('ce poke est broken');
 				return this.chainModify(0.5);
 			}
 		},
+		onModifyMove(move) {
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {	
+				this.debug('Ce poke est broken 2');
+				move.ignoreImmunity['Psychic'] = true;
+			}
+		},
+		onModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod < 0 && move.type === 'Psychic' && target.type === 'Steel') { // vibecode à reprendre !!
+				this.debug('Ce poke est broken 3');
+				return this.chainModify(2);
+			}
+		},
 		flags: {},
-		name: "Serene Rock",
+		name: "Mecaniques 1G",
 		rating: 3.5,
 		num: 9998,
 	},
@@ -5978,7 +5981,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 24
 	},
 	electricityyyy: {
-		onSwitchIn(pokemon) {
+		onSwitchIn(pokemon) { // onStart ?
 			const moveId = 'zap'; // ← Change this to any move you want!
 			const move = this.dex.getActiveMove(moveId);
 			this.add('-ability', pokemon, 'ELECTRICITYYYY');
@@ -6177,7 +6180,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 		},
-		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
+		flags: {},
 		name: "HiddenStar in FourSeasons",
 		rating: 4,
 		num: 1000,
@@ -6201,12 +6204,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			this.field.clearWeather();
 		},
-		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
+		flags: { },
 		name: "Hidden Star in All Seasons",
 		rating: 4,
-		num: 1001
+		num: 1001,
 	},
-	eruptionvolcanique: {
+	eruptionvolcanique: { // a fix oups
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
 			if (source.vesuveCounter >= 1) {
@@ -6324,7 +6327,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 9991,
 	},
 	cinqnuitschezfreddy: {
-		onSwitchIn(pokemon) {
+		onSwitchIn(pokemon) { // onStart ?
 			const moveId = 'meanlook'; // ← Change this to any move you want!
 			const move = this.dex.getActiveMove(moveId);
 			this.add('-ability', pokemon, 'Cinq nuit chez Freddys');
@@ -6380,7 +6383,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
                 return null;
             }
         },
-        flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, breakable: 1, notransform: 1 },            
+        flags: {},            
         name: "I'm a Wizard",
         rating: 3,
         num: 998,
@@ -6485,8 +6488,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 
 			const moveGmaxSupplementaire = this.sample(listeMovesGmax);
 			if (moveGmaxSupplementaire != undefined) {
-				this.actions.useMove(moveGmaxSupplementaire, source); //Rudolf apprends à coder ptn de merde
+				this.actions.useMove(moveGmaxSupplementaire, source); //Rudolf apprends à coder ptn de merde // nique typescript vive Python et R
 			}
+		},
+		onEnd(pokemon) {
+			pokemon.removeVolatile('Dynamax')
 		},
 		flags: {},
 		name: "Pouvoir Gigamax",
@@ -6579,24 +6585,29 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
-			if (pokemon.activeTurns > 2) {
-				this.add('-activate', pokemon, "ability: Pote Glace");
-				// this.add('-end', pokemon, `elixir${elixir}`);
-				for (const target of pokemon.foes()) {
+			if (pokemon.species.id === "darmanitangalarzen") return;
+				if (pokemon.activeTurns > 2) {
+					const elixir = pokemon.activeTurns;
+					this.add('-activate', pokemon, "ability: Pote Glace");
+					this.add('-message', '${pokemon.name} dépense deux elixir pour activer sa capacité !');
+					this.add('-end', pokemon, `elixir: ${elixir-1}`, '[silent]')
+					for (const target of pokemon.foes()) {
 						target.trySetStatus('frz', pokemon);
+					}
+					pokemon.formeChange("darmanitangalarzen");
+				} else {
+					const elixir = pokemon.activeTurns;
+					this.add('-end', pokemon, `elixir: ${elixir-1}`, '[silent]') 
+					//j'ai pas l'impression qu'on peut modifier un compteur existant dcp on supprime l'ancien et on en refait pour créer l'illusion 
+					//j'ai mis en silent mais stv que ça soit plus visible on peut faire ça :
+					//this.add('-activate', pokemon, `ability: Pote Glace`);
+					//this.add('-message', `${pokemon.name} a gagné un elixir !`);
+					this.add('-start', pokemon, `elixir: ${elixir}`,'[silent]');
 				}
-				pokemon.formeChange("darmanitangalarzen");
-			}
-			const elixir = pokemon.activeTurns;
-			this.add('-end', pokemon, `elixir: ${elixir-1}`, '[silent]') 
-			//j'ai pas l'impression qu'on peut modifier un compteur existant dcp on supprime l'ancien et on en refait pour créer l'illusion 
-			//j'ai mis en silent mais stv que ça soit plus visible on peut faire ça :
-			//this.add('-activate', pokemon, `ability: Pote Glace`);
-			//this.add('-message', `${pokemon.name} a gagné un elixir !`);
-			this.add('-start', pokemon, `elixir: ${elixir}`,'[silent]');
 		},
 		onEnd(pokemon) {
-			// this.add('-end', pokemon, `elixir${elixir}`); //jsp ça sert à quoi loool (en vrais surement pour neutralizing gaz)
+			const elixir = pokemon.activeTurns;
+			this.add('-end', pokemon, `elixir: ${elixir-1}`, '[silent]') 	
 		},
 		flags: {},
 		name: "Pote Glace",
