@@ -2319,6 +2319,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 
 		activate: "  [POKEMON] extends [MOVE] by 2 turns!",
 	},
+
+	// Shitpost
 	hiddenstarinfourseasons: {
 		name: "Hidden Star in Four Seasons",
 		shortDesc: "On switch-in and at the end of each turn, this pokemon changes the weather.",

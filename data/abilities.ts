@@ -1124,7 +1124,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Ground') {
 				if (!this.heal(target.baseMaxhp / 4)) {
-					this.add('-immune', target, '[from] ability: Earth Eater');
+					this.add('-iearthemmune', target, '[from] ability: Earth Eater');
 				}
 				return null;
 			}
@@ -6613,5 +6613,48 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Pote Glace",
 		rating: 2,
 		num: 3002,
+	},
+	consume: {
+		onResidualOrder: 8,
+		onResidual(pokemon) {
+			const target = this.getAtSlot(pokemon.volatiles['leechseed'].sourceSlot);
+			if (!target || target.fainted || target.hp <= 0) {					
+				this.debug('Nothing to leech into');
+					return;
+			}
+			const damage = this.damage(pokemon.baseMaxhp / 16, pokemon, target);
+			if (damage) {
+				this.heal(damage, target, pokemon);
+			}
+		},
+		onFaint(target) {
+			//
+		},
+		flags: {},
+		name: "CONSUME",
+		rating: 3,
+		num: 3003,
+	},
+	eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill: {
+		onStart(source) {
+			this.field.addPseudoWeather('supergravity', source);
+			source.addVolatile('masterofgravity');
+		},
+		onModifyMove(move, pokemon) { // vibecode 0/10 optimisation, je ne sais pas faire de conditions multiples en typescript et POO
+			if (!this.field.getPseudoWeather('gravity')) return;
+			if (!this.field.getPseudoWeather('supergravity')) return;
+			if (!pokemon.volatiles['masterofgravity']) return;
+			move.target = 'allAdjacentFoes';
+		},
+		onHit(target, source, move) {
+				this.add('The person known ™ as myself also known as ™ Wilhelm von Clausewitz Halcyon HISUIMARU is filled completely ™ and utterly with the feeling, an emotional reaction ™, that is commonly described in short ™ as disgust towards the man ™ coated in figurative trash. Due to these ™ intense emotions that I, the Eternal Senselessness Bearing the Alias of Chaos ™ who Manipulates Gravity at Will, feel towards this ™ man that I dare not call human, only a monster ™ (and also the coach), but only the trash like man, I ™ will beat down all who stand in my literal and figurative ™ way. To achieve this goal I must achieve even ™ greater power than the power over gravity that ™ I manipulate at will. The figure that I deem ™ to be less than a human, only a monster, is the same ™ as me in this regard. The collection, that is the capture ™, of all the figurative trash, that retains a disposition ™ of one that could be called a god, and yet is an average folk is an action ™ that is unforgivable. You, that is to say, the one reading ™ this message, cannot affect me with your measly powers ™ . The monster also known in short as the Trashy Man ™, is unpleasant on the eyes ™, especially when he is committing ™ an act as simple as walking around at his lesuire.');
+			},
+		onEnd(pokemon) {
+			pokemon.removeVolatile('masterofgravity');
+		},
+		flags: {},
+		name: 'Eternal Senselessness Bearing the Alias of "Chaos" who Manipulates Gravity at Will', // sinon Empire Power - Eternal Force
+		rating: 2,
+		num: 3003,
 	},
 };
