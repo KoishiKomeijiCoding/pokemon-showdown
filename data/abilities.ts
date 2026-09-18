@@ -6640,15 +6640,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.field.addPseudoWeather('supergravity', source);
 			source.addVolatile('masterofgravity');
 		},
-		onModifyMove(move, pokemon) { // vibecode 0/10 optimisation, je ne sais pas faire de conditions multiples en typescript et POO
-			if (!this.field.getPseudoWeather('gravity')) return;
-			if (!this.field.getPseudoWeather('supergravity')) return;
+		onModifyMove(move, pokemon) { // vibecode 0/10 optimisation, je ne sais pas faire de conditions multiples en typescript et POO //ratio
+			//if (!this.field.getPseudoWeather('gravity')) return; je suppose que c'est une erreur mais en vrais jsp 
+			if (!this.field.getPseudoWeather('supergravity') && !this.field.getPseudoWeather('gravity')) return;
 			if (!pokemon.volatiles['masterofgravity']) return;
-			move.target = 'allAdjacentFoes';
+			move.target = 'allAdjacentFoes'; //ptdr azy
 		},
-		onHit(target, source, move) {
-				this.add('The person known ™ as myself also known as ™ Wilhelm von Clausewitz Halcyon HISUIMARU is filled completely ™ and utterly with the feeling, an emotional reaction ™, that is commonly described in short ™ as disgust towards the man ™ coated in figurative trash. Due to these ™ intense emotions that I, the Eternal Senselessness Bearing the Alias of Chaos ™ who Manipulates Gravity at Will, feel towards this ™ man that I dare not call human, only a monster ™ (and also the coach), but only the trash like man, I ™ will beat down all who stand in my literal and figurative ™ way. To achieve this goal I must achieve even ™ greater power than the power over gravity that ™ I manipulate at will. The figure that I deem ™ to be less than a human, only a monster, is the same ™ as me in this regard. The collection, that is the capture ™, of all the figurative trash, that retains a disposition ™ of one that could be called a god, and yet is an average folk is an action ™ that is unforgivable. You, that is to say, the one reading ™ this message, cannot affect me with your measly powers ™ . The monster also known in short as the Trashy Man ™, is unpleasant on the eyes ™, especially when he is committing ™ an act as simple as walking around at his lesuire.');
-			},
+		onDamagingHit(target, source, move) {
+				this.add("-message",'The person known ™ as myself also known as ™ Wilhelm von Clausewitz Halcyon HISUIMARU is filled completely ™ and utterly with the feeling, an emotional reaction ™, that is commonly described in short ™ as disgust towards the man ™ coated in figurative trash. Due to these ™ intense emotions that I, the Eternal Senselessness Bearing the Alias of Chaos ™ who Manipulates Gravity at Will, feel towards this ™ man that I dare not call human, only a monster ™ (and also the coach), but only the trash like man, I ™ will beat down all who stand in my literal and figurative ™ way. To achieve this goal I must achieve even ™ greater power than the power over gravity that ™ I manipulate at will. The figure that I deem ™ to be less than a human, only a monster, is the same ™ as me in this regard. The collection, that is the capture ™, of all the figurative trash, that retains a disposition ™ of one that could be called a god, and yet is an average folk is an action ™ that is unforgivable. You, that is to say, the one reading ™ this message, cannot affect me with your measly powers ™ . The monster also known in short as the Trashy Man ™, is unpleasant on the eyes ™, especially when he is committing ™ an act as simple as walking around at his lesuire.');
+		}, 
 		onEnd(pokemon) {
 			pokemon.removeVolatile('masterofgravity');
 		},

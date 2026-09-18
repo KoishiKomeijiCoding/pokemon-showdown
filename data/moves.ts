@@ -22864,20 +22864,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onAnyTryMove(target, source, effect) {
 				if (['explosion', 'mindblown', 'mistyexplosion', 'selfdestruct', 'allahakbar', 'selfdestruct1g'].includes(effect.id)) {
 					this.attrLastMove('[still]');
-					this.add('cant', this.effectState.target, 'condition: Master of Gravity', effect, `[of] ${target}`);
+					this.add('cant', target, 'condition: Master of Gravity', effect, `[of] ${source}`);
+					this.add('-message', 'because of master of gravity');
 					return false;
 				}
 			},
-			onAnyInvulnerability(target, source, move) {
-				if (['smackdown', 'thousandarrows', 'gravapple'].includes(move.id)) {
-					this.add('-immune', target, '[from] condition: Master of Gravity');
-					return false;
-				}
-			},
-			onImmunity(type, pokemon) {					
-				if (type === 'Ground') {
-					this.add('-immune', pokemon, '[from] condition: Master of Gravity');
-					return false;
+			onTryHit(target, source, move) {
+				if ((target !== source && move.type === 'Ground') || ['smackdown', 'thousandarrows', 'gravapple'].includes(move.id)) {
+					move.accuracy = true;
+					this.add('-immune', target, '[from] condition: Master of Gravity'); //jsp ou t'as sortie ton [from] condition mais ça a l'air de servir à rien jsp
+					this.add('-message', 'because of master of gravity');
+					return null;
 				}
 			},
 			onResidualOrder: 18,
@@ -22889,5 +22886,5 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Psychic",
 		zMove: { boost: { evasion: 1 } },
 		contestType: "Clever",
-	},
+	}, //les fonctionnalité du talent sont plutôt correctement implémenté cependant niveau visuel c'est pas super explicite juste le moove rate mais jsp trop comment préciser ça
 };
