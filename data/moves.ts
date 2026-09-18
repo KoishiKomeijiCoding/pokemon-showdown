@@ -22941,7 +22941,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-activate', pokemon, 'move: Impostor');
 				return null;
 			},
-		
+			onFoeTrapPokemon(pokemon) {	
+				pokemon.tryTrap(true);
+			},
+			onFoeMaybeTrapPokemon(pokemon, source) {
+				if (!source) source = this.effectState.target;
+				if (!source) return;
+				pokemon.maybeTrapped = true;
+			},
 		},
 		target: "self",
 		type: "Psychic",
