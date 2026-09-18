@@ -5850,7 +5850,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onModifyDamage(damage, source, target, move) {
-			if (target.getMoveHitData(move).typeMod < 0 && move.type === 'Psychic' && target.type === 'Steel') { // vibecode à reprendre !!
+			if (target.getMoveHitData(move).typeMod < 0 && move.type === 'Psychic' && target.types.includes('Steel')) { // vibecode à reprendre !! //ratio t'allait fraire crash le serv
 				this.debug('Ce poke est broken 3');
 				return this.chainModify(2);
 			}
@@ -6657,4 +6657,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2,
 		num: 3003,
 	},
+	amogus: {
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Amogus');
+			const pokemons = this.getAllActive();
+			const impostor = this.sample(pokemons);
+			impostor.addVolatile('impostor');
+			this.add('message', "Il y a maintenant un imposteur parmis nous!");
+		},
+		flags: {},
+		name: 'Amogus', 
+		rating: 2,
+		num: 3003,
+	}
 };
+

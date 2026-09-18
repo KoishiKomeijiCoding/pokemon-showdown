@@ -21777,4 +21777,15 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 82.0,
 		eggGroups: ["Human-Like"],
 	},
+	mariosus: {
+		num: 10000,
+		name: "Mario Sus",
+		types: ["Fire", "Normal"],
+		baseStats: { hp: 90, atk: 110, def: 80, spa: 70, spd: 110, spe: 80 },
+		abilities: { 0: 'Amogus'}, 
+		heightm: 1.85,
+		weightkg: 82.0,
+		eggGroups: ["Human-Like"],
+		
+	}
 };

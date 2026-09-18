@@ -22573,6 +22573,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					console.log("dammage doubled")
                     return this.chainModify(2);
             },
+			onTrapPokemon(pokemon) {
+				pokemon.tryTrap();
+			},
 		},
 		target: "normal",
 		type: "Dark",
@@ -22887,4 +22890,85 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { boost: { evasion: 1 } },
 		contestType: "Clever",
 	}, //les fonctionnalité du talent sont plutôt correctement implémenté cependant niveau visuel c'est pas super explicite juste le moove rate mais jsp trop comment préciser ça
+	impostor: {
+		num: 393,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Impostor",
+		pp: 10,
+		priority: 0,
+		flags: { snatch: 1, metronome: 1 },
+		volatileStatus: 'impostor',
+		condition: {
+			onStart(target) {
+				target.moveSlots.push({
+					move: "Reveal",
+					id: "reveal" as ID,
+					pp: 8,
+					maxpp: 8,
+					target: "normal",
+					disabled: false,
+					used: false,
+					virtual: true,
+            	});
+			},
+			onModifyAtk(atk, pokemon) {
+				return this.chainModify(1.5);
+			},
+			onModifySpA(spa, pokemon) {
+				return this.chainModify(1.5);
+			},
+			onModifySpe(spe, pokemon) {
+				return this.chainModify(1.5);
+			},
+			onModifyDef(def, pokemon) {
+				return this.chainModify(1.5);
+			},
+			onModifySpD(spd, pokemon) {
+				return this.chainModify(1.5);
+			},
+			onTrapPokemon(pokemon) {
+				pokemon.tryTrap();
+			},
+			onFaint(target, source, effect) {
+				this.add('-message', source.name + " a tué l'imposteur et est donc récompensé !")
+				this.heal(source.baseMaxhp,source);
+				const boost: SparseBoostsTable = {"atk": 1, "def": 1, "spa": 1, "spd": 1, "spe": 1};
+				this.boost(boost,source);
+			},
+			onDragOut(pokemon) {
+				this.add('-activate', pokemon, 'move: Impostor');
+				return null;
+			},
+		
+		},
+		target: "self",
+		type: "Psychic",
+		zMove: { boost: { evasion: 1 } },
+		contestType: "Clever",
+	},
+	reveal: {
+		num: 686,
+		accuracy: 100,
+		basePower: 120,
+		category: "Special",
+		name: "Reveal",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyType(move, pokemon) {
+			const types = pokemon.getTypes();
+			let type = types[0];
+			if (type === 'Bird') type = '???';
+			if (type === '???' && types[1]) type = types[1];
+			move.type = type;
+		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+		},
+		target: "normal",
+		type: "Normal",
+		contestType: "Beautiful",
+	},
 };
