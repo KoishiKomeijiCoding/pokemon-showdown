@@ -22618,7 +22618,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			'grosserveur', "terrorisme", "auuwoh", 'pompeibaby',
 			'bienveillance', 'megaintimidate', 'hawkingroom', 'motivation',
 			'6767', 'serenerock', 'homochromie', 'epsteinfiles', 'intrusion',
-			'aurafarming', 'megaopportunist', 'mercredi', 'poteglace'
+			'aurafarming', 'megaopportunist', 'mercredi', 'poteglace','eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill'
 		];
 		const newAbility = this.sample(shitpostAbilities);
 		const oldAbility = target.setAbility(newAbility);
