@@ -65,6 +65,7 @@ interface MoveFlags {
 	sound?: 1; // Has no effect on Pokemon with the Ability Soundproof.
 	wind?: 1; // Activates the Wind Power and Wind Rider Abilities.
 	explosive?: 1;//augmente les effets du talent terroriste
+	shitpost?:1;//Les talents shitposts
 }
 
 export interface HitEffect {

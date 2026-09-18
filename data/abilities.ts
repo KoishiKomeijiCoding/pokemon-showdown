@@ -1124,7 +1124,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Ground') {
 				if (!this.heal(target.baseMaxhp / 4)) {
-					this.add('-immune', target, '[from] ability: Earth Eater');
+					this.add('-iearthemmune', target, '[from] ability: Earth Eater');
 				}
 				return null;
 			}
@@ -5835,25 +5835,28 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 9999,
 	},
-	serenerock: {
-		onModifyMovePriority: -2,
-		onModifyMove(move) {
-			if (move.secondaries) {
-				this.debug('doubling secondary chance');
-				for (const secondary of move.secondaries) {
-					if (secondary.chance) secondary.chance *= 2;
-				}
-			}
-			if (move.self?.chance) move.self.chance *= 2;
-		},
+	mecaniques1g: {
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.getMoveHitData(move).typeMod > 0) {
 				this.debug('ce poke est broken');
 				return this.chainModify(0.5);
 			}
 		},
+		onModifyMove(move) {
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {	
+				this.debug('Ce poke est broken 2');
+				move.ignoreImmunity['Psychic'] = true;
+			}
+		},
+		onModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod < 0 && move.type === 'Psychic' && target.type === 'Steel') { // vibecode à reprendre !!
+				this.debug('Ce poke est broken 3');
+				return this.chainModify(2);
+			}
+		},
 		flags: {},
-		name: "Serene Rock",
+		name: "Mecaniques 1G",
 		rating: 3.5,
 		num: 9998,
 	},
@@ -5978,7 +5981,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 24
 	},
 	electricityyyy: {
-		onSwitchIn(pokemon) {
+		onSwitchIn(pokemon) { // onStart ?
 			const moveId = 'zap'; // ← Change this to any move you want!
 			const move = this.dex.getActiveMove(moveId);
 			this.add('-ability', pokemon, 'ELECTRICITYYYY');
@@ -6177,7 +6180,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 		},
-		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
+		flags: {},
 		name: "HiddenStar in FourSeasons",
 		rating: 4,
 		num: 1000,
@@ -6201,12 +6204,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			this.field.clearWeather();
 		},
-		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
+		flags: { },
 		name: "Hidden Star in All Seasons",
 		rating: 4,
-		num: 1001
+		num: 1001,
 	},
-	eruptionvolcanique: {
+	eruptionvolcanique: { // a fix oups
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
 			if (source.vesuveCounter >= 1) {
@@ -6324,7 +6327,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 9991,
 	},
 	cinqnuitschezfreddy: {
-		onSwitchIn(pokemon) {
+		onSwitchIn(pokemon) { // onStart ?
 			const moveId = 'meanlook'; // ← Change this to any move you want!
 			const move = this.dex.getActiveMove(moveId);
 			this.add('-ability', pokemon, 'Cinq nuit chez Freddys');
@@ -6380,7 +6383,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
                 return null;
             }
         },
-        flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, breakable: 1, notransform: 1 },            
+        flags: {},            
         name: "I'm a Wizard",
         rating: 3,
         num: 998,
@@ -6485,8 +6488,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 
 			const moveGmaxSupplementaire = this.sample(listeMovesGmax);
 			if (moveGmaxSupplementaire != undefined) {
-				this.actions.useMove(moveGmaxSupplementaire, source); //Rudolf apprends à coder ptn de merde
+				this.actions.useMove(moveGmaxSupplementaire, source); //Rudolf apprends à coder ptn de merde // nique typescript vive Python et R
 			}
+		},
+		onEnd(pokemon) {
+			pokemon.removeVolatile('Dynamax')
 		},
 		flags: {},
 		name: "Pouvoir Gigamax",
@@ -6535,5 +6541,120 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Execution d'Always Furrious",
 		rating: 3.5,
 		num: 9995,
+	},
+    aislop: { // WIP
+		onResidualOrder: 50,
+		onResidualSubOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			const moves = this.dex.moves.all().filter(move => (
+				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
+				move.flags['shitpost']
+			));
+			let randomMove;
+			if (moves.length) {
+				moves.sort((a, b) => a.num - b.num);
+				randomMove = this.sample(moves);
+			}
+			if (!randomMove) return false;
+			source.moveSlots[Math.floor(Math.random() * (3 + 1))] = 
+			{
+				id : randomMove.id,
+				move : randomMove.name,
+				pp : randomMove.pp,
+				maxpp : randomMove.pp,
+				disabled: false,
+				used: false,
+			} //Pour une raison obscure l'objet move n'intègre pas l'interface MoveSlot, dcp je fais ça à la main
+			this.add('-ability', target, 'AI Slop');
+			this.add('-message', `${source.name} a reçu ${randomMove.name} !`);
+		},
+		flags: {},
+		name: "AI Slop",
+		rating: 0,
+		num: 3001,
+	},
+	poteglace: {
+		onSwitchIn(pokemon) {
+			const moveId = 'icywind';
+			const move = this.dex.getActiveMove(moveId);
+			this.actions.useMove(move, pokemon)
+			const elixir = pokemon.activeTurns;
+			this.add('-activate', pokemon, `ability: Pote Glace`);
+			this.add('-start', pokemon, `elixir: ${elixir}`,'[silent]');
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (pokemon.species.id === "darmanitangalarzen") return;
+				if (pokemon.activeTurns > 2) {
+					const elixir = pokemon.activeTurns;
+					this.add('-activate', pokemon, "ability: Pote Glace");
+					this.add('-message', '${pokemon.name} dépense deux elixir pour activer sa capacité !');
+					this.add('-end', pokemon, `elixir: ${elixir-1}`, '[silent]')
+					for (const target of pokemon.foes()) {
+						target.trySetStatus('frz', pokemon);
+					}
+					pokemon.formeChange("darmanitangalarzen");
+				} else {
+					const elixir = pokemon.activeTurns;
+					this.add('-end', pokemon, `elixir: ${elixir-1}`, '[silent]') 
+					//j'ai pas l'impression qu'on peut modifier un compteur existant dcp on supprime l'ancien et on en refait pour créer l'illusion 
+					//j'ai mis en silent mais stv que ça soit plus visible on peut faire ça :
+					//this.add('-activate', pokemon, `ability: Pote Glace`);
+					//this.add('-message', `${pokemon.name} a gagné un elixir !`);
+					this.add('-start', pokemon, `elixir: ${elixir}`,'[silent]');
+				}
+		},
+		onEnd(pokemon) {
+			const elixir = pokemon.activeTurns;
+			this.add('-end', pokemon, `elixir: ${elixir-1}`, '[silent]') 	
+		},
+		flags: {},
+		name: "Pote Glace",
+		rating: 2,
+		num: 3002,
+	},
+	consume: {
+		onResidualOrder: 8,
+		onResidual(pokemon) {
+			const target = this.getAtSlot(pokemon.volatiles['leechseed'].sourceSlot);
+			if (!target || target.fainted || target.hp <= 0) {					
+				this.debug('Nothing to leech into');
+					return;
+			}
+			const damage = this.damage(pokemon.baseMaxhp / 16, pokemon, target);
+			if (damage) {
+				this.heal(damage, target, pokemon);
+			}
+		},
+		onFaint(target) {
+			//
+		},
+		flags: {},
+		name: "CONSUME",
+		rating: 3,
+		num: 3003,
+	},
+	eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill: {
+		onStart(source) {
+			this.field.addPseudoWeather('supergravity', source);
+			source.addVolatile('masterofgravity');
+		},
+		onModifyMove(move, pokemon) { // vibecode 0/10 optimisation, je ne sais pas faire de conditions multiples en typescript et POO //ratio
+			//if (!this.field.getPseudoWeather('gravity')) return; je suppose que c'est une erreur mais en vrais jsp 
+			if (!this.field.getPseudoWeather('supergravity') && !this.field.getPseudoWeather('gravity')) return;
+			if (!pokemon.volatiles['masterofgravity']) return;
+			move.target = 'allAdjacentFoes'; //ptdr azy
+		},
+		onDamagingHit(target, source, move) {
+				this.add("-message",'The person known ™ as myself also known as ™ Wilhelm von Clausewitz Halcyon HISUIMARU is filled completely ™ and utterly with the feeling, an emotional reaction ™, that is commonly described in short ™ as disgust towards the man ™ coated in figurative trash. Due to these ™ intense emotions that I, the Eternal Senselessness Bearing the Alias of Chaos ™ who Manipulates Gravity at Will, feel towards this ™ man that I dare not call human, only a monster ™ (and also the coach), but only the trash like man, I ™ will beat down all who stand in my literal and figurative ™ way. To achieve this goal I must achieve even ™ greater power than the power over gravity that ™ I manipulate at will. The figure that I deem ™ to be less than a human, only a monster, is the same ™ as me in this regard. The collection, that is the capture ™, of all the figurative trash, that retains a disposition ™ of one that could be called a god, and yet is an average folk is an action ™ that is unforgivable. You, that is to say, the one reading ™ this message, cannot affect me with your measly powers ™ . The monster also known in short as the Trashy Man ™, is unpleasant on the eyes ™, especially when he is committing ™ an act as simple as walking around at his lesuire.');
+		}, 
+		onEnd(pokemon) {
+			pokemon.removeVolatile('masterofgravity');
+		},
+		flags: {},
+		name: 'Eternal Senselessness Bearing the Alias of "Chaos" who Manipulates Gravity at Will', // sinon Empire Power - Eternal Force
+		rating: 2,
+		num: 3003,
 	},
 };
