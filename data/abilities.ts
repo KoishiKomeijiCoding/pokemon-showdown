@@ -6669,6 +6669,58 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: 'Amogus', 
 		rating: 2,
 		num: 3003,
-	}
+	},
+	ballondiscret: {	onSwitchIn(pokemon) { // onStart ?
+			const moveId = 'smokescreen'; // ← Change this to any move you want!
+			const move = this.dex.getActiveMove(moveId);
+			this.add('-ability', pokemon, 'Ballon Discret');
+			for (const target of pokemon.adjacentFoes()) {
+				if (move) {
+					this.actions.useMove(move, pokemon,{ target: target });
+				}
+			}
+			this.actions.useMove('celebrate', pokemon);
+		},
+		onBasePowerPriority: 30,
+		onBasePower(basePower, attacker, defender, move) {
+			const basePowerAfterMultiplier = this.modify(basePower, this.event.modifier);
+			this.debug(`Base Power: ${basePowerAfterMultiplier}`);
+			if (basePowerAfterMultiplier <= 60) {
+				this.debug('Technician boost');
+				return this.chainModify(1.5);
+			}
+		},
+		flags: {},
+		name: "Ballon Discret",
+		rating: 2.5,
+		num: 9994,
+
+	},
+	jaipleindecadeaux: {	onSwitchIn(pokemon) { // onStart ?
+			const moveId = 'present'; // ← Change this to any move you want!
+			const move = this.dex.getActiveMove(moveId);
+			this.add('-ability', pokemon, 'Jai plein de cadeaux');
+			for (const target of pokemon.adjacentFoes()) {
+				if (move) {
+					this.actions.useMove(move, pokemon,{ target: target });
+				}
+			}
+		},
+		onDamagingHit(damage, target, source, effect) {
+				if (Math.floor(Math.random() * (3)) == 2) {
+					this.add('-message', target + " Je vais te manger le dambolo");
+					const morsures = [
+						'bite','firefang','thunderfang','bugbite','icefang','leechlife','poisonfang','crunch','psychicfangs'
+					];
+					const Paslescookies = this.sample(morsures);
+					console.log(Paslescookies)
+					this.actions.useMove(Paslescookies, target, { target: source});
+				}
+		},
+		flags: {},
+		name: "Jai plein de cadeaux",
+		rating: 2.5,
+		num: 9995,
+	},
 };
 

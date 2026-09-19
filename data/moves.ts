@@ -22978,4 +22978,46 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
+	ninjaflop: {
+		num: 816,
+		accuracy: 100,
+		basePower: 60,
+		category: "Physical",
+		name: "Ninja Flop",
+		pp: 5,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
+		onHit(target,source) {
+			source.addVolatile('endure');
+			target.addVolatile('endure');
+		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+		},
+		target: "normal",
+		type: "Normal",
+		contestType: "Beautiful",
+	},
+	nainsdenoel: {
+		num: 816,
+		accuracy: 90,
+		basePower: 5,
+		category: "Physical",
+		name: "Nains de Noel",
+		pp: 10,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, bite: 1, shitpost: 1 },
+		onEffectiveness(typeMod, target, type, move) {
+			return typeMod + this.dex.getEffectiveness('Fire', type);
+		},
+		secondary: {
+			chance: 10,
+			volatileStatus: 'flinch',
+		},
+		multihit: 10,
+		multiaccuracy: true,
+		target: "normal",
+		type: "Ice",
+		contestType: "Tough",
+	},
 };
