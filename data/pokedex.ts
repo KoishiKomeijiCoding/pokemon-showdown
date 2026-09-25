@@ -21811,7 +21811,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	megaknight: {
 		num: 10000,
 		name: "Mega Knight",
-		types: ["Steel", "Fight"],
+		types: ["Steel", "Fighting"],
 		baseStats: {hp: 160, atk: 90, def: 90, spa: 30, spd: 65, spe: 50 },
 		abilities: { 0: 'HMMMM'},
 		heightm: 2.25,
