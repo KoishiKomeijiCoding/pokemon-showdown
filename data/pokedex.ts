@@ -21804,9 +21804,30 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fire", "Ice"],
 		baseStats: {hp: 150, atk: 140, def: 75, spa: 25, spd: 75, spe: 75 },
 		abilities: { 0: 'Jai plein de cadeaux'},
-		heightm: 1.75,
+		heightm: 1.95,
 		weightkg: 500.0,
 		eggGroups: ["Human-Like"],
 	},
+	megaknight: {
+		num: 10000,
+		name: "Mega Knight",
+		types: ["Steel", "Fight"],
+		baseStats: {hp: 160, atk: 90, def: 90, spa: 30, spd: 65, spe: 50 },
+		abilities: { 0: 'HMMMM'},
+		heightm: 2.25,
+		weightkg: 800.0,
+		eggGroups: ["Human-Like"],
+	},
+	juif: {
+		num: 10000,
+		name: "Juif",
+		types: ["Normal", "Steel"],
+		baseStats: {hp: 99, atk: 99, def: 99, spa: 55, spd: 99, spe: 99 },
+		abilities: { 0: 'World Wide Corruption'},
+		heightm: 1.85,
+		weightkg: 100.0,
+		eggGroups: ["Human-Like"],
+	},
+
 
 };

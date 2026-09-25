@@ -66,6 +66,8 @@ interface MoveFlags {
 	wind?: 1; // Activates the Wind Power and Wind Rider Abilities.
 	explosive?: 1;//augmente les effets du talent terroriste
 	shitpost?:1;//Les talents shitposts
+	saut?:1;//augmente la puissance des moves de saut dans le talent Hmmmm
+	argent?:1;//augmente la puissance des moves d'argent dans le talent du Juif
 }
 
 export interface HitEffect {
