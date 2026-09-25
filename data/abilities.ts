@@ -6669,6 +6669,124 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: 'Amogus', 
 		rating: 2,
 		num: 3003,
-	}
+	},
+	ballondiscret: {	onSwitchIn(pokemon) { // onStart ?
+			const moveId = 'smokescreen'; // ← Change this to any move you want!
+			const move = this.dex.getActiveMove(moveId);
+			this.add('-ability', pokemon, 'Ballon Discret');
+			for (const target of pokemon.adjacentFoes()) {
+				if (move) {
+					this.actions.useMove(move, pokemon,{ target: target });
+				}
+			}
+			this.actions.useMove('celebrate', pokemon);
+		},
+		onBasePowerPriority: 30,
+		onBasePower(basePower, attacker, defender, move) {
+			const basePowerAfterMultiplier = this.modify(basePower, this.event.modifier);
+			this.debug(`Base Power: ${basePowerAfterMultiplier}`);
+			if (basePowerAfterMultiplier <= 60) {
+				this.debug('Technician boost');
+				return this.chainModify(1.5);
+			}
+		},
+		flags: {},
+		name: "Ballon Discret",
+		rating: 2.5,
+		num: 9994,
+	},
+	jaipleindecadeaux: {	onSwitchIn(pokemon) { // onStart ?
+			const moveId = 'present'; // ← Change this to any move you want!
+			const move = this.dex.getActiveMove(moveId);
+			this.add('-ability', pokemon, 'Jai plein de cadeaux');
+			for (const target of pokemon.adjacentFoes()) {
+				if (move) {
+					this.actions.useMove(move, pokemon,{ target: target });
+				}
+			}
+		},
+		onDamagingHit(damage, target, source, effect) {
+				if (Math.floor(Math.random() * (3)) == 2) {
+					this.add('-message', target + " Je vais te manger le dambolo");
+					const morsures = [
+						'bite','firefang','thunderfang','bugbite','icefang','leechlife','poisonfang','crunch','psychicfangs'
+					];
+					const Paslescookies = this.sample(morsures);
+					console.log(Paslescookies)
+					this.actions.useMove(Paslescookies, target, { target: source});
+				}
+		},
+		flags: {},
+		name: "Jai plein de cadeaux",
+		rating: 2.5,
+		num: 9995,
+	},
+	hmmmm: {	onSwitchIn(pokemon) { // onStart ?
+			const moveId = 'megasaut'; // ← Change this to any move you want!
+			const move = this.dex.getActiveMove(moveId);
+			this.add('-ability', pokemon, 'hmmmm');
+			for (const target of pokemon.adjacentFoes()) {
+				if (move) {
+					this.actions.useMove(move, pokemon,{ target: target });
+				}
+			}
+		},
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['saut']) {
+				return this.chainModify(1.3);
+			}
+		},
+		flags: {},
+		name: "HMMMM",
+		rating: 2.5,
+		num:5688,
+	},
+	worldwidecorruption: {
+		onTryBoost(boost, target, source, effect) {
+			if (source && target === source) return;
+			let showMsg = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					delete boost[i];
+					showMsg = true;
+				}
+				if (Math.floor(Math.random() * (3)) == 2) {
+					this.actions.useMove('partingshot', target, { target: source});
+				}
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod > 0) {
+				this.debug('World Wide Corruption neutralize');
+				return this.chainModify(0.3);
+			}
+		},
+		onAnyTryMove(target, source, effect) {
+			if (['explosion', 'mindblown', 'mistyexplosion', 'selfdestruct', 'allahakbar'].includes(effect.id)) {
+				this.attrLastMove('[still]');
+				this.add('cant', this.effectState.target, 'ability: World Wide Corruption', effect, `[of] ${target}`);
+				return false;
+			}
+		},
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Dark') {
+				this.add('-immune', target, '[from] ability: World Wide Corruption');
+				return null;
+			}
+		},
+			onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['argent']) {
+				return this.chainModify(2.5);
+			}
+		},
+		flags: { breakable: 1 },
+		name: "World Wide Corruption",
+		rating: 2,
+		num: 2955,
+	},
+	
 };
 

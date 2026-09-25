@@ -21787,5 +21787,47 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 82.0,
 		eggGroups: ["Human-Like"],
 		
-	}
+	},
+	ninjaclown: {
+		num: 10000,
+		name:  "Ninja Clown",
+		types: ["Normal", "Dark"],
+		baseStats: {hp: 90, atk: 130, def: 45, spa: 130, spd: 45, spe: 160 },
+		abilities: { 0: 'Ballon Discret'},
+		heightm: 1.75,
+		weightkg: 42.0,
+		eggGroups: ["Human-Like"],
+	},
+	mamadounoel: {
+		num: 10000,
+		name: "Mamadou Noel",
+		types: ["Fire", "Ice"],
+		baseStats: {hp: 150, atk: 140, def: 75, spa: 25, spd: 75, spe: 75 },
+		abilities: { 0: 'Jai plein de cadeaux'},
+		heightm: 1.95,
+		weightkg: 500.0,
+		eggGroups: ["Human-Like"],
+	},
+	megaknight: {
+		num: 10000,
+		name: "Mega Knight",
+		types: ["Steel", "Fight"],
+		baseStats: {hp: 160, atk: 90, def: 90, spa: 30, spd: 65, spe: 50 },
+		abilities: { 0: 'HMMMM'},
+		heightm: 2.25,
+		weightkg: 800.0,
+		eggGroups: ["Human-Like"],
+	},
+	juif: {
+		num: 10000,
+		name: "Juif",
+		types: ["Normal", "Steel"],
+		baseStats: {hp: 99, atk: 99, def: 99, spa: 55, spd: 99, spe: 99 },
+		abilities: { 0: 'World Wide Corruption'},
+		heightm: 1.85,
+		weightkg: 100.0,
+		eggGroups: ["Human-Like"],
+	},
+
+
 };
