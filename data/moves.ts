@@ -22890,4 +22890,42 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { boost: { evasion: 1 } },
 		contestType: "Clever",
 	},
+	monologue: {
+		num: 50000,
+		accuracy: 30,
+		basePower: 0,
+		category: "Status",
+		name: "Monologue",
+		pp: 256,
+		priority: 0,
+		flags: { charge: 1, protect: 1, metronome: 1, shitpost: 1 },
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			defender.addVolatile('yawn');
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					atk: 1,
+					def: 1,
+					spa: 1,
+					spd: 1,
+					spe: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Stellar",
+		zMove: { boost: { atk: 1, def: 1, spa: 1, spd: 1, spe: 1 } },
+		contestType: "Clever",
+	},
 };
