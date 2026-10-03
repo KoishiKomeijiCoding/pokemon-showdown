@@ -22628,6 +22628,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			'worldwidecorruption'
 		];
 		const newAbility = this.sample(shitpostAbilities);
+		console.log(newAbility);
+		if (newAbility == undefined) return; //pour eviter les crashs
 		const oldAbility = target.setAbility(newAbility);
 		if (!oldAbility) return oldAbility as false | null;
 	},
@@ -23215,6 +23217,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onChangeBoost(boost, target, source, effect) {
+				if (source == undefined) return;
 					this.actions.useMove('haze', source);
 			},
 			onFieldStart(field, source, effect) {
