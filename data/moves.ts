@@ -19699,7 +19699,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			chance: 30,
 			status: 'par',
 		},
-		target: "normal",
+		target: "allAdjacentFoes",
 		type: "Electric",
 		contestType: "Cool",
 	},
@@ -22439,7 +22439,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
         name: "Magic",
         pp: 1,
         noPPBoosts: true,
-        priority: 1,
+        priority: 0,
         flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, allyanim: 1, failencore: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 ,shitpost: 1},
         onHit(target, source, moove) {
             const lapins = ["diggersby","cinderace","lopunny","azumarill"]

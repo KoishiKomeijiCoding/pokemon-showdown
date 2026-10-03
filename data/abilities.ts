@@ -5985,11 +5985,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const moveId = 'zap'; // ← Change this to any move you want!
 			const move = this.dex.getActiveMove(moveId);
 			this.add('-ability', pokemon, 'ELECTRICITYYYY');
-			for (const target of pokemon.adjacentFoes()) {
-				if (move) {
-					this.actions.useMove(move, pokemon,{ target: target });
-				}
-			}
+			this.actions.useMove(move, pokemon);
 		},
 		flags: {},
 		name: "ELECTRICITYYYY",
@@ -6480,16 +6476,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				'gmaxmalodor', 'gmaxmeltdown', , 'gmaxreplenish', 'gmaxresonance', 'gmaxsandblast', 
 				'gmaxsmite', 'gmaxsnooze', 'gmaxstunshock', 'gmaxsweetness', 'gmaxtartness', 
 				'gmaxterror', 'gmaxvinelash', 'gmaxvolcalith', 'gmaxvoltcrash', 'gmaxwildfire', 
-				'gmaxwindrage'
-				// 'gmaxsteelsurge', 'gmaxstonesurge'
-				// 'gmaxhydrosnipe', 'gmaxdrumsolo', 'gmaxfireball'
-				// 'gmaxoneblow', 'gmaxrapidflow', 
+				'gmaxwindrage' 
 			];
 
 			const moveGmaxSupplementaire = this.sample(listeMovesGmax);
-			if (moveGmaxSupplementaire != undefined) {
+			console.log(moveGmaxSupplementaire)
+			if (moveGmaxSupplementaire != undefined || moveGmaxSupplementaire != null) {
 				this.actions.useMove(moveGmaxSupplementaire, source); //Rudolf apprends à coder ptn de merde // nique typescript vive Python et R
-			}
+			} // des fois ça marche pas et jsp trop pourquoi c'est bizaaarrreeeee
 		},
 		onEnd(pokemon) {
 			pokemon.removeVolatile('Dynamax')
