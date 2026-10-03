@@ -7916,7 +7916,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						const stats: BoostID[] = ['atk' , 'def' ,'spa' , 'spd' ,'spe'];
 						const boost: SparseBoostsTable = {};
 						boost[stats[Math.floor(Math.random() * stats.length)]] = 1
-						this.boost(boost, pokemon);
+						this.boost(boost, pokemon,pokemon);
 					}
 				}
 			},
@@ -23148,23 +23148,22 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
 		volatileStatus: 'savon',
-		status: 'savon',
 		condition: {
 			onStart(target) {
 				this.add('-start', target, 'move: Savon');
-			}
-		},
+			},
 			onResidualOrder: 8,
 			onResidual(pokemon) {
 				const target = this.getAtSlot(pokemon.volatiles['savon'].sourceSlot);
 				if (!target || target.fainted || target.hp <= 0) {
 					this.debug('Nothing to leech into');
 					return;}
+			},
 		},
 		onTryImmunity(target) {
 			return !target.hasType('Water');
 		},
-		target: "randomNormal",
+		target: "randomNormal", 
 		type: "Water",
 		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Clever",
@@ -23174,7 +23173,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 75,
 		onBasePower(basePower, pokemon, target) {
-			if (target.status === 'savon') {
+			if (target.volatiles['savon']) {
 				return this.chainModify(2);
 			}
 		},
@@ -23191,7 +23190,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Water",
 		contestType: "Tough",
 	},
-		douche: {
+	douche: {
 		num: 10000,
 		accuracy: true,
 		basePower: 0,
