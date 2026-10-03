@@ -6760,7 +6760,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.getMoveHitData(move).typeMod > 0) {
 				this.debug('World Wide Corruption neutralize');
-				return this.chainModify(0.3);
+				return this.chainModify(0.6);
 			}
 		},
 		onAnyTryMove(target, source, effect) {
@@ -6786,6 +6786,73 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "World Wide Corruption",
 		rating: 2,
 		num: 2955,
+	},
+	ongachepaslesavon: {
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['backshot']) {
+				return this.chainModify(1.2);
+			}
+		},
+		onSwitchIn(pokemon) {
+			this.actions.useMove('douche', pokemon);
+			this.actions.useMove('haze', pokemon);
+			this.actions.useMove('savon', pokemon);
+		},
+		flags: { breakable: 1 },
+		name: "On gache pas le savon",
+		rating: 2,
+		num: 7955,
+	},
+	opinionpolitique: {
+		onDamagingHit(damage, target, source, effect) {
+			const x = Math.floor (Math.random()*(3))
+			if (x == 1) {
+					this.actions.useMove('uproar', source);
+			}
+			if (x == 2) {
+					this.actions.useMove('taunt', target);
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Opinion politique",
+		rating: 2,
+		num: 7995,
+	},
+	auramalveillante: {
+		onSwitchIn(pokemon) {
+			const x = Math.floor (Math.random()*(100))
+			if (x == 90) {
+					this.actions.useMove('killyourself', pokemon);
+			}
+			if (this.suppressingAbility(pokemon)) return;
+			this.add('-ability', pokemon, 'Aura Malveillante');
+		},
+		onAnyBasePowerPriority: 20,
+		onAnyBasePower(basePower, source, target, move) {
+			if (target === source || move.category === 'Status' || move.type !== 'Dark') return;
+			if (!move.auraBooster?.hasAbility('Aura Malveillante')) move.auraBooster = this.effectState.target;
+			if (move.auraBooster !== this.effectState.target) return;
+			return this.chainModify([move.hasAuraBreak ? 3072 : 5448, 4096]);
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Electric') {
+				this.debug('Aura Malveillante boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Electric') {
+				this.debug('Aura Malveillante boost');
+				return this.chainModify(1.5);
+			}
+		},
+		flags: {},
+		name: "Aura Malveillante",
+		rating: 3,
+		num: 1876,
 	},
 	
 };

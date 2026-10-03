@@ -21145,7 +21145,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Dark"],
 		gender: "N",
 		baseStats: { hp: 111, atk: 166, def: 100, spa: 24, spd: 100, spe: 99 },
-		abilities: { 0: "Dark Aura" },
+		abilities: { 0: "Aura Malveillante" },
 		heightm: 1.5,
 		weightkg: 61,
 		color: "White",
@@ -21828,6 +21828,25 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 100.0,
 		eggGroups: ["Human-Like"],
 	},
-
+	inspecteurdelhygiene: {
+		num: 10000,
+		name: "Inspecteur de l'Hygiene",
+		types: ["Fire", "Water"],
+		baseStats: {hp: 135, atk: 135, def: 135, spa: 55, spd: 55, spe: 55 },
+		abilities: { 0: 'On gache pas le savon'},
+		heightm: 2.05,
+		weightkg: 110.0,
+		eggGroups: ["Human-Like"],
+	},
+	opinuspoliticus: {
+		num: 10000,
+		name: "Opinus Politicus",
+		types: ["Dragon","Bug"],
+		baseStats: {hp: 45, atk: 45, def: 180, spa: 45, spd: 180, spe: 105 },
+		abilities: { 0: 'Opinion politique'},
+		heightm: 4.15,
+		weightkg: 210.0,
+		eggGroups: ["Monster"],
+	},
 
 };

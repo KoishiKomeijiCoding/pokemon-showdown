@@ -68,6 +68,7 @@ interface MoveFlags {
 	shitpost?:1;//Les talents shitposts
 	saut?:1;//augmente la puissance des moves de saut dans le talent Hmmmm
 	argent?:1;//augmente la puissance des moves d'argent dans le talent du Juif
+	backshot?:1;//augmente la puissance des moves de backshot pour l'Inspecteur de l'hygiene
 }
 
 export interface HitEffect {
