@@ -22938,6 +22938,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				pokemon.tryTrap();
 			},
 			onFaint(target, source, effect) {
+				if (source == undefined) return;
 				this.add('-message', source.name + " a tué l'imposteur et est donc récompensé !")
 				this.heal(source.baseMaxhp,source);
 				const boost: SparseBoostsTable = {"atk": 1, "def": 1, "spa": 1, "spd": 1, "spe": 1};
