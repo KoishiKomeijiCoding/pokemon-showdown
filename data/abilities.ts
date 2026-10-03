@@ -5836,23 +5836,41 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 9999,
 	},
 	mecaniques1g: {
-		onSourceModifyDamage(damage, source, target, move) {
+		onStart() {
+			this.add('-ability', "Mécaniques 1G");
+			this.add("-message", "Le Pokémon n'est pas affecté par les mécaniques implémentées après la première génération !");
+		},
+		onSourceModifyDamage(damage, source, target, move) { // aucune faiblesse
 			if (target.getMoveHitData(move).typeMod > 0) {
 				this.debug('ce poke est broken');
 				return this.chainModify(0.5);
 			}
 		},
-		onModifyMove(move) {
+		onModifyMove(move) { // ignore les immunités des types ténèbres, acier et fée + mold breaker
+			move.ignoreAbility = true;
 			if (!move.ignoreImmunity) move.ignoreImmunity = {};
 			if (move.ignoreImmunity !== true) {	
 				this.debug('Ce poke est broken 2');
-				move.ignoreImmunity['Psychic'] = true;
+				if (move.type = 'Psychic)') move.ignoreImmunity['Psychic'] = true;
+				if (move.type = 'Poison') move.ignoreImmunity['Poison'] = true;
+				if (move.type = 'Fairy') move.ignoreImmunity['Fairy'] = true;
+				return;
 			}
 		},
-		onModifyDamage(damage, source, target, move) {
-			if (target.getMoveHitData(move).typeMod < 0 && move.type === 'Psychic' && target.type === 'Steel') { // vibecode à reprendre !!
+	
+		},
+		onModifyDamage(damage, source, target, move) { // ignore les résistances // je voudrais que pour les types ténèbres, acier et fée mais j'ai pas réussi + plus le temps + ratio
+			if (target.getMoveHitData(move).typeMod < 0 {
 				this.debug('Ce poke est broken 3');
 				return this.chainModify(2);
+			}
+		},
+		onTryMove(pokemon, target, move) { // 1/256 chance de rater son move
+			const armorTailHolder = this.effectState.target
+			if (Math.floor(Math.random() * (256 + 0)) == 2) {
+				this.attrLastMove('[still]');
+				this.add('cant', armorTailHolder, 'ability: Mécaniques 1G', move, `[of] ${pokemon}`);
+				return false;
 			}
 		},
 		flags: {},
@@ -6204,7 +6222,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			this.field.clearWeather();
 		},
-		flags: { },
+		flags: {},
 		name: "Hidden Star in All Seasons",
 		rating: 4,
 		num: 1001,
@@ -6249,6 +6267,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.field.setTerrain('grassyterrain');
 			if (pokemon.chiantmanActivated) return;
 			pokemon.chiantmanActivated = true;
+
 			const moveId = 'leechseed'; 
 			const move = this.dex.getActiveMove(moveId);
 			for (const target of pokemon.adjacentFoes()) {
@@ -6256,6 +6275,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.actions.useMove(move, pokemon,{ target: target });
 				}
 			}
+		},
+		onModifyMove(move, pokemon, target) { // objectif : lancer une seule fois le move pour les 3 oppos au lieu de 3 fois sur chaque
+			if (move.id !== 'leechseed' || pokemon.spreadMoveOnSwitchIn) return;
+			move.target = 'allAdjacentFoes';
+			pokemon.spreadMoveOnSwitchIn = true; // on a un flag pour faire en sorte que le pokemon n'ait pas le move de base en spread (autre option : créer un move particulier)
+		},
+		onEnd(pokemon) { // reset 
+			pokemon.spreadMoveOnSwitchIn = false; // on reset le flag pour le prochain switchin
 		},
 		flags: {},
 		name: "Chiantman",
@@ -6327,7 +6354,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 9991,
 	},
 	cinqnuitschezfreddy: {
-		onSwitchIn(pokemon) { // onStart ?
+		onStart(pokemon) { // onStart ?
 			const moveId = 'meanlook'; // ← Change this to any move you want!
 			const move = this.dex.getActiveMove(moveId);
 			this.add('-ability', pokemon, 'Cinq nuit chez Freddys');
@@ -6542,7 +6569,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: 9995,
 	},
-    aislop: { // WIP
+    aislop: { 
 		onResidualOrder: 50,
 		onResidualSubOrder: 1,
 		onDamagingHit(damage, target, source, move) {
@@ -6594,6 +6621,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					for (const target of pokemon.foes()) {
 						target.trySetStatus('frz', pokemon);
 					}
+					pokemon.clearBoosts() // explorer 'clearnegativeboost' ? (Z-moves)
 					pokemon.formeChange("darmanitangalarzen");
 				} else {
 					const elixir = pokemon.activeTurns;
@@ -6635,25 +6663,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 3003,
 	},
-	eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill: {
+	omitted: {
 		onStart(source) {
 			this.field.addPseudoWeather('supergravity', source);
-			source.addVolatile('masterofgravity');
+			source.addVolatile('eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill');
 		},
 		onModifyMove(move, pokemon) { // vibecode 0/10 optimisation, je ne sais pas faire de conditions multiples en typescript et POO //ratio
-			//if (!this.field.getPseudoWeather('gravity')) return; je suppose que c'est une erreur mais en vrais jsp 
 			if (!this.field.getPseudoWeather('supergravity') && !this.field.getPseudoWeather('gravity')) return;
-			if (!pokemon.volatiles['masterofgravity']) return;
+			if (!pokemon.volatiles['eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill']) return;
 			move.target = 'allAdjacentFoes'; //ptdr azy
 		},
 		onDamagingHit(target, source, move) {
 				this.add("-message",'The person known ™ as myself also known as ™ Wilhelm von Clausewitz Halcyon HISUIMARU is filled completely ™ and utterly with the feeling, an emotional reaction ™, that is commonly described in short ™ as disgust towards the man ™ coated in figurative trash. Due to these ™ intense emotions that I, the Eternal Senselessness Bearing the Alias of Chaos ™ who Manipulates Gravity at Will, feel towards this ™ man that I dare not call human, only a monster ™ (and also the coach), but only the trash like man, I ™ will beat down all who stand in my literal and figurative ™ way. To achieve this goal I must achieve even ™ greater power than the power over gravity that ™ I manipulate at will. The figure that I deem ™ to be less than a human, only a monster, is the same ™ as me in this regard. The collection, that is the capture ™, of all the figurative trash, that retains a disposition ™ of one that could be called a god, and yet is an average folk is an action ™ that is unforgivable. You, that is to say, the one reading ™ this message, cannot affect me with your measly powers ™ . The monster also known in short as the Trashy Man ™, is unpleasant on the eyes ™, especially when he is committing ™ an act as simple as walking around at his lesuire.');
 		}, 
 		onEnd(pokemon) {
-			pokemon.removeVolatile('masterofgravity');
+			pokemon.removeVolatile('eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill');
 		},
 		flags: {},
-		name: 'Eternal Senselessness Bearing the Alias of "Chaos" who Manipulates Gravity at Will', // sinon Empire Power - Eternal Force
+		name: 'omitted',
 		rating: 2,
 		num: 3003,
 	},
