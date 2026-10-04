@@ -6473,7 +6473,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const listeMovesGmax = [
 				'gmaxbefuddle', 'gmaxcannonade', 'gmaxcentiferno', 'gmaxchistrike', 'gmaxcuddle',
 				'gmaxdepletion', 'gmaxfinale', 'gmaxfoamburst', 'gmaxgoldrush', 'gmaxgravitas', 
-				'gmaxmalodor', 'gmaxmeltdown', , 'gmaxreplenish', 'gmaxresonance', 'gmaxsandblast', 
+				'gmaxmalodor', 'gmaxmeltdown', 'gmaxreplenish', 'gmaxresonance', 'gmaxsandblast', 
 				'gmaxsmite', 'gmaxsnooze', 'gmaxstunshock', 'gmaxsweetness', 'gmaxtartness', 
 				'gmaxterror', 'gmaxvinelash', 'gmaxvolcalith', 'gmaxvoltcrash', 'gmaxwildfire', 
 				'gmaxwindrage' 
@@ -6550,7 +6550,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				randomMove = this.sample(moves);
 			}
 			if (!randomMove) return false;
-			source.moveSlots[Math.floor(Math.random() * (3 + 1))] = 
+			source.moveSlots[Math.floor(Math.random() * (source.moveSlots.length))] = 
 			{
 				id : randomMove.id,
 				move : randomMove.name,
@@ -6558,6 +6558,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				maxpp : randomMove.pp,
 				disabled: false,
 				used: false,
+				target: randomMove.target,
+				virtual:false,
 			} //Pour une raison obscure l'objet move n'intègre pas l'interface MoveSlot, dcp je fais ça à la main
 			this.add('-ability', target, 'AI Slop');
 			this.add('-message', `${source.name} a reçu ${randomMove.name} !`);
@@ -6664,7 +6666,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2,
 		num: 3003,
 	},
-	ballondiscret: {	onSwitchIn(pokemon) { // onStart ?
+	ballondiscret: {	
+		onSwitchIn(pokemon) { // onStart ?
 			const moveId = 'smokescreen'; // ← Change this to any move you want!
 			const move = this.dex.getActiveMove(moveId);
 			this.add('-ability', pokemon, 'Ballon Discret');

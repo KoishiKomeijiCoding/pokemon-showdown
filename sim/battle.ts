@@ -1682,11 +1682,19 @@ export class Battle {
 				pokemon.maybeDisabled = false;
 				pokemon.maybeLocked = false;
 				for (const moveSlot of pokemon.moveSlots) {
+					if (moveSlot == undefined) {
+						console.log("Il y a un slot de move undefined avec" + pokemon.name);
+						continue;
+					}
 					moveSlot.disabled = false;
 					moveSlot.disabledSource = '';
 				}
 				this.runEvent('DisableMove', pokemon);
 				for (const moveSlot of pokemon.moveSlots) {
+					if (moveSlot == undefined) {
+						console.log("Il y a un slot de move undefined avec" + pokemon.name);
+						continue;
+					}
 					const activeMove = this.dex.getActiveMove(moveSlot.id);
 					this.singleEvent('DisableMove', activeMove, null, pokemon);
 					if (activeMove.flags['cantusetwice'] && pokemon.lastMove?.id === moveSlot.id) {
