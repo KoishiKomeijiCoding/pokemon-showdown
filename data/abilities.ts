@@ -6854,6 +6854,31 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 1876,
 	},
+	gogogadget: {
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['beam']) {
+				return this.chainModify(1.3);
+			}
+		},
+		onDamagePriority: -30,
+        onDamage(damage, target, source, effect) {
+            if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move') {
+                this.actions.useMove('doubleteam', target);
+            }
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (pokemon.activeTurns) {
+				this.actions.useMove('metronome', pokemon);
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Go Go Gadget",
+		rating: 3,
+		num: 5,
+	},
 	
 };
 

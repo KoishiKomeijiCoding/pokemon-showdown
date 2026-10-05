@@ -21848,5 +21848,14 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 210.0,
 		eggGroups: ["Monster"],
 	},
-
+inspecteurgadget: { //proposition de Phrog
+		num: 10000,
+		name: "Inspecteur Gadget",
+		types: ["Electric","Steel"],
+		baseStats: {hp: 50, atk: 160, def: 90, spa: 160, spd: 70, spe: 130 },
+		abilities: { 0: 'Go Go Gadget'},
+		heightm: 2.00,
+		weightkg: 75.0,
+		eggGroups: ["Human-Like"],
+	},
 };
