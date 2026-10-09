@@ -104017,6 +104017,15 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			solarbeam: ["9M"],
 			steelbeam: ["9M"],
 			twinbeam: ["9M"],
+			underwhelminggadgetjob: ["9M"],
+		}
+	},
+	songoku: {
+		learnset:{
+			fly: ["9M"],
+			armthrust: ["9M"],
+			genkidama: ["9M"],
+			teleport: ["9M"],
 		}
 	},
 };

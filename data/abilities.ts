@@ -6879,6 +6879,70 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 5,
 	},
-	
+	jesuisgoku: {
+		onTryBoost(boost, target, source, effect) {
+			// Don't bounce self stat changes, or boosts that have already bounced
+			if (!source || target === source || !boost || effect.name === 'Aura de Goku') return;
+			let b: BoostID;
+			for (b in boost) {
+				if (boost[b]! < 0) {
+					if (target.boosts[b] === -6) continue;
+					const negativeBoost: SparseBoostsTable = {};
+					negativeBoost[b] = boost[b];
+					delete boost[b];
+					if (source.hp) {
+						this.add('-ability', target, 'Aura de Goku');
+						this.boost(negativeBoost, source, target, null, true);	
+					}
+				}
+			}
+		},
+		onChangeBoost(boost, target, source, effect) {
+			if (effect && effect.id === 'zpower') return;
+			let i: BoostID;
+			for (i in boost) {
+				boost[i]! *= 2;
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, spa) {
+			return this.chainModify(2);
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (Math.floor(Math.random() * (3)) == 2) {
+				if (pokemon.activeTurns) {
+				this.boost({ spe: 1,spa: 1, atk: 1,def: 1,spd: 1 });
+				}
+			}
+		},
+		onSwitchIn(pokemon) {
+			let activated = false;
+			for (const target of pokemon.adjacentFoes()) {
+				if (!activated) {
+					this.add('-ability', pokemon, 'Je suis Goku', 'boost');
+					activated = true;
+				}
+				if (target.volatiles['substitute']) {
+					this.add('-immune', target);
+				} else {
+					this.boost({ atk: -1 }, target, pokemon, null, true);
+					this.boost({ spa: -1 }, target, pokemon, null, true);
+				}
+			}
+		},
+		onTryHit(pokemon, target, move) {
+			if (move.name === 'Cancer') {
+				this.add('-immune', pokemon, '[from] ability: Je suis Goku');
+				this.add('-message', target + " Goku a vaincu le cancer.");
+				return null;
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Je suis Goku",
+		rating: 2,
+		num: 2740,
+	},
 };
 

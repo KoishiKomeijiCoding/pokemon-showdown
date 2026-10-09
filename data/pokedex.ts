@@ -21858,4 +21858,14 @@ inspecteurgadget: { //proposition de Phrog
 		weightkg: 75.0,
 		eggGroups: ["Human-Like"],
 	},
+songoku: {  //A NE SURTOUT PAS METTRE EN OU IL EST LA UNIQUEMENT POUR LE TROLL
+	num: 10000,
+		name: "Son Goku",
+		types: ["Stellar"],
+		baseStats: {hp: 250, atk: 250, def: 250, spa: 250, spd: 250, spe: 250 },
+		abilities: { 0: 'Je suis Goku'},
+		heightm: 1.75,
+		weightkg: 80.0,
+		eggGroups: ["Human-Like"],
+	},
 };

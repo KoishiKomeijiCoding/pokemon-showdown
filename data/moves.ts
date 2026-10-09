@@ -21610,7 +21610,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Cancer",
 		pp: 15,
 		priority: 0,
-		flags: { protect: 1, mirror: 1,shitpost:1 },
+		flags: { protect: 1, mirror: 1, shitpost:1 },
 		condition: {
 			noCopy: true,
 			onStart(pokemon) {
@@ -23327,5 +23327,55 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Electric",
 		contestType: "Tough",
 	},
-
+		underwhelminggadgetjob: {
+		num: 9989,
+		accuracy: 95,
+		basePower: 10,
+		category: "Physical",
+		name: "Underwhelming Gadgetjob",
+		pp: 5,
+		priority: 0,
+		multihit: 6,
+		multiaccuracy: true,
+		secondary: {
+			chance: 10,
+			status: 'underwhelmed',
+			volatileStatus: 'underwhelmed',
+			boosts: {
+				spe: -1,
+			},
+		},
+		onBasePower(basePower, pokemon, target) {
+			if (target.status === 'underwhelmed') {
+				return this.chainModify(2);
+			}
+		},
+		flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
+		target: "allAdjacent",
+		type: "Steel",
+		contestType: "Tough",
+	},
+	genkidama: {
+		num: 800,
+		accuracy: 100,
+		basePower: 200,
+		category: "Special",
+		name: "Genkidama",
+		pp: 10,
+		priority: 0,
+		flags: { charge: 1, protect: 1, mirror: 1, metronome: 1, beam: 1 },
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+		target: "allAdjacent",
+		type: "Stellar",
+	},
 };
