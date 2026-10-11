@@ -6001,11 +6001,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const moveId = 'zap'; // ← Change this to any move you want!
 			const move = this.dex.getActiveMove(moveId);
 			this.add('-ability', pokemon, 'ELECTRICITYYYY');
-			for (const target of pokemon.adjacentFoes()) {
-				if (move) {
-					this.actions.useMove(move, pokemon,{ target: target });
-				}
-			}
+			this.actions.useMove(move, pokemon);
 		},
 		flags: {},
 		name: "ELECTRICITYYYY",
@@ -6502,19 +6498,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const listeMovesGmax = [
 				'gmaxbefuddle', 'gmaxcannonade', 'gmaxcentiferno', 'gmaxchistrike', 'gmaxcuddle',
 				'gmaxdepletion', 'gmaxfinale', 'gmaxfoamburst', 'gmaxgoldrush', 'gmaxgravitas', 
-				'gmaxmalodor', 'gmaxmeltdown', , 'gmaxreplenish', 'gmaxresonance', 'gmaxsandblast', 
+				'gmaxmalodor', 'gmaxmeltdown', 'gmaxreplenish', 'gmaxresonance', 'gmaxsandblast', 
 				'gmaxsmite', 'gmaxsnooze', 'gmaxstunshock', 'gmaxsweetness', 'gmaxtartness', 
 				'gmaxterror', 'gmaxvinelash', 'gmaxvolcalith', 'gmaxvoltcrash', 'gmaxwildfire', 
-				'gmaxwindrage'
-				// 'gmaxsteelsurge', 'gmaxstonesurge'
-				// 'gmaxhydrosnipe', 'gmaxdrumsolo', 'gmaxfireball'
-				// 'gmaxoneblow', 'gmaxrapidflow', 
+				'gmaxwindrage' 
 			];
 
 			const moveGmaxSupplementaire = this.sample(listeMovesGmax);
-			if (moveGmaxSupplementaire != undefined) {
+			console.log(moveGmaxSupplementaire)
+			if (moveGmaxSupplementaire != undefined || moveGmaxSupplementaire != null) {
 				this.actions.useMove(moveGmaxSupplementaire, source); //Rudolf apprends à coder ptn de merde // nique typescript vive Python et R
-			}
+			} // des fois ça marche pas et jsp trop pourquoi c'est bizaaarrreeeee
 		},
 		onEnd(pokemon) {
 			pokemon.removeVolatile('Dynamax')
@@ -6581,7 +6575,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				randomMove = this.sample(moves);
 			}
 			if (!randomMove) return false;
-			source.moveSlots[Math.floor(Math.random() * (3 + 1))] = 
+			source.moveSlots[Math.floor(Math.random() * (source.moveSlots.length))] = 
 			{
 				id : randomMove.id,
 				move : randomMove.name,
@@ -6589,6 +6583,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				maxpp : randomMove.pp,
 				disabled: false,
 				used: false,
+				target: randomMove.target,
+				virtual:false,
 			} //Pour une raison obscure l'objet move n'intègre pas l'interface MoveSlot, dcp je fais ça à la main
 			this.add('-ability', target, 'AI Slop');
 			this.add('-message', `${source.name} a reçu ${randomMove.name} !`);
@@ -6699,4 +6695,204 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2,
 		num: 3003,
 	},
+	amogus: {
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Amogus');
+			const pokemons = this.getAllActive();
+			const impostor = this.sample(pokemons);
+			impostor.addVolatile('impostor');
+			this.add('message', "Il y a maintenant un imposteur parmis nous!");
+		},
+		flags: {},
+		name: 'Amogus', 
+		rating: 2,
+		num: 3003,
+	},
+	ballondiscret: {	
+		onSwitchIn(pokemon) { // onStart ?
+			const moveId = 'smokescreen'; // ← Change this to any move you want!
+			const move = this.dex.getActiveMove(moveId);
+			this.add('-ability', pokemon, 'Ballon Discret');
+			for (const target of pokemon.adjacentFoes()) {
+				if (move) {
+					this.actions.useMove(move, pokemon,{ target: target });
+				}
+			}
+			this.actions.useMove('celebrate', pokemon);
+		},
+		onBasePowerPriority: 30,
+		onBasePower(basePower, attacker, defender, move) {
+			const basePowerAfterMultiplier = this.modify(basePower, this.event.modifier);
+			this.debug(`Base Power: ${basePowerAfterMultiplier}`);
+			if (basePowerAfterMultiplier <= 60) {
+				this.debug('Technician boost');
+				return this.chainModify(1.5);
+			}
+		},
+		flags: {},
+		name: "Ballon Discret",
+		rating: 2.5,
+		num: 9994,
+	},
+	jaipleindecadeaux: {	onSwitchIn(pokemon) { // onStart ?
+			const moveId = 'present'; // ← Change this to any move you want!
+			const move = this.dex.getActiveMove(moveId);
+			this.add('-ability', pokemon, 'Jai plein de cadeaux');
+			for (const target of pokemon.adjacentFoes()) {
+				if (move) {
+					this.actions.useMove(move, pokemon,{ target: target });
+				}
+			}
+		},
+		onDamagingHit(damage, target, source, effect) {
+				if (Math.floor(Math.random() * (3)) == 2) {
+					this.add('-message', target + " Je vais te manger le dambolo");
+					const morsures = [
+						'bite','firefang','thunderfang','bugbite','icefang','leechlife','poisonfang','crunch','psychicfangs'
+					];
+					const Paslescookies = this.sample(morsures);
+					console.log(Paslescookies)
+					this.actions.useMove(Paslescookies, target, { target: source});
+				}
+		},
+		flags: {},
+		name: "Jai plein de cadeaux",
+		rating: 2.5,
+		num: 9995,
+	},
+	hmmmm: {	onSwitchIn(pokemon) { // onStart ?
+			const moveId = 'megasaut'; // ← Change this to any move you want!
+			const move = this.dex.getActiveMove(moveId);
+			this.add('-ability', pokemon, 'hmmmm');
+			for (const target of pokemon.adjacentFoes()) {
+				if (move) {
+					this.actions.useMove(move, pokemon,{ target: target });
+				}
+			}
+		},
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['saut']) {
+				return this.chainModify(1.3);
+			}
+		},
+		flags: {},
+		name: "HMMMM",
+		rating: 2.5,
+		num:5688,
+	},
+	worldwidecorruption: {
+		onTryBoost(boost, target, source, effect) {
+			if (source && target === source) return;
+			let showMsg = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					delete boost[i];
+					showMsg = true;
+				}
+				if (Math.floor(Math.random() * (3)) == 2) {
+					this.actions.useMove('partingshot', target, { target: source});
+				}
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod > 0) {
+				this.debug('World Wide Corruption neutralize');
+				return this.chainModify(0.6);
+			}
+		},
+		onAnyTryMove(target, source, effect) {
+			if (['explosion', 'mindblown', 'mistyexplosion', 'selfdestruct', 'allahakbar'].includes(effect.id)) {
+				this.attrLastMove('[still]');
+				this.add('cant', this.effectState.target, 'ability: World Wide Corruption', effect, `[of] ${target}`);
+				return false;
+			}
+		},
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Dark') {
+				this.add('-immune', target, '[from] ability: World Wide Corruption');
+				return null;
+			}
+		},
+			onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['argent']) {
+				return this.chainModify(2.5);
+			}
+		},
+		flags: { breakable: 1 },
+		name: "World Wide Corruption",
+		rating: 2,
+		num: 2955,
+	},
+	ongachepaslesavon: {
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['backshot']) {
+				return this.chainModify(1.2);
+			}
+		},
+		onSwitchIn(pokemon) {
+			this.actions.useMove('douche', pokemon);
+			this.actions.useMove('haze', pokemon);
+			this.actions.useMove('savon', pokemon);
+		},
+		flags: { breakable: 1 },
+		name: "On gache pas le savon",
+		rating: 2,
+		num: 7955,
+	},
+	opinionpolitique: {
+		onDamagingHit(damage, target, source, effect) {
+			const x = Math.floor (Math.random()*(3))
+			if (x == 1) {
+					this.actions.useMove('uproar', source);
+			}
+			if (x == 2) {
+					this.actions.useMove('taunt', target);
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Opinion politique",
+		rating: 2,
+		num: 7995,
+	},
+	auramalveillante: {
+		onSwitchIn(pokemon) {
+			const x = Math.floor (Math.random()*(100))
+			if (x == 90) {
+					this.actions.useMove('killyourself', pokemon);
+			}
+			if (this.suppressingAbility(pokemon)) return;
+			this.add('-ability', pokemon, 'Aura Malveillante');
+		},
+		onAnyBasePowerPriority: 20,
+		onAnyBasePower(basePower, source, target, move) {
+			if (target === source || move.category === 'Status' || move.type !== 'Dark') return;
+			if (!move.auraBooster?.hasAbility('Aura Malveillante')) move.auraBooster = this.effectState.target;
+			if (move.auraBooster !== this.effectState.target) return;
+			return this.chainModify([move.hasAuraBreak ? 3072 : 5448, 4096]);
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Electric') {
+				this.debug('Aura Malveillante boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Electric') {
+				this.debug('Aura Malveillante boost');
+				return this.chainModify(1.5);
+			}
+		},
+		flags: {},
+		name: "Aura Malveillante",
+		rating: 3,
+		num: 1876,
+	},
+	
 };
+

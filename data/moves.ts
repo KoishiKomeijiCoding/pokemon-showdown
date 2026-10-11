@@ -518,7 +518,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Aqua Tail",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, backshot: 1 },
 		target: "normal",
 		type: "Water",
 		contestType: "Beautiful",
@@ -728,9 +728,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				status: 'frz',
 			},
         ],
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('spa', false, true) > pokemon.getStat('atk', false, true)) move.category = 'Special';
+		},
 		pp: 5,
 		priority: 0,
-		flags: { protect: 1, mirror: 1 },
+		flags: { protect: 1, mirror: 1, shitpost: 1 },
 		target: "allAdjacentFoes",
 		type: "Dark",
 	},
@@ -1622,7 +1625,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Body Press",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, saut: 1 },
 		overrideOffensiveStat: 'def',
 		target: "normal",
 		type: "Fighting",
@@ -1635,7 +1638,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Body Slam",
 		pp: 15,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1, minimize: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1, minimize: 1, saut: 1 },
 		secondary: {
 			chance: 30,
 			status: 'par',
@@ -1757,7 +1760,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {
 			contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1,
-			metronome: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
+			metronome: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1, saut: 1
 		},
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
@@ -2024,7 +2027,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Bulldoze",
 		pp: 20,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
+		flags: { protect: 1, mirror: 1, nonsky: 1, metronome: 1, saut: 1 },
 		secondary: {
 			chance: 100,
 			boosts: {
@@ -5695,7 +5698,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Flare Blitz",
 		pp: 15,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, defrost: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, defrost: 1, metronome: 1, backshot: 1 },
 		recoil: [33, 100],
 		secondary: {
 			chance: 10,
@@ -6626,7 +6629,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Giga Impact",
 		pp: 5,
 		priority: 0,
-		flags: { contact: 1, recharge: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { contact: 1, recharge: 1, protect: 1, mirror: 1, metronome: 1, backshot: 1 },
 		self: {
 			volatileStatus: 'mustrecharge',
 		},
@@ -7913,7 +7916,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						const stats: BoostID[] = ['atk' , 'def' ,'spa' , 'spd' ,'spe'];
 						const boost: SparseBoostsTable = {};
 						boost[stats[Math.floor(Math.random() * stats.length)]] = 1
-						this.boost(boost, pokemon);
+						this.boost(boost, pokemon,pokemon);
 					}
 				}
 			},
@@ -8589,7 +8592,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Heat Crash",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1, minimize: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1, minimize: 1, saut: 1 },
 		onTryHit(target, pokemon, move) {
 			if (target.volatiles['dynamax']) {
 				this.add('-fail', pokemon, 'Dynamax');
@@ -8646,7 +8649,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Heavy Slam",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1, minimize: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1, minimize: 1, saut: 1 },
 		onTryHit(target, pokemon, move) {
 			if (target.volatiles['dynamax']) {
 				this.add('-fail', pokemon, 'Dynamax');
@@ -9834,7 +9837,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Iron Tail",
 		pp: 15,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, backshot: 1 },
 		secondary: {
 			chance: 30,
 			boosts: {
@@ -11029,7 +11032,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Make It Rain",
 		pp: 5,
 		priority: 0,
-		flags: { protect: 1, mirror: 1 },
+		flags: { protect: 1, mirror: 1, argent: 1 },
 		self: {
 			boosts: {
 				spa: -1,
@@ -13289,7 +13292,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Payback",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, argent: 1 },
 		target: "normal",
 		type: "Dark",
 		contestType: "Tough",
@@ -13302,7 +13305,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Pay Day",
 		pp: 20,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, argent: 1 },
 		target: "normal",
 		type: "Normal",
 		contestType: "Clever",
@@ -14030,7 +14033,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Power Whip",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, backshot: 1 },
 		target: "normal",
 		type: "Grass",
 		contestType: "Tough",
@@ -14515,7 +14518,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Pursuit",
 		pp: 20,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, backshot: 1 },
 		beforeTurnCallback(pokemon, target) {
 			pokemon.addVolatile('pursuit', pokemon, this.dex.getActiveMove('pursuit'));
 		},
@@ -18160,7 +18163,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Stomp",
 		pp: 20,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1, minimize: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1, minimize: 1, saut: 1 },
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch',
@@ -18184,7 +18187,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Stomping Tantrum",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, saut: 1 },
 		target: "normal",
 		type: "Ground",
 		contestType: "Tough",
@@ -19699,7 +19702,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			chance: 30,
 			status: 'par',
 		},
-		target: "normal",
+		target: "allAdjacentFoes",
 		type: "Electric",
 		contestType: "Cool",
 	},
@@ -20923,7 +20926,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Wave Crash",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, backshot: 1 },
 		recoil: [33, 100],
 		target: "normal",
 		type: "Water",
@@ -22445,7 +22448,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
         name: "Magic",
         pp: 1,
         noPPBoosts: true,
-        priority: 1,
+        priority: 0,
         flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, allyanim: 1, failencore: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 ,shitpost: 1},
         onHit(target, source, moove) {
             const lapins = ["diggersby","cinderace","lopunny","azumarill"]
@@ -22579,6 +22582,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					console.log("dammage doubled")
                     return this.chainModify(2);
             },
+			onTrapPokemon(pokemon) {
+				pokemon.tryTrap();
+			},
 		},
 		target: "normal",
 		type: "Dark",
@@ -22627,6 +22633,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			'aurafarming', 'megaopportunist', 'mercredi', 'poteglace', 'omitted'
 		];
 		const newAbility = this.sample(shitpostAbilities);
+		console.log(newAbility);
+		if (newAbility == undefined) return; //pour eviter les crashs
 		const oldAbility = target.setAbility(newAbility);
 		if (!oldAbility) return oldAbility as false | null;
 	},
@@ -22931,4 +22939,440 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { boost: { atk: 1, def: 1, spa: 1, spd: 1, spe: 1 } },
 		contestType: "Clever",
 	},
+};
+	impostor: {
+		num: 393,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Impostor",
+		pp: 10,
+		priority: 0,
+		flags: { snatch: 1, metronome: 1 },
+		volatileStatus: 'impostor',
+		condition: {
+			onStart(target) {
+				target.moveSlots.push({
+					move: "Reveal",
+					id: "reveal" as ID,
+					pp: 8,
+					maxpp: 8,
+					target: "normal",
+					disabled: false,
+					used: false,
+					virtual: true,
+            	});
+			},
+			onModifyAtk(atk, pokemon) {
+				return this.chainModify(1.5);
+			},
+			onModifySpA(spa, pokemon) {
+				return this.chainModify(1.5);
+			},
+			onModifySpe(spe, pokemon) {
+				return this.chainModify(1.5);
+			},
+			onModifyDef(def, pokemon) {
+				return this.chainModify(1.5);
+			},
+			onModifySpD(spd, pokemon) {
+				return this.chainModify(1.5);
+			},
+			onTrapPokemon(pokemon) {
+				pokemon.tryTrap();
+			},
+			onFaint(target, source, effect) {
+				if (source == undefined) return;
+				this.add('-message', source.name + " a tué l'imposteur et est donc récompensé !")
+				this.heal(source.baseMaxhp,source);
+				const boost: SparseBoostsTable = {"atk": 1, "def": 1, "spa": 1, "spd": 1, "spe": 1};
+				this.boost(boost,source);
+			},
+			onDragOut(pokemon) {
+				this.add('-activate', pokemon, 'move: Impostor');
+				return null;
+			},
+			onFoeTrapPokemon(pokemon) {	
+				pokemon.tryTrap(true);
+			},
+			onFoeMaybeTrapPokemon(pokemon, source) {
+				if (!source) source = this.effectState.target;
+				if (!source) return;
+				pokemon.maybeTrapped = true;
+			},
+		},
+		target: "self",
+		type: "Psychic",
+		zMove: { boost: { evasion: 1 } },
+		contestType: "Clever",
+	},
+	reveal: {
+		num: 686,
+		accuracy: 100,
+		basePower: 120,
+		category: "Special",
+		name: "Reveal",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyType(move, pokemon) {
+			const types = pokemon.getTypes();
+			let type = types[0];
+			if (type === 'Bird') type = '???';
+			if (type === '???' && types[1]) type = types[1];
+			move.type = type;
+		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+		},
+		target: "normal",
+		type: "Normal",
+		contestType: "Beautiful",
+	},
+	ninjaflop: {
+		num: 816,
+		accuracy: 100,
+		basePower: 60,
+		category: "Physical",
+		name: "Ninja Flop",
+		pp: 5,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
+		onHit(target,source) {
+			source.addVolatile('endure');
+			target.addVolatile('endure');
+		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+		},
+		target: "normal",
+		type: "Normal",
+		contestType: "Beautiful",
+	},
+	nainsdenoel: {
+		num: 816,
+		accuracy: 90,
+		basePower: 5,
+		category: "Physical",
+		name: "Nains de Noel",
+		pp: 10,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, bite: 1, shitpost: 1 },
+		onEffectiveness(typeMod, target, type, move) {
+			return typeMod + this.dex.getEffectiveness('Fire', type);
+		},
+		secondary: {
+			chance: 10,
+			onHit(target, source) {
+				const status = this.sample(['brn', 'frz']);
+				target.trySetStatus(status, source);
+			},
+		},
+		multihit: 10,
+		multiaccuracy: true,
+		target: "normal",
+		type: "Ice",
+		contestType: "Tough",
+	},
+	megasaut: {
+		num: 3235,
+		accuracy: 95,
+		basePower: 95,
+		category: "Physical",
+		name: "Mega Saut",
+		pp: 5,
+		priority: 0,
+		flags: { reflectable: 1, mirror: 1, metronome: 1, shitpost: 1, saut: 1 },
+		onHit(target, source, move) {
+			return source.addVolatile('trapped', source, move, 'trapper');
+		},
+		target: "normal",
+		type: "Steel",
+		contestType: "Tough",
+	},
+	megauppercut: {
+		num: 5925,
+		accuracy: 95,
+		basePower: 70,
+		category: "Physical",
+		name: "Mega Uppercut",
+		pp: 10,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
+		forceSwitch: true,
+		target: "normal",
+		type: "Steel",
+		contestType: "Tough",
+	},
+	megabounce: {
+		num: 340,
+		accuracy: 85,
+		basePower: 65,
+		category: "Physical",
+		name: "Mega Bounce",
+		pp: 5,
+		priority: 0,
+		flags: {
+			contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1,
+			metronome: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1, shitpost: 1, saut: 1
+		},
+		secondary: {
+			chance: 30,
+			status: 'par',
+		},
+		multihit: 2,
+		multiaccuracy: true,
+		target: "any",
+		type: "Flying",
+		contestType: "Cute",
+	},
+	protectionmediatique: {
+		num: 73,
+		accuracy: 90,
+		basePower: 0,
+		category: "Status",
+		name: "Protection Mediatique",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1, shitpost: 1 },
+		volatileStatus: 'protectionmediatique',
+		condition: {
+			onStart(target) {
+				this.add('-start', target, 'move: Protection Mediatique');
+			},
+			onResidualOrder: 8,
+			onResidual(pokemon) {
+				const target = this.getAtSlot(pokemon.volatiles['protectionmediatique'].sourceSlot);
+				if (!target || target.fainted || target.hp <= 0) {
+					this.debug('Nothing to leech into');
+					return;
+				}
+				const damage = this.damage(pokemon.baseMaxhp / 8, pokemon, target);
+				if (damage) {
+					this.heal(damage, target, pokemon);
+				}
+			},
+		},
+		onTryImmunity(target) {
+			return !target.hasType('Ghost');
+		},
+			onHit(target) {
+			target.addVolatile('followme');
+		},
+		target: "normal",
+		type: "Normal",
+		zMove: { effect: 'clearnegativeboost' },
+		contestType: "Clever",
+	},
+	gigapaf: {
+		num: 3740,
+		accuracy: 100,
+		basePower: 60,
+		category: "Physical",
+		name: "Giga paf",
+		pp: 10,
+		priority: 0,
+		flags: {
+			contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1,
+			metronome: 1, backshot: 1, shitpost: 1
+		},
+		secondary: {
+			chance: 10,
+			status: 'brn',
+		},
+		willCrit: true,
+		target: "normal",
+		type: "Fire",
+		contestType: "Tough",
+	},
+	savon: {
+			num: 7391,
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		name: "Savon",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
+		volatileStatus: 'savon',
+		condition: {
+			onStart(target) {
+				this.add('-start', target, 'move: Savon');
+			},
+			onResidualOrder: 8,
+			onResidual(pokemon) {
+				const target = this.getAtSlot(pokemon.volatiles['savon'].sourceSlot);
+				if (!target || target.fainted || target.hp <= 0) {
+					this.debug('Nothing to leech into');
+					return;}
+			},
+		},
+		onTryImmunity(target) {
+			return !target.hasType('Water');
+		},
+		target: "randomNormal", 
+		type: "Water",
+		zMove: { effect: 'clearnegativeboost' },
+		contestType: "Clever",
+	},
+	baissetoimec: {
+		num: 5776,
+		accuracy: 100,
+		basePower: 75,
+		onBasePower(basePower, pokemon, target) {
+			if (target.volatiles['savon']) {
+				return this.chainModify(2);
+			}
+		},
+		secondary: {
+			chance: 30,
+			status: 'brn',
+		},
+		category: "Physical",
+		name: "Baisse toi mec",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		target: "normal",
+		type: "Water",
+		contestType: "Tough",
+	},
+	douche: {
+		num: 10000,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Douche",
+		pp: 10,
+		priority: 0,
+		flags: { nonsky: 1, metronome: 1, shitpost: 1 },
+		pseudoWeather:'douche',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, attacker, defender, move) {
+				if (move.type === 'Water' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+					return this.chainModify([5325, 4096]);
+				}
+			},
+			onChangeBoost(boost, target, source, effect) {
+				if (source == undefined) return;
+					this.actions.useMove('haze', source);
+			},
+			onFieldStart(field, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'Douche', '[from] ability: ' + effect.name, `[of] ${source}`);
+				} else {
+					this.add('-fieldstart', 'Douche');
+				}
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 7,
+			onFieldEnd() {
+				this.add('-fieldend', 'Douche');
+			},
+		},
+		target: "all",
+		type: "Water",
+		zMove: { boost: { spe: 1 } },
+		contestType: "Clever",
+	},
+	debatpolitique: {
+		num: 10000,
+		accuracy: 95,
+		basePower: 0,
+		category: "Status",
+		name: "Debat politique",
+		pp: 10,
+		priority: 0,
+		flags: { nonsky: 1, metronome: 1, shitpost: 1 },
+		pseudoWeather: 'debatpolitique',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+		onFieldStart(field, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'Debat politique', '[from] ability: ' + effect.name, `[of] ${source}`);
+				} else {
+					this.add('-fieldstart', 'Debat politique');
+				}
+			},
+			onFieldResidual() {
+				const x = Math.floor (Math.random()*(3))
+				for (const pokemon of this.getAllActive()) {
+					if (!pokemon.hasType("Bug")) {
+						if (x == 1) {
+						this.add('-message', pokemon + "Oooh, comme c'est bizarre ! Ben voyons !");
+						this.actions.useMove('swagger', pokemon);
+						}
+						if (x == 2) {
+						this.add('-message', pokemon + "La Republique c'est moi!!!");
+						this.actions.useMove('uproar', pokemon);
+						}
+					}
+				}
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 7,
+			onFieldEnd() {
+				this.add('-fieldend', 'Debat politique');
+			},
+		},
+		target: "all",
+		type: "Dragon",
+		zMove: { boost: { spe: 1 } },
+		contestType: "Clever",
+
+	},
+	ragebait: {
+		num: 9776,
+		accuracy: 100,
+		basePower: 5,
+		onTryHit(target) {
+			if (target.getAbility().flags['cantsuppress']) {
+				return false;
+			}
+		},
+		onHit(target, source) {
+			const oldAbility = target.setAbility('angerpoint');
+			if (!oldAbility) return oldAbility as false | null;
+			if (target.status === 'slp') target.cureStatus();
+			this.actions.useMove('ragepowder', target);
+		},
+		category: "Special",
+		name: "Rage bait",
+		willCrit: true,
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
+		target: "normal",
+		type: "Bug",
+		contestType: "Tough",
+	},
+		killyourself: {
+		num: 9999,
+		accuracy: true,
+		basePower: 999,
+		category: "Special",
+		name: "Kill yourself",
+		willCrit: true,
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		target: "randomNormal",
+		type: "Electric",
+		contestType: "Tough",
+	},
+
 };
