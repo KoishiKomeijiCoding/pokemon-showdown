@@ -7916,7 +7916,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						const stats: BoostID[] = ['atk' , 'def' ,'spa' , 'spd' ,'spe'];
 						const boost: SparseBoostsTable = {};
 						boost[stats[Math.floor(Math.random() * stats.length)]] = 1
-						this.boost(boost, pokemon);
+						this.boost(boost, pokemon,pokemon);
 					}
 				}
 			},
@@ -19702,7 +19702,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			chance: 30,
 			status: 'par',
 		},
-		target: "normal",
+		target: "allAdjacentFoes",
 		type: "Electric",
 		contestType: "Cool",
 	},
@@ -21691,7 +21691,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			}
 		},
-		flags: { protect: 1, mirror: 1, nonsky: 1,shitpost:1 },
+		flags: { protect: 1, mirror: 1, nonsky: 1, shitpost:1, cantusetwice: 1},
 		target: "allAdjacentFoes",
 		forceSwitch: true,
 		type: "Poison",
@@ -22208,7 +22208,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				move.basePower *= 2;
 				break;
 			case 'deltastream':
-				move.basePower *= 2;
+				move.basePower *= 3;
 				move.target = 'allAdjacentFoes';
 				break;
 			}
@@ -22278,7 +22278,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
 		onHit(pokemon) {
-			pokemon.changeLevel(5)//augmente le level du poke de 1
+			pokemon.changeLevel(5)//augmente le level du poke de 5
 		},
 		target: "self",
 		type: "Electric",
@@ -22409,6 +22409,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 3,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1,cantusetwice: 1, shitpost: 1 },
+		onTry(source) {
+			if (source.activeMoveActions > 1) {
+				this.hint("Screamer only works on your first turn out.");
+				return false;
+			}
+		},
 		secondary: {
 			chance: 100,
 			volatileStatus: 'flinch',
@@ -22442,7 +22448,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
         name: "Magic",
         pp: 1,
         noPPBoosts: true,
-        priority: 1,
+        priority: 0,
         flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, allyanim: 1, failencore: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 ,shitpost: 1},
         onHit(target, source, moove) {
             const lapins = ["diggersby","cinderace","lopunny","azumarill"]
@@ -22537,7 +22543,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 80,
 		category: "Special",
 		name: "Musique Arabe",
-		pp: 15,
+		pp: 10,
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, sound: 1, shitpost: 1 },
 		onHit(target) {
@@ -22545,7 +22551,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (!move || move.isZ) return false;
 			if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
 
-			const ppDeducted = target.deductPP(move.id, 8);
+			const ppDeducted = target.deductPP(move.id, 32);
 			if (!ppDeducted) return false;
 			this.add("-activate", target, 'move: Spite', move.name, ppDeducted);
 			target.addVolatile('torment')
@@ -22624,10 +22630,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			'grosserveur', "terrorisme", "auuwoh", 'pompeibaby',
 			'bienveillance', 'megaintimidate', 'hawkingroom', 'motivation',
 			'6767', 'serenerock', 'homochromie', 'epsteinfiles', 'intrusion',
-			'aurafarming', 'megaopportunist', 'mercredi', 'poteglace','eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill',
-			'worldwidecorruption'
+			'aurafarming', 'megaopportunist', 'mercredi', 'poteglace', 'omitted'
 		];
 		const newAbility = this.sample(shitpostAbilities);
+		console.log(newAbility);
+		if (newAbility == undefined) return; //pour eviter les crashs
 		const oldAbility = target.setAbility(newAbility);
 		if (!oldAbility) return oldAbility as false | null;
 	},
@@ -22862,7 +22869,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
-		volatileStatus: 'masterofgravity',
+		volatileStatus: 'eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill',
 		condition: {
 			duration: 100,
 			onStart(target) {
@@ -22894,6 +22901,44 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { boost: { evasion: 1 } },
 		contestType: "Clever",
 	}, //les fonctionnalité du talent sont plutôt correctement implémenté cependant niveau visuel c'est pas super explicite juste le moove rate mais jsp trop comment préciser ça
+	monologue: {
+		num: 50000,
+		accuracy: 30,
+		basePower: 0,
+		category: "Status",
+		name: "Monologue",
+		pp: 256,
+		priority: 0,
+		flags: { charge: 1, protect: 1, metronome: 1, shitpost: 1 },
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			defender.addVolatile('yawn');
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					atk: 1,
+					def: 1,
+					spa: 1,
+					spd: 1,
+					spe: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Stellar",
+		zMove: { boost: { atk: 1, def: 1, spa: 1, spd: 1, spe: 1 } },
+		contestType: "Clever",
+	},
 	impostor: {
 		num: 393,
 		accuracy: true,
@@ -22936,6 +22981,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				pokemon.tryTrap();
 			},
 			onFaint(target, source, effect) {
+				if (source == undefined) return;
 				this.add('-message', source.name + " a tué l'imposteur et est donc récompensé !")
 				this.heal(source.baseMaxhp,source);
 				const boost: SparseBoostsTable = {"atk": 1, "def": 1, "spa": 1, "spd": 1, "spe": 1};
@@ -23148,23 +23194,22 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
 		volatileStatus: 'savon',
-		status: 'savon',
 		condition: {
 			onStart(target) {
 				this.add('-start', target, 'move: Savon');
-			}
-		},
+			},
 			onResidualOrder: 8,
 			onResidual(pokemon) {
 				const target = this.getAtSlot(pokemon.volatiles['savon'].sourceSlot);
 				if (!target || target.fainted || target.hp <= 0) {
 					this.debug('Nothing to leech into');
 					return;}
+			},
 		},
 		onTryImmunity(target) {
 			return !target.hasType('Water');
 		},
-		target: "randomNormal",
+		target: "randomNormal", 
 		type: "Water",
 		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Clever",
@@ -23174,7 +23219,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 75,
 		onBasePower(basePower, pokemon, target) {
-			if (target.status === 'savon') {
+			if (target.volatiles['savon']) {
 				return this.chainModify(2);
 			}
 		},
@@ -23191,7 +23236,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Water",
 		contestType: "Tough",
 	},
-		douche: {
+	douche: {
 		num: 10000,
 		accuracy: true,
 		basePower: 0,
@@ -23216,6 +23261,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onChangeBoost(boost, target, source, effect) {
+				if (source == undefined) return;
 					this.actions.useMove('haze', source);
 			},
 			onFieldStart(field, source, effect) {
@@ -23326,56 +23372,5 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "randomNormal",
 		type: "Electric",
 		contestType: "Tough",
-	},
-		underwhelminggadgetjob: {
-		num: 9989,
-		accuracy: 95,
-		basePower: 10,
-		category: "Physical",
-		name: "Underwhelming Gadgetjob",
-		pp: 5,
-		priority: 0,
-		multihit: 6,
-		multiaccuracy: true,
-		secondary: {
-			chance: 10,
-			status: 'underwhelmed',
-			volatileStatus: 'underwhelmed',
-			boosts: {
-				spe: -1,
-			},
-		},
-		onBasePower(basePower, pokemon, target) {
-			if (target.status === 'underwhelmed') {
-				return this.chainModify(2);
-			}
-		},
-		flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
-		target: "allAdjacent",
-		type: "Steel",
-		contestType: "Tough",
-	},
-	genkidama: {
-		num: 800,
-		accuracy: 100,
-		basePower: 200,
-		category: "Special",
-		name: "Genkidama",
-		pp: 10,
-		priority: 0,
-		flags: { charge: 1, protect: 1, mirror: 1, metronome: 1, beam: 1 },
-		onTryMove(attacker, defender, move) {
-			if (attacker.removeVolatile(move.id)) {
-				return;
-			}
-			this.add('-prepare', attacker, move.name);
-			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-				return;
-			}
-			attacker.addVolatile('twoturnmove', defender);
-			return null;
-		},
-		target: "allAdjacent",
-		type: "Stellar",
 	},
 };

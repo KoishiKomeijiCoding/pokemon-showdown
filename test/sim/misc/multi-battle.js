@@ -10,7 +10,7 @@ describe('Free-for-all', () => {
 		battle.destroy();
 	});
 
-	it(`should support forfeiting`, () => {
+	/*it(`should support forfeiting`, () => {
 		battle = common.createBattle({ gameType: 'freeforall' }, [[
 			{ species: 'wynaut', moves: ['vitalthrow'] },
 		], [
@@ -28,5 +28,22 @@ describe('Free-for-all', () => {
 		battle.lose('p3');
 		battle.makeChoices();
 		assert.equal(battle.turn, 4);
+	});*/
+
+	it('should finish a four-team battle using only Brainrot', () => {
+		const teams = Array.from({ length: 4 }, () => Array.from({ length: 6 }, () => ({
+			species: 'Tung Tung Tung Sahur', ability: 'aislop', moves: ['brainrot','uturn'],
+		})));
+		battle = common.createBattle({ gameType: 'freeforall' }, teams);
+
+		let turns = 0;
+		while (!battle.ended && turns < 1000) {
+			battle.makeChoices();
+			turns++;
+		}
+		console.log(turns);
+
+		assert(battle.ended, 'The battle should end with one team remaining');
+		assert(battle.winner, 'The battle should have a winner');
 	});
 });

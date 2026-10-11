@@ -267,6 +267,7 @@ export class Pokemon {
 	bouclier: boolean;
 	vesuveCounter:number;
 	chiantmanActivated: boolean;
+	spreadMoveOnSwitchIn: boolean;
 	corruption: Pokemon | null;
 	hascorrupted: Pokemon[];
 	leftoCounter: number;
@@ -498,6 +499,7 @@ export class Pokemon {
 		this.bouclier = false;
 		this.vesuveCounter = 0;
 		this.chiantmanActivated = false;
+		this.spreadMoveOnSwitchIn = false;
 		this.shieldBoost = false;
 		this.syrupTriggered = false;
 		this.stellarBoostedTypes = [];
@@ -534,20 +536,20 @@ export class Pokemon {
 		const stats = this.battle.spreadModify(this.species.baseStats, this.set);
 		if (this.species.maxHP) stats.hp = this.species.maxHP;
 
-		/*this.baseMaxhp = stats.hp;
-		this.maxhp = stats.hp;
-		this.hp = stats.hp;*/
-		
 
 		if (!this.transformed) this.baseStoredStats = stats;
 		let statName: StatIDExceptHP;
 		for (statName in this.storedStats) {
 			this.storedStats[statName] = stats[statName];
 			if (this.modifiedStats) this.modifiedStats[statName] = stats[statName]; // Gen 1: Reset modified stats.
-		}
+		} // en vrais jsp si c'est necessaire ahahahah
 
-		this.formeChange(this.species,null,true)
-		this.setAbility(ability)
+		this.details = this.getUpdatedDetails();
+		let details = (this.illusion || this).details;
+		if (this.terastallized) details += `, tera:${this.terastallized}`;
+			this.battle.add('detailschange', this, details);
+
+		
 
 	}
 
