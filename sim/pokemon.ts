@@ -267,6 +267,7 @@ export class Pokemon {
 	bouclier: boolean;
 	vesuveCounter:number;
 	chiantmanActivated: boolean;
+	spreadMoveOnSwitchIn: boolean;
 	corruption: Pokemon | null;
 	hascorrupted: Pokemon[];
 	leftoCounter: number;
@@ -498,6 +499,7 @@ export class Pokemon {
 		this.bouclier = false;
 		this.vesuveCounter = 0;
 		this.chiantmanActivated = false;
+		this.spreadMoveOnSwitchIn = false;
 		this.shieldBoost = false;
 		this.syrupTriggered = false;
 		this.stellarBoostedTypes = [];

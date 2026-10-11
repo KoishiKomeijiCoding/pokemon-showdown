@@ -21691,7 +21691,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			}
 		},
-		flags: { protect: 1, mirror: 1, nonsky: 1,shitpost:1 },
+		flags: { protect: 1, mirror: 1, nonsky: 1, shitpost:1, cantusetwice: 1},
 		target: "allAdjacentFoes",
 		forceSwitch: true,
 		type: "Poison",
@@ -22208,7 +22208,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				move.basePower *= 2;
 				break;
 			case 'deltastream':
-				move.basePower *= 2;
+				move.basePower *= 3;
 				move.target = 'allAdjacentFoes';
 				break;
 			}
@@ -22278,7 +22278,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
 		onHit(pokemon) {
-			pokemon.changeLevel(5)//augmente le level du poke de 1
+			pokemon.changeLevel(5)//augmente le level du poke de 5
 		},
 		target: "self",
 		type: "Electric",
@@ -22409,6 +22409,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 3,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1,cantusetwice: 1, shitpost: 1 },
+		onTry(source) {
+			if (source.activeMoveActions > 1) {
+				this.hint("Screamer only works on your first turn out.");
+				return false;
+			}
+		},
 		secondary: {
 			chance: 100,
 			volatileStatus: 'flinch',
@@ -22537,7 +22543,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 80,
 		category: "Special",
 		name: "Musique Arabe",
-		pp: 15,
+		pp: 10,
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, sound: 1, shitpost: 1 },
 		onHit(target) {
@@ -22545,7 +22551,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (!move || move.isZ) return false;
 			if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
 
-			const ppDeducted = target.deductPP(move.id, 8);
+			const ppDeducted = target.deductPP(move.id, 32);
 			if (!ppDeducted) return false;
 			this.add("-activate", target, 'move: Spite', move.name, ppDeducted);
 			target.addVolatile('torment')
@@ -22624,8 +22630,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			'grosserveur', "terrorisme", "auuwoh", 'pompeibaby',
 			'bienveillance', 'megaintimidate', 'hawkingroom', 'motivation',
 			'6767', 'serenerock', 'homochromie', 'epsteinfiles', 'intrusion',
-			'aurafarming', 'megaopportunist', 'mercredi', 'poteglace','eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill',
-			'worldwidecorruption'
+			'aurafarming', 'megaopportunist', 'mercredi', 'poteglace', 'omitted'
 		];
 		const newAbility = this.sample(shitpostAbilities);
 		console.log(newAbility);
@@ -22864,7 +22869,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
-		volatileStatus: 'masterofgravity',
+		volatileStatus: 'eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill',
 		condition: {
 			duration: 100,
 			onStart(target) {
@@ -22896,6 +22901,45 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { boost: { evasion: 1 } },
 		contestType: "Clever",
 	}, //les fonctionnalité du talent sont plutôt correctement implémenté cependant niveau visuel c'est pas super explicite juste le moove rate mais jsp trop comment préciser ça
+	monologue: {
+		num: 50000,
+		accuracy: 30,
+		basePower: 0,
+		category: "Status",
+		name: "Monologue",
+		pp: 256,
+		priority: 0,
+		flags: { charge: 1, protect: 1, metronome: 1, shitpost: 1 },
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			defender.addVolatile('yawn');
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					atk: 1,
+					def: 1,
+					spa: 1,
+					spd: 1,
+					spe: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Stellar",
+		zMove: { boost: { atk: 1, def: 1, spa: 1, spd: 1, spe: 1 } },
+		contestType: "Clever",
+	},
+};
 	impostor: {
 		num: 393,
 		accuracy: true,
