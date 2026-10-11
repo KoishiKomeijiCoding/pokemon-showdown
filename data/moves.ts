@@ -22939,7 +22939,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { boost: { atk: 1, def: 1, spa: 1, spd: 1, spe: 1 } },
 		contestType: "Clever",
 	},
-};
 	impostor: {
 		num: 393,
 		accuracy: true,
