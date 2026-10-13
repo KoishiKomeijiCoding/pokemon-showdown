@@ -5998,10 +5998,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	electricityyyy: {
 		onSwitchIn(pokemon) { // onStart ?
-			const moveId = 'zap'; // ← Change this to any move you want!
+			const moveId = 'zap';
 			const move = this.dex.getActiveMove(moveId);
 			this.add('-ability', pokemon, 'ELECTRICITYYYY');
-			this.actions.useMove(move, pokemon);
+			this.actions.useMove(move, pokemon,{is_from_ability: true});
 		},
 		flags: {},
 		name: "ELECTRICITYYYY",
@@ -6200,7 +6200,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	hiddenstarinallseasons: {
 		onStart(source) {
 			this.field.setWeather('deltastream');
-			this.actions.useMove('tailwind', source);
+			this.actions.useMove('tailwind', source,{is_from_ability: true});
 		},
 		onAnySetWeather(target, source, weather) {
 			if (this.field.getWeather().id === 'deltastream') return false;
@@ -6228,8 +6228,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return;
 			}
 			source.vesuveCounter += 1;
-			this.actions.useMove('eruption', target);
-			this.actions.useMove('earthquake', target); //lors de la mort fait juste éruption mais pas earthquake (éruption fait 0 % du coup)
+			this.actions.useMove('eruption', target,{is_from_ability: true});
+			this.actions.useMove('earthquake', target,{is_from_ability: true}); //lors de la mort fait juste éruption mais pas earthquake (éruption fait 0 % du coup)
 			source.vesuveCounter = 0; 
 		},
 		flags: {},
@@ -6354,7 +6354,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-ability', pokemon, 'Cinq nuit chez Freddys');
 			for (const target of pokemon.adjacentFoes()) {
 				if (move) {
-					this.actions.useMove(move, pokemon,{ target: target });
+					this.actions.useMove(move, pokemon,{ target: target, });//is from ability fait maybe crash dcp je met pas pour l'instant besoin de + de test
 				}
 			}
 			this.field.addPseudoWeather("trickroom")
@@ -6450,7 +6450,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target !== source && move.type === 'Poison') {
 				if (!this.boost({ spa: 1 })) {
 					this.add('-immune', target, '[from] ability: Mercredi');
-					this.actions.useMove("cestlheuredesortirlespoubelles", target,{ target: source })
+					this.actions.useMove("cestlheuredesortirlespoubelles", target,{ target: source, is_from_ability: true})
 				}
 				return null;
 			}
@@ -6507,7 +6507,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const moveGmaxSupplementaire = this.sample(listeMovesGmax);
 			console.log(moveGmaxSupplementaire)
 			if (moveGmaxSupplementaire != undefined || moveGmaxSupplementaire != null) {
-				this.actions.useMove(moveGmaxSupplementaire, source); //Rudolf apprends à coder ptn de merde // nique typescript vive Python et R
+				this.actions.useMove(moveGmaxSupplementaire, source, {is_from_ability: true}); //Rudolf apprends à coder ptn de merde // nique typescript vive Python et R
 			} // des fois ça marche pas et jsp trop pourquoi c'est bizaaarrreeeee
 		},
 		onEnd(pokemon) {
@@ -6598,7 +6598,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchIn(pokemon) {
 			const moveId = 'icywind';
 			const move = this.dex.getActiveMove(moveId);
-			this.actions.useMove(move, pokemon)
+			this.actions.useMove(move, pokemon, {is_from_ability: true})
 			const elixir = pokemon.activeTurns;
 			this.add('-activate', pokemon, `ability: Pote Glace`);
 			this.add('-start', pokemon, `elixir: ${elixir}`,'[silent]');
@@ -6715,7 +6715,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-ability', pokemon, 'Ballon Discret');
 			for (const target of pokemon.adjacentFoes()) {
 				if (move) {
-					this.actions.useMove(move, pokemon,{ target: target });
+					this.actions.useMove(move, pokemon,{ target: target, is_from_ability: true });
 				}
 			}
 			this.actions.useMove('celebrate', pokemon);
@@ -6740,7 +6740,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-ability', pokemon, 'Jai plein de cadeaux');
 			for (const target of pokemon.adjacentFoes()) {
 				if (move) {
-					this.actions.useMove(move, pokemon,{ target: target });
+					this.actions.useMove(move, pokemon,{ target: target, is_from_ability: true });
 				}
 			}
 		},
@@ -6752,7 +6752,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					];
 					const Paslescookies = this.sample(morsures);
 					console.log(Paslescookies)
-					this.actions.useMove(Paslescookies, target, { target: source});
+					this.actions.useMove(Paslescookies, target, { target: source, is_from_ability: true});
 				}
 		},
 		flags: {},
@@ -6766,7 +6766,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-ability', pokemon, 'hmmmm');
 			for (const target of pokemon.adjacentFoes()) {
 				if (move) {
-					this.actions.useMove(move, pokemon,{ target: target });
+					this.actions.useMove(move, pokemon,{ target: target, is_from_ability: true });
 				}
 			}
 		},
@@ -6792,7 +6792,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					showMsg = true;
 				}
 				if (Math.floor(Math.random() * (3)) == 2) {
-					this.actions.useMove('partingshot', target, { target: source});
+					this.actions.useMove('partingshot', target, { target: source, is_from_ability: true });
 				}
 			}
 		},
@@ -6862,7 +6862,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchIn(pokemon) {
 			const x = Math.floor (Math.random()*(100))
 			if (x == 90) {
-					this.actions.useMove('killyourself', pokemon);
+					this.actions.useMove('killyourself', pokemon,{is_from_ability: true});
 			}
 			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Aura Malveillante');
@@ -6903,14 +6903,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagePriority: -30,
         onDamage(damage, target, source, effect) {
             if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move') {
-                this.actions.useMove('doubleteam', target);
+                this.actions.useMove('doubleteam', target,{is_from_ability: true});
             }
 		},
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
 			if (pokemon.activeTurns) {
-				this.actions.useMove('metronome', pokemon);
+				this.actions.useMove('metronome', pokemon,{is_from_ability: true});
 			}
 		},
 		flags: { breakable: 1 },
@@ -6983,5 +6983,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2,
 		num: 2740,
 	},
+	aniqtoohigh: 
+	{
+		onFoeTryMoveAbility(move,source){ //event custom qui choppe les mooves venant d'ability et les cancels parce que mdr
+			const abilityHolder = this.effectState.target //this.effectState.target = le pokemon qui a l'ability 
+			//je comprends pas pk on utilise pas plus ça c'est super pratique et c'est marqué qu'on peut faire ça à un endroit random dans le code mdr
+			this.actions.useMove(move,abilityHolder, {target: source});
+			this.add('-message', abilityHolder.name + " a volé le moove de " + source.name);
+			return false;
+		},
+		flags: {},
+		name: "An IQ too high ?",
+		rating: 3,
+		num: 1876,
+	}
 };
 

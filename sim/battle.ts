@@ -765,7 +765,7 @@ export class Battle {
 		// }
 		if (this.eventDepth >= 8) {
 			// oh fuck
-			this.add('message', 'STACK LIMIT EXCEEDED');
+			this.add('message', 'LOL RATIO LE SERV A CRASH (Stack overflow)');
 			this.add('message', 'PLEASE REPORT IN BUG THREAD');
 			this.add('message', 'Event: ' + eventid);
 			this.add('message', 'Parent event: ' + this.event.id);
