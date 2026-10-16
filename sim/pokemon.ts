@@ -261,6 +261,7 @@ export class Pokemon {
 	swordBoost: boolean;
 	shieldBoost: boolean;
 	okinaCetteConne:boolean;
+	ameCollectee: number;
 	canGemAlert:boolean;
 	epsteinPower:boolean;
 	pompeiBaby:boolean;
@@ -490,6 +491,7 @@ export class Pokemon {
 		this.heroMessageDisplayed = false;
 		this.swordBoost = false;
 		this.okinaCetteConne = false;
+		this.ameCollectee = 1000;
 		this.corruption = null;
 		this.hascorrupted = [];
 		this.leftoCounter = 0;
