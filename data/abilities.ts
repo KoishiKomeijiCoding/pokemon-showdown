@@ -5836,23 +5836,39 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 9999,
 	},
 	mecaniques1g: {
-		onSourceModifyDamage(damage, source, target, move) {
+		onStart() {
+			this.add('-ability', "Mécaniques 1G");
+			this.add("-message", "Le Pokémon n'est pas affecté par les mécaniques implémentées après la première génération !");
+		},
+		onSourceModifyDamage(damage, source, target, move) { // aucune faiblesse
 			if (target.getMoveHitData(move).typeMod > 0) {
 				this.debug('ce poke est broken');
 				return this.chainModify(0.5);
 			}
 		},
-		onModifyMove(move) {
+		onModifyMove(move) { // ignore les immunités des types ténèbres, acier et fée + mold breaker
+			move.ignoreAbility = true;
 			if (!move.ignoreImmunity) move.ignoreImmunity = {};
 			if (move.ignoreImmunity !== true) {	
 				this.debug('Ce poke est broken 2');
-				move.ignoreImmunity['Psychic'] = true;
+				if (move.type = 'Psychic)') move.ignoreImmunity['Psychic'] = true;
+				if (move.type = 'Poison') move.ignoreImmunity['Poison'] = true;
+				if (move.type = 'Fairy') move.ignoreImmunity['Fairy'] = true;
+				return;
 			}
 		},
-		onModifyDamage(damage, source, target, move) {
-			if (target.getMoveHitData(move).typeMod < 0 && move.type === 'Psychic' && target.types.includes('Steel')) { // vibecode à reprendre !! //ratio t'allait fraire crash le serv
+		onModifyDamage(damage, source, target, move) { // ignore les résistances // je voudrais que pour les types ténèbres, acier et fée mais j'ai pas réussi + plus le temps + ratio
+			if (target.getMoveHitData(move).typeMod < 0) {
 				this.debug('Ce poke est broken 3');
 				return this.chainModify(2);
+			}
+		},
+		onTryMove(pokemon, target, move) { // 1/256 chance de rater son move
+			const armorTailHolder = this.effectState.target
+			if (Math.floor(Math.random() * (256 + 0)) == 2) {
+				this.attrLastMove('[still]');
+				this.add('cant', armorTailHolder, 'ability: Mécaniques 1G', move, `[of] ${pokemon}`);
+				return false;
 			}
 		},
 		flags: {},
@@ -5982,10 +5998,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	electricityyyy: {
 		onSwitchIn(pokemon) { // onStart ?
-			const moveId = 'zap'; // ← Change this to any move you want!
+			const moveId = 'zap';
 			const move = this.dex.getActiveMove(moveId);
 			this.add('-ability', pokemon, 'ELECTRICITYYYY');
-			this.actions.useMove(move, pokemon);
+			this.actions.useMove(move, pokemon,{is_from_ability: true});
 		},
 		flags: {},
 		name: "ELECTRICITYYYY",
@@ -6184,7 +6200,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	hiddenstarinallseasons: {
 		onStart(source) {
 			this.field.setWeather('deltastream');
-			this.actions.useMove('tailwind', source);
+			this.actions.useMove('tailwind', source,{is_from_ability: true});
 		},
 		onAnySetWeather(target, source, weather) {
 			if (this.field.getWeather().id === 'deltastream') return false;
@@ -6200,7 +6216,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			this.field.clearWeather();
 		},
-		flags: { },
+		flags: {},
 		name: "Hidden Star in All Seasons",
 		rating: 4,
 		num: 1001,
@@ -6212,8 +6228,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return;
 			}
 			source.vesuveCounter += 1;
-			this.actions.useMove('eruption', target);
-			this.actions.useMove('earthquake', target); //lors de la mort fait juste éruption mais pas earthquake (éruption fait 0 % du coup)
+			this.actions.useMove('eruption', target,{is_from_ability: true});
+			this.actions.useMove('earthquake', target,{is_from_ability: true}); //lors de la mort fait juste éruption mais pas earthquake (éruption fait 0 % du coup)
 			source.vesuveCounter = 0; 
 		},
 		flags: {},
@@ -6245,6 +6261,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.field.setTerrain('grassyterrain');
 			if (pokemon.chiantmanActivated) return;
 			pokemon.chiantmanActivated = true;
+
 			const moveId = 'leechseed'; 
 			const move = this.dex.getActiveMove(moveId);
 			for (const target of pokemon.adjacentFoes()) {
@@ -6252,6 +6269,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.actions.useMove(move, pokemon,{ target: target });
 				}
 			}
+		},
+		onModifyMove(move, pokemon, target) { // objectif : lancer une seule fois le move pour les 3 oppos au lieu de 3 fois sur chaque
+			if (move.id !== 'leechseed' || pokemon.spreadMoveOnSwitchIn) return;
+			move.target = 'allAdjacentFoes';
+			pokemon.spreadMoveOnSwitchIn = true; // on a un flag pour faire en sorte que le pokemon n'ait pas le move de base en spread (autre option : créer un move particulier)
+		},
+		onEnd(pokemon) { // reset 
+			pokemon.spreadMoveOnSwitchIn = false; // on reset le flag pour le prochain switchin
 		},
 		flags: {},
 		name: "Chiantman",
@@ -6323,13 +6348,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 9991,
 	},
 	cinqnuitschezfreddy: {
-		onSwitchIn(pokemon) { // onStart ?
+		onStart(pokemon) { // onStart ?
 			const moveId = 'meanlook'; // ← Change this to any move you want!
 			const move = this.dex.getActiveMove(moveId);
 			this.add('-ability', pokemon, 'Cinq nuit chez Freddys');
 			for (const target of pokemon.adjacentFoes()) {
 				if (move) {
-					this.actions.useMove(move, pokemon,{ target: target });
+					this.actions.useMove(move, pokemon,{ target: target, });//is from ability fait maybe crash dcp je met pas pour l'instant besoin de + de test
 				}
 			}
 			this.field.addPseudoWeather("trickroom")
@@ -6425,7 +6450,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target !== source && move.type === 'Poison') {
 				if (!this.boost({ spa: 1 })) {
 					this.add('-immune', target, '[from] ability: Mercredi');
-					this.actions.useMove("cestlheuredesortirlespoubelles", target,{ target: source })
+					this.actions.useMove("cestlheuredesortirlespoubelles", target,{ target: source, is_from_ability: true})
 				}
 				return null;
 			}
@@ -6482,7 +6507,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const moveGmaxSupplementaire = this.sample(listeMovesGmax);
 			console.log(moveGmaxSupplementaire)
 			if (moveGmaxSupplementaire != undefined || moveGmaxSupplementaire != null) {
-				this.actions.useMove(moveGmaxSupplementaire, source); //Rudolf apprends à coder ptn de merde // nique typescript vive Python et R
+				this.actions.useMove(moveGmaxSupplementaire, source, {is_from_ability: true}); //Rudolf apprends à coder ptn de merde // nique typescript vive Python et R
 			} // des fois ça marche pas et jsp trop pourquoi c'est bizaaarrreeeee
 		},
 		onEnd(pokemon) {
@@ -6536,7 +6561,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: 9995,
 	},
-    aislop: { // WIP
+    aislop: { 
 		onResidualOrder: 50,
 		onResidualSubOrder: 1,
 		onDamagingHit(damage, target, source, move) {
@@ -6573,7 +6598,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchIn(pokemon) {
 			const moveId = 'icywind';
 			const move = this.dex.getActiveMove(moveId);
-			this.actions.useMove(move, pokemon)
+			this.actions.useMove(move, pokemon, {is_from_ability: true})
 			const elixir = pokemon.activeTurns;
 			this.add('-activate', pokemon, `ability: Pote Glace`);
 			this.add('-start', pokemon, `elixir: ${elixir}`,'[silent]');
@@ -6590,6 +6615,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					for (const target of pokemon.foes()) {
 						target.trySetStatus('frz', pokemon);
 					}
+					pokemon.clearBoosts() // explorer 'clearnegativeboost' ? (Z-moves)
 					pokemon.formeChange("darmanitangalarzen");
 				} else {
 					const elixir = pokemon.activeTurns;
@@ -6631,25 +6657,41 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 3003,
 	},
-	eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill: {
+	omitted: {
 		onStart(source) {
 			this.field.addPseudoWeather('supergravity', source);
-			source.addVolatile('masterofgravity');
+			// source.addVolatile('eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill');
+			this.add("-message", 'Keh heh heh heh... Why, hello there... It has been a while. I never expected that "you lot" would make it to this place. It is a bit too much of a "coincidence", do you not agree? Though on the topic of "coincidences", you and I do share a "coincidental similarity". The "coincidental similarity" that we each know the other s "secret". As well as the "coincidental similarity" that we each harbor "murderous intent" towards the other. You wish to erase all those who know "the secret of your ability". And I can not stand for others to be made aware of the "secret" that I, in fact, bear the moniker of "Disciple of Darkness". For that is "proof" concerning my "sublime" "duty", and therefore "confidential information". Although, to an "informant" such as yourself, this could rather be classified as "valuable information". In the first place, this "Disciple of Darkness" denomination... Keh hah hah hah hah! Very well! You, too, shall kneel before this "new" "power" that "my humble self" possesses!');
 		},
-		onModifyMove(move, pokemon) { // vibecode 0/10 optimisation, je ne sais pas faire de conditions multiples en typescript et POO //ratio
-			//if (!this.field.getPseudoWeather('gravity')) return; je suppose que c'est une erreur mais en vrais jsp 
+		onAnyTryMove(target, source, effect) {
+				if (['explosion', 'mindblown', 'mistyexplosion', 'selfdestruct', 'allahakbar', 'selfdestruct1g'].includes(effect.id)) {
+					this.attrLastMove('[still]');
+					this.add('cant', target, 'ability: omitted', effect, `[of] ${source}`);
+					this.add('-message', 'because of omitted');
+					return false;
+				}
+			},
+		onModifyMove(move, pokemon) {
 			if (!this.field.getPseudoWeather('supergravity') && !this.field.getPseudoWeather('gravity')) return;
-			if (!pokemon.volatiles['masterofgravity']) return;
+			// if (!pokemon.volatiles['eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill']) return;
 			move.target = 'allAdjacentFoes'; //ptdr azy
 		},
+		onTryHit(target, source, move) {
+				if ((target !== source && move.type === 'Ground') || ['smackdown', 'thousandarrows', 'gravapple'].includes(move.id)) {
+					move.accuracy = true;
+					this.add('-immune', target, '[from] ability: omitted');
+					this.add('-message', 'because of omitted');
+					return null;
+				}
+			},
 		onDamagingHit(target, source, move) {
 				this.add("-message",'The person known ™ as myself also known as ™ Wilhelm von Clausewitz Halcyon HISUIMARU is filled completely ™ and utterly with the feeling, an emotional reaction ™, that is commonly described in short ™ as disgust towards the man ™ coated in figurative trash. Due to these ™ intense emotions that I, the Eternal Senselessness Bearing the Alias of Chaos ™ who Manipulates Gravity at Will, feel towards this ™ man that I dare not call human, only a monster ™ (and also the coach), but only the trash like man, I ™ will beat down all who stand in my literal and figurative ™ way. To achieve this goal I must achieve even ™ greater power than the power over gravity that ™ I manipulate at will. The figure that I deem ™ to be less than a human, only a monster, is the same ™ as me in this regard. The collection, that is the capture ™, of all the figurative trash, that retains a disposition ™ of one that could be called a god, and yet is an average folk is an action ™ that is unforgivable. You, that is to say, the one reading ™ this message, cannot affect me with your measly powers ™ . The monster also known in short as the Trashy Man ™, is unpleasant on the eyes ™, especially when he is committing ™ an act as simple as walking around at his lesuire.');
 		}, 
 		onEnd(pokemon) {
-			pokemon.removeVolatile('masterofgravity');
+			pokemon.removeVolatile('eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill');
 		},
 		flags: {},
-		name: 'Eternal Senselessness Bearing the Alias of "Chaos" who Manipulates Gravity at Will', // sinon Empire Power - Eternal Force
+		name: 'omitted',
 		rating: 2,
 		num: 3003,
 	},
@@ -6673,7 +6715,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-ability', pokemon, 'Ballon Discret');
 			for (const target of pokemon.adjacentFoes()) {
 				if (move) {
-					this.actions.useMove(move, pokemon,{ target: target });
+					this.actions.useMove(move, pokemon,{ target: target, is_from_ability: true });
 				}
 			}
 			this.actions.useMove('celebrate', pokemon);
@@ -6698,7 +6740,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-ability', pokemon, 'Jai plein de cadeaux');
 			for (const target of pokemon.adjacentFoes()) {
 				if (move) {
-					this.actions.useMove(move, pokemon,{ target: target });
+					this.actions.useMove(move, pokemon,{ target: target, is_from_ability: true });
 				}
 			}
 		},
@@ -6710,7 +6752,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					];
 					const Paslescookies = this.sample(morsures);
 					console.log(Paslescookies)
-					this.actions.useMove(Paslescookies, target, { target: source});
+					this.actions.useMove(Paslescookies, target, { target: source, is_from_ability: true});
 				}
 		},
 		flags: {},
@@ -6724,7 +6766,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-ability', pokemon, 'hmmmm');
 			for (const target of pokemon.adjacentFoes()) {
 				if (move) {
-					this.actions.useMove(move, pokemon,{ target: target });
+					this.actions.useMove(move, pokemon,{ target: target, is_from_ability: true });
 				}
 			}
 		},
@@ -6750,7 +6792,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					showMsg = true;
 				}
 				if (Math.floor(Math.random() * (3)) == 2) {
-					this.actions.useMove('partingshot', target, { target: source});
+					this.actions.useMove('partingshot', target, { target: source, is_from_ability: true });
 				}
 			}
 		},
@@ -6820,7 +6862,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchIn(pokemon) {
 			const x = Math.floor (Math.random()*(100))
 			if (x == 90) {
-					this.actions.useMove('killyourself', pokemon);
+					this.actions.useMove('killyourself', pokemon,{is_from_ability: true});
 			}
 			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Aura Malveillante');
@@ -6848,6 +6890,110 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		flags: {},
 		name: "Aura Malveillante",
+		rating: 3,
+		num: 1876,
+	},
+	gogogadget: {
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['beam']) {
+				return this.chainModify(1.3);
+			}
+		},
+		onDamagePriority: -30,
+        onDamage(damage, target, source, effect) {
+            if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move') {
+                this.actions.useMove('doubleteam', target,{is_from_ability: true});
+            }
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (pokemon.activeTurns) {
+				this.actions.useMove('metronome', pokemon,{is_from_ability: true});
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Go Go Gadget",
+		rating: 3,
+		num: 5,
+	},
+	jesuisgoku: {
+		onTryBoost(boost, target, source, effect) {
+			// Don't bounce self stat changes, or boosts that have already bounced
+			if (!source || target === source || !boost || effect.name === 'Aura de Goku') return;
+			let b: BoostID;
+			for (b in boost) {
+				if (boost[b]! < 0) {
+					if (target.boosts[b] === -6) continue;
+					const negativeBoost: SparseBoostsTable = {};
+					negativeBoost[b] = boost[b];
+					delete boost[b];
+					if (source.hp) {
+						this.add('-ability', target, 'Aura de Goku');
+						this.boost(negativeBoost, source, target, null, true);	
+					}
+				}
+			}
+		},
+		onChangeBoost(boost, target, source, effect) {
+			if (effect && effect.id === 'zpower') return;
+			let i: BoostID;
+			for (i in boost) {
+				boost[i]! *= 2;
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, spa) {
+			return this.chainModify(2);
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (Math.floor(Math.random() * (3)) == 2) {
+				if (pokemon.activeTurns) {
+				this.boost({ spe: 1,spa: 1, atk: 1,def: 1,spd: 1 });
+				}
+			}
+		},
+		onSwitchIn(pokemon) {
+			let activated = false;
+			for (const target of pokemon.adjacentFoes()) {
+				if (!activated) {
+					this.add('-ability', pokemon, 'Je suis Goku', 'boost');
+					activated = true;
+				}
+				if (target.volatiles['substitute']) {
+					this.add('-immune', target);
+				} else {
+					this.boost({ atk: -1 }, target, pokemon, null, true);
+					this.boost({ spa: -1 }, target, pokemon, null, true);
+				}
+			}
+		},
+		onTryHit(pokemon, target, move) {
+			if (move.name === 'Cancer') {
+				this.add('-immune', pokemon, '[from] ability: Je suis Goku');
+				this.add('-message', target + " Goku a vaincu le cancer.");
+				return null;
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Je suis Goku",
+		rating: 2,
+		num: 2740,
+	},
+	aniqtoohigh: 
+	{
+		onFoeTryMoveAbility(move,source){ //event custom qui choppe les mooves venant d'ability et les cancels parce que mdr
+			const abilityHolder = this.effectState.target //this.effectState.target = le pokemon qui a l'ability 
+			//je comprends pas pk on utilise pas plus ça c'est super pratique et c'est marqué qu'on peut faire ça à un endroit random dans le code mdr
+			this.actions.useMove(move,abilityHolder, {target: source});
+			this.add('-message', abilityHolder.name + " a volé le moove de " + source.name);
+			return false;
+		},
+		flags: {},
+		name: "An IQ too high ?",
 		rating: 3,
 		num: 1876,
 	},

@@ -69,6 +69,7 @@ interface MoveFlags {
 	saut?:1;//augmente la puissance des moves de saut dans le talent Hmmmm
 	argent?:1;//augmente la puissance des moves d'argent dans le talent du Juif
 	backshot?:1;//augmente la puissance des moves de backshot pour l'Inspecteur de l'hygiene
+	beam?:1;//augmente la puissance des moves contenant "beam" pour Inspecteur Gadget
 }
 
 export interface HitEffect {

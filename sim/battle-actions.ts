@@ -363,11 +363,15 @@ export class BattleActions {
 	 * Dancer.
 	 */
 	useMove(
-		move: Move | string, pokemon: Pokemon, options?: {
+		move: Move | string, pokemon: Pokemon,options?: {
 			target?: Pokemon | null, sourceEffect?: Effect | null,
-			zMove?: string, maxMove?: string,
-		}
+			zMove?: string, maxMove?: string, is_from_ability?: boolean 
+		},
 	) {
+		if(options?.is_from_ability != undefined && options.is_from_ability) {
+			const tryMoveResult = this.battle.runEvent('TryMoveAbility', pokemon, null, null, move);
+			if (!tryMoveResult) return false;
+		}
 		pokemon.moveThisTurnResult = undefined;
 		const oldMoveResult: boolean | null | undefined = pokemon.moveThisTurnResult;
 		const moveResult = this.useMoveInner(move, pokemon, options);
