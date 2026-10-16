@@ -23423,7 +23423,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
         },
         target: "allAdjacent",
         type: "Stellar",
-    }
+    },
     soulswap: {
         num: 10000,
         accuracy: true,

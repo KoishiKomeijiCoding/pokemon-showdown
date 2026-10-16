@@ -7054,7 +7054,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 
 				const listeIdStat = ["hp", "atk", "def", "spa", "spd", "spe"];
                 for (const idStat of listeIdStat) {
-                    pokemon.baseStoredStats[idStat] = currentStats[idStat] * 2;
+                    //pokemon.baseStoredStats[idStat] = currentStats[idStat] * 2;
                 }
                 pokemon.updateSpeed();
             }
