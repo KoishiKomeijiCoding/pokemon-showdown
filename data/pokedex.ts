@@ -21881,6 +21881,25 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 210.0,
 		eggGroups: ["Monster"],
 	},
-
+	inspecteurgadget: { //proposition de Phrog
+		num: 10000,
+		name: "Inspecteur Gadget",
+		types: ["Electric","Steel"],
+		baseStats: {hp: 50, atk: 160, def: 90, spa: 160, spd: 70, spe: 130 },
+		abilities: { 0: 'Go Go Gadget'},
+		heightm: 2.00,
+		weightkg: 75.0,
+		eggGroups: ["Human-Like"],
+	},
+	songoku: {  //A NE SURTOUT PAS METTRE EN OU IL EST LA UNIQUEMENT POUR LE TROLL
+	num: 10000,
+		name: "Son Goku",
+		types: ["Stellar"],
+		baseStats: {hp: 250, atk: 250, def: 250, spa: 250, spd: 250, spe: 250 },
+		abilities: { 0: 'Je suis Goku'},
+		heightm: 1.75,
+		weightkg: 80.0,
+		eggGroups: ["Human-Like"],
+	},
 };
 

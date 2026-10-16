@@ -121,10 +121,11 @@ export interface EventMethods {
 	onType?: (this: Battle, types: string[], pokemon: Pokemon) => string[] | void;
 	onUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onUpdate?: (this: Battle, pokemon: Pokemon) => void;
-	onWeather?: (this: Battle, target: Pokemon, source: null, effect: Condition) => void;
+	onWeather?: (this: Battle, target: Pokemon, source: null, effect: Condition) => boolean | void;
 	onWeatherModifyDamage?: CommonHandlers['ModifierSourceMove'];
 	onModifyDamagePhase1?: CommonHandlers['ModifierSourceMove'];
 	onModifyDamagePhase2?: CommonHandlers['ModifierSourceMove'];
+	onFoeTryMoveAbility?: (this: Battle,move: Move | string,source: Pokemon,target: Pokemon) => void; //methode pour les mooves ability "zap ou le sorcier de glace"
 	onFoeDamagingHit?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
 	onFoeAfterEachBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon) => void;
 	onFoeAfterHit?: MoveEventMethods['onAfterHit'];
