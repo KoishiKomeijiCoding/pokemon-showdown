@@ -2584,7 +2584,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "Base move affects power. Allies: +1/6 max HP.",
 	},
 	gmaxfireball: {
-		name: "G-Max Fire Ball",
+		name: "G-Max Fireball",
 		desc: "Power is 160 regardless of the base move's Max Move power. This move and its effects ignore the Abilities of other Pokemon.",
 		shortDesc: "Always 160 power. Ignores Abilities.",
 	},
@@ -7704,7 +7704,267 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	ceremoniesecrete: {
-		name: 'Secret Ceremony: Hidden Season"',
+		name: "Zippy Zap",
 		shortDesc: "Power doubles and type varies in each weather.",
+	},
+	malveillancemax: {
+		name: "Malveillance Max",
+		shortDesc: "Dark, all-around debuffing Max move with flinch and paralysis.",
+	},
+	epsteintemple: {
+		name: "Epstein Temple",
+		shortDesc: "Creates a bizarre pseudo-weather field.",
+	},
+	nihillight: {
+		name: "Nihil Light",
+		shortDesc: "100 BP Special move that ignores evasive drops.",
+	},
+	mijotage: {
+		name: "Mijotage",
+		shortDesc: "Raises Sp. Atk sharply with a status effect.",
+	},
+	withthistreasureisummon: {
+		name: "With this treasure I summon",
+		shortDesc: "Summons a volatile treasure effect.",
+	},
+	zap: {
+		name: "Zap",
+		shortDesc: "Electric blast that changes power with weather.",
+	},
+	tentencule: {
+		name: "Tentencule",
+		shortDesc: "Type-based tentacle strike from the user's first type.",
+	},
+	amnesia1g: {
+		name: "Amnesia 1G",
+		shortDesc: "Raises Sp. Atk and Sp. Def by 2.",
+	},
+	cancer: {
+		name: "Cancer",
+		shortDesc: "A custom attack with weird anti-status and condition effects.",
+	},
+	normalisator: {
+		name: "Normalisator",
+		shortDesc: "Unusual status move that normalizes battle flow.",
+	},
+	cestlheuredesortirlespoubelles: {
+		name: "C'est l'heure de sortir les poubelles",
+		shortDesc: "Trash-themed physical hit that messes with foes.",
+	},
+	cendresdepompei: {
+		name: "Cendres de Pompei",
+		shortDesc: "150 BP Fire blast hitting all nearby foes.",
+	},
+	chaise: {
+		name: "Chaise",
+		shortDesc: "80 BP physical hit with a self-centered side effect.",
+	},
+	toutailier: {
+		name: "Toutailier",
+		shortDesc: "Status move that triggers Perish Song in a narrow HP range.",
+	},
+	fuckyou: {
+		name: "Fuck you",
+		shortDesc: "Priority 3 sound attack that only works on turn one.",
+	},
+	bzzzzt: {
+		name: "Bzzzzt",
+		shortDesc: "Random Thunder strike on a foe.",
+	},
+	chantdopera: {
+		name: "Chant d'opera",
+		shortDesc: "Sound-based status move that confuses and disrupts.",
+	},
+	balles: {
+		name: "Balles",
+		shortDesc: "50 BP Steel attack with guaranteed critical hits.",
+	},
+	imomniingit: {
+		name: "I'm omniing it",
+		shortDesc: "10-hit physical move with extremely high pressure.",
+	},
+	standreadyformyworm: {
+		name: "Stand Ready For my Worm",
+		shortDesc: "120 BP physical hit with a high crit ratio.",
+	},
+	moreofapettome: {
+		name: "More of a pet to me",
+		shortDesc: "Status move that sets up Swords Dance and Baton Pass.",
+	},
+	vibecoding: {
+		name: "Vibecoding",
+		shortDesc: "A weird status move with type-based nonsense.",
+	},
+	deforestation: {
+		name: "Deforestation",
+		shortDesc: "Clears the battlefield terrain.",
+	},
+	epsteinisland: {
+		name: "Epstein Island",
+		shortDesc: "Creates an island pseudo-weather field.",
+	},
+	dataserver: {
+		name: "Data Server",
+		shortDesc: "Creates a server pseudo-weather field.",
+	},
+	domaineexpension: {
+		name: "Domaine Expension",
+		shortDesc: "Expands the active server or terrain effect.",
+	},
+	makedataserver: {
+		name: "Make Data Server",
+		shortDesc: "Sets up a data-server field.",
+	},
+	secretceremonyhiddenseason: {
+		name: "Secret Ceremony Hidden Season",
+		shortDesc: "Weather-dependent Special attack with shifting type.",
+	},
+	bowling: {
+		name: "Bowling",
+		shortDesc: "120 BP Rock move that hits cleanly.",
+	},
+	mangetesmorts: {
+		name: "Mange Tes Morts",
+		shortDesc: "Status move that applies a weird trap or volatile effect.",
+	},
+	boostlevel: {
+		name: "Lost Level",
+		shortDesc: "Raises the user's level by 5.",
+	},
+	gemalert: {
+		name: "Gem Alert",
+		shortDesc: "Stalling status move with a gem alert volatile.",
+	},
+	corruption: {
+		name: "Corruption",
+		shortDesc: "Stalling status move with corruption effects.",
+	},
+	wonderfulberry: {
+		name: "Wonderful Berry",
+		shortDesc: "Physical item-like move that interacts with held berries.",
+	},
+	screamer: {
+		name: "Screamer",
+		shortDesc: "Priority 3 sound move that only works on turn one.",
+	},
+	poweroutrage: {
+		name: "Power Outrage",
+		shortDesc: "Creates muddy and watery sport fields.",
+	},
+	magic: {
+		name: "Magic",
+		shortDesc: "Status move with random absurd battle effects.",
+	},
+	fireboll: {
+		name: "Fireboll",
+		shortDesc: "Fire move that damages nearby allies as well as the foe.",
+	},
+	allahakbar: {
+		name: "Allah Akbar",
+		shortDesc: "Explosive Normal move that self-destructs after impact.",
+	},
+	coran: {
+		name: "Coran",
+		shortDesc: "Status move with a sacred or volatile effect.",
+	},
+	musiquearabe: {
+		name: "Musique Arabe",
+		shortDesc: "Turns the target's last move into a weapon.",
+	},
+	dijihad: {
+		name: "Dijihad",
+		shortDesc: "Priority 3 status move that traps the foe.",
+	},
+	executionpublique: {
+		name: "Execution Publique",
+		shortDesc: "Adds Follow Me to the target and disrupts action.",
+	},
+	brainrot: {
+		name: "Brainrot",
+		shortDesc: "Physical move that fails against cantsuppress abilities.",
+	},
+	supergravity: {
+		name: "Super Gravity",
+		shortDesc: "Creates Super Gravity for several turns.",
+	},
+	masterofgravity: {
+		name: "Master of Gravity",
+		shortDesc: "Applies a gravity-control volatile.",
+	},
+	monologue: {
+		name: "Monologue",
+		shortDesc: "Charge-based status move with long speeches.",
+	},
+	impostor: {
+		name: "Impostor",
+		shortDesc: "Applies the Impostor volatile.",
+	},
+	reveal: {
+		name: "Reveal",
+		shortDesc: "Type-based reveal attack from the user's first type.",
+	},
+	ninjaflop: {
+		name: "Ninja Flop",
+		shortDesc: "Both user and target gain Endure.",
+	},
+	nainsdenoel: {
+		name: "Nains de Noel",
+		shortDesc: "Low-power hit with boosted effectiveness against Fire.",
+	},
+	megasaut: {
+		name: "Mega Saut",
+		shortDesc: "95 BP physical move that traps the target.",
+	},
+	megauppercut: {
+		name: "Mega Uppercut",
+		shortDesc: "Steel hit that forces a switch.",
+	},
+	megabounce: {
+		name: "Mega Bounce",
+		shortDesc: "Charge-based jump move with gravity and distance.",
+	},
+	protectionmediatique: {
+		name: "Protection Mediatique",
+		shortDesc: "Protective status move with a media shield volatile.",
+	},
+	gigapaf: {
+		name: "Giga paf",
+		shortDesc: "Charge-based physical hit with backshot logic.",
+	},
+	savon: {
+		name: "Savon",
+		shortDesc: "Sets a soap volatile that amplifies later hits.",
+	},
+	baissetoimec: {
+		name: "Baisse toi mec",
+		shortDesc: "Soap-boosted strike that hits much harder.",
+	},
+	douche: {
+		name: "Douche",
+		shortDesc: "Creates a shower pseudo-weather field.",
+	},
+	debatpolitique: {
+		name: "Debat politique",
+		shortDesc: "Creates a political debate pseudo-weather field.",
+	},
+	ragebait: {
+		name: "Rage bait",
+		shortDesc: "Low-power move that fails against cantsuppress abilities.",
+	},
+	killyourself: {
+		name: "Kill yourself",
+		shortDesc: "Massive Electric move that can kill almost anything.",
+	},
+	underwhelminggadgetjob: {
+		name: "Underwhelming Gadgetjob",
+		shortDesc: "Six-hit physical attack with low power and chance to annoy.",
+	},
+	genkidama: {
+		name: "Genkidama",
+		shortDesc: "200 BP Special charge move with huge power.",
+	},
+	soulswap: {
+		name: "Soul Swap",
+		shortDesc: "Swaps a soul or volatile effect between combatants.",
 	},
 };

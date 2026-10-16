@@ -96,7 +96,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		block: "  [POKEMON] is protected by an aromatic veil!",
 	},
 	asone: {
-		name: "As One",
+		name: "Aroma Veil",
 		shortDesc: "See 'As One (Glastrier)' and 'As One (Spectrier)'.",
 
 		start: "  [POKEMON] has two Abilities!",
@@ -2322,7 +2322,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 
 	// Shitpost
 	hiddenstarinfourseasons: {
-		name: "Hidden Star in Four Seasons",
+		name: "HiddenStar in FourSeasons",
 		shortDesc: "On switch-in and at the end of each turn, this pokemon changes the weather.",
 
 		activate: "  [POKEMON] prend le contrôle des saisons !",
@@ -2332,5 +2332,185 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		shortDesc: "On switch-in and at the end of each turn, this pokemon changes the weather.",
 
 		start: "Les saisons sont sans dessus-dessous !",
+	},
+	intrusion: {
+		name: "Intrusion",
+		shortDesc: "Damages the user when healing is attempted; Dark moves fail.",
+	},
+	superopportunist: {
+		name: "Super Opportunist",
+		shortDesc: "Copies positive boosts and applies them later.",
+	},
+	epsteinfiles: {
+		name: "Epstein Files",
+		shortDesc: "Contact hits can spread this Ability and lower weak foes.",
+	},
+	homochromie: {
+		name: "Homochromie",
+		shortDesc: "Copies a nearby foe's typing on switch-in.",
+	},
+	mecaniques1g: {
+		name: "Mecaniques 1G",
+		shortDesc: "Old-gen-broken: ignores several immunities and boosts resisted hits.",
+	},
+	pompeibaby: {
+		name: "Pompei Baby",
+		shortDesc: "Survives at 1 HP and transforms after a turn.",
+	},
+	motivation: {
+		name: "Motivation",
+		shortDesc: "Slicing moves hit harder and damaging hits boost Attack.",
+	},
+	hawkingroom: {
+		name: "Hawking Room",
+		shortDesc: "Adds Trick Room, Wonder Room, Magic Room, and Gravity.",
+	},
+	megaintimidate: {
+		name: "Mega-Intimidate",
+		shortDesc: "Lowers adjacent foes' Attack by 2 on switch-in.",
+	},
+	forcedentry: {
+		name: "Forced Entry",
+		shortDesc: "Uses Earthquake immediately on switch-in.",
+	},
+	bienveillance: {
+		name: "Bienveillance",
+		shortDesc: "Reacts to damage by dealing recoil to the attacker.",
+	},
+	electricityyyy: {
+		name: "ELECTRICITYYYY",
+		shortDesc: "Uses Zap as soon as it enters battle.",
+	},
+	auuwoh: {
+		name: "auuwoh",
+		shortDesc: "Repeating the same move boosts its damage.",
+	},
+	areyousure: {
+		name: "Are you sure ?",
+		shortDesc: "Lowers adjacent foes' Attack and alters forme logic.",
+	},
+	terrorisme: {
+		name: "Terrorisme",
+		shortDesc: "Explosive moves hit harder and ignore Normal immunity.",
+	},
+	grosserveur: {
+		name: "Gros Serveur",
+		shortDesc: "Water moves are boosted and redirected.",
+	},
+	musiquecool: {
+		name: "Musique Cool",
+		shortDesc: "Boosts Sp. Atk each turn and powers bullet moves.",
+	},
+	chiantman: {
+		name: "Chiantman",
+		shortDesc: "Sets Grassy Terrain and Leech Seeds all foes.",
+	},
+	pancake: {
+		name: "Pancake",
+		shortDesc: "KOing a foe heals and raises its level.",
+	},
+	joyauxrare: {
+		name: "Joyaux Rare",
+		shortDesc: "Ground moves hit harder and can trigger rare gem upgrades.",
+	},
+	wonderfulsliceoflefto: {
+		name: "Wonderful Slice of Lefto",
+		shortDesc: "Steals foes' Leftovers and heals from them.",
+	},
+	cinqnuitschezfreddy: {
+		name: "Cinq nuits chez Freddy",
+		shortDesc: "Uses Mean Look on all foes and boosts Fire.",
+	},
+	imawizard: {
+		name: "I'm a Wizard",
+		shortDesc: "Shifts forms and reflects status with a shield.",
+	},
+	normalnormalize: {
+		name: "Normal Normalize",
+		shortDesc: "Turns most moves into Normal and blocks Intimidate.",
+	},
+	mercredi: {
+		name: "Mercredi",
+		shortDesc: "Poison hits trigger a special effect and boost Sp. Atk.",
+	},
+	ratiosupreme: {
+		name: "Ratio Supreme",
+		shortDesc: "Accuracy drops as more allies faint.",
+	},
+	pouvoirgigamax: {
+		name: "Pouvoir Gigamax",
+		shortDesc: "Permanent Dynamax plus a random G-Max move.",
+	},
+	aurafarming: {
+		name: "Aura Farming",
+		shortDesc: "Charges up, then boosts all stats when it moves.",
+	},
+	executiondalwaysfurrious: {
+		name: "Execution d'Always Furrious",
+		shortDesc: "Raises its own Attack and lowers foes' Attack.",
+	},
+	aislop: {
+		name: "AI Slop",
+		shortDesc: "Randomly swaps in a custom move for a foe.",
+	},
+	poteglace: {
+		name: "Pote Glace",
+		shortDesc: "Uses Icy Wind and freezes foes after enough turns.",
+	},
+	consume: {
+		name: "CONSUME",
+		shortDesc: "Leech Seed turns into a drain on the user.",
+	},
+	eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill: {
+		name: "Eternal Senselessness Bearing the Alias of Chaos who Manipulates Gravity at Will",
+		shortDesc: "Sets Super Gravity and blocks explosive self-destructs.",
+	},
+	amogus: {
+		name: "Amogus",
+		shortDesc: "Marks a random active foe as the impostor.",
+	},
+	ballondiscret: {
+		name: "Ballon Discret",
+		shortDesc: "Uses Smoke Screen and Celebrate; weak moves hit harder.",
+	},
+	worldwidecorruption: {
+		name: "World Wide Corruption",
+		shortDesc: "Blocks negative stat drops and may Parting Shot.",
+	},
+	ongachepaslesavon: {
+		name: "On gache pas le savon",
+		shortDesc: "A chaotic anti-status, anti-suppression gimmick.",
+	},
+	opinionpolitique: {
+		name: "Opinion politique",
+		shortDesc: "Randomly uses Uproar or Taunt after contact.",
+	},
+	auramalveillante: {
+		name: "Aura Malveillante",
+		shortDesc: "Dark aura buff plus a random self-destruct gamble.",
+	},
+	gogogadget: {
+		name: "Go Go Gadget",
+		shortDesc: "Boosts beam moves, dodges at full HP, and Metronomes.",
+	},
+	jesuisgoku: {
+		name: "Je suis Goku",
+		shortDesc: "Doubles stat changes and boosts all stats randomly.",
+	},
+	homonculusdream: {
+		name: "Homonculus Dream",
+		shortDesc: "Collects souls to evolve into an empowered form.",
+	},
+	homonculusnightmare: {
+		name: "Homonculus Nightmare",
+		shortDesc: "Randomly removes PP from one move each turn.",
+	},
+	trueemperor: {
+		name: "True Emperor",
+		shortDesc: "Adds Stellar typing and blocks debuffs and status.",
+	},
+	drip: {
+		name: "Drip",
+		shortDesc: "Positive stat boosts trigger Baton Pass.",
 	},
 };

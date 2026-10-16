@@ -21926,7 +21926,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
         eggGroups: ["Undiscovered"],
         changesFrom: "Taira no Fumikado",
         /* + mêmes handlers onAnyDamage / onSoulAscension que la forme de base */
-    },	inspecteurgadget: { //proposition de Phrog
+    },	
+	inspecteurgadget: { //proposition de Phrog
 		num: 10000,
 		name: "Inspecteur Gadget",
 		types: ["Electric","Steel"],
