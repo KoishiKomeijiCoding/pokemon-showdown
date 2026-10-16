@@ -21805,7 +21805,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Wilhelm von Clausewitz Halcyon HISUIMARU",
 		types: ["Psychic", "Poison"],
 		baseStats: { hp: 50, atk: 50, def: 180, spa: 80, spd: 180, spe: 50 },
-		abilities: { 0: 'omitted'},
+		abilities: { 0: 'Eternal Senselessness Bearing the Alias of Chaos who Manipulates Gravity at Will'},
 		heightm: 1.85,
 		weightkg: 82.0,
 		eggGroups: ["Human-Like"],
