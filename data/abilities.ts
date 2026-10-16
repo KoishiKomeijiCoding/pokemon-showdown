@@ -6657,7 +6657,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 3003,
 	},
-	omitted: {
+	eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill: {
 		onStart(source) {
 			this.field.addPseudoWeather('supergravity', source);
 			// source.addVolatile('eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill');
@@ -6691,7 +6691,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			pokemon.removeVolatile('eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill');
 		},
 		flags: {},
-		name: 'omitted',
+		name: 'Eternal Senselessness Bearing the Alias of Chaos who Manipulates Gravity at Will', //ratio je le garde comme ça
 		rating: 2,
 		num: 3003,
 	},
