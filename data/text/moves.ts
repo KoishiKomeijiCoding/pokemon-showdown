@@ -7725,7 +7725,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	withthistreasureisummon: {
 		name: "With this treasure I summon",
-		shortDesc: "Summons a volatile treasure effect.",
+		shortDesc: "Summons Donald Trump.",
 	},
 	zap: {
 		name: "Zap",
