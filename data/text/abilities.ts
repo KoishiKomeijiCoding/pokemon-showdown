@@ -2463,7 +2463,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill: {
 		name: "Eternal Senselessness Bearing the Alias of Chaos who Manipulates Gravity at Will",
-		shortDesc: "Sets Super Gravity and blocks explosive self-destructs.",
+		shortDesc: 'This "ability" sets up what we usually call an "pseudo-weather" which increases the "accuracy" of every moves. Furthermore, the "power" of my gravity is so powerful that "flying" types pokemon and pokemon who "levitate" are now stuck on the "ground". When someone with this magnificient "ability" is under the "pseudo-weather" Super Gravity all of his "moves" hits all adjacents "targets" moreover the "user" of this "ability" will also be "flying" under the "Super-Gravity" wich makes him to all "ground" type "mooves"',
 	},
 	amogus: {
 		name: "Amogus",
@@ -2512,5 +2512,9 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	drip: {
 		name: "Drip",
 		shortDesc: "Positive stat boosts trigger Baton Pass.",
+	},
+	aniqtoohigh: {
+		name: "An IQ Too High ?",
+		shortDesc: "Gives imprison,charge and magnetic rise also return attacks that came from abilities.",
 	},
 };

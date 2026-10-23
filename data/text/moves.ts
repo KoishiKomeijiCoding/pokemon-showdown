@@ -7967,4 +7967,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Soul Swap",
 		shortDesc: "Swaps a soul or volatile effect between combatants.",
 	},
+	theoriedelarelativite: {
+		name: "Théorie de la Relativité",
+		shortDesc: "Removes all of the pseudo-weather,weather, terrains and boost the user",
+	},
+	congredelascience: {
+		name: "Congre de la Science",
+		shortDesc: "Set up the Congre de la Science.",
+	},
 };

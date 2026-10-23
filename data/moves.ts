@@ -23247,12 +23247,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { nonsky: 1, metronome: 1, shitpost: 1 },
 		pseudoWeather:'douche',
 		condition: {
-			duration: 5,
+			duration: 3,
 			durationCallback(source, effect) {
-				if (source?.hasItem('terrainextender')) {
-					return 8;
-				}
-				return 5;
+				return 3;
 			},
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
@@ -23293,12 +23290,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { nonsky: 1, metronome: 1, shitpost: 1 },
 		pseudoWeather: 'debatpolitique',
 		condition: {
-			duration: 5,
+			duration: 3,
 			durationCallback(source, effect) {
-				if (source?.hasItem('terrainextender')) {
-					return 8;
-				}
-				return 5;
+				return 3;
 			},
 		onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
@@ -23530,4 +23524,102 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
         type: "Ghost",
         contestType: "Clever",
     },
+	theoriedelarelativite: {
+		num: 14,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Theorie de la relativite",
+		pp: 20,
+		priority: 0,
+		flags: { snatch: 1, dance: 1, metronome: 1, shitpost: 1 },
+		onHit(pokemon) {
+			let compteur = 0;
+			if(this.field.terrain != '') {
+				compteur = compteur + 1;
+				this.field.clearTerrain();
+			}
+			if(this.field.weather != '') {
+				compteur = compteur + 1;
+				this.field.clearWeather();
+			}
+			const tab = Object.keys(this.field.pseudoWeather);
+			for (const i in tab) {
+				compteur = compteur + 1;
+				this.field.removePseudoWeather(tab[i]);
+			}//on virre tout les pseudos weathers
+
+			for(let i = 0; i < compteur; i++) {
+				this.actions.useMove('acupressure', pokemon);
+			}
+
+		},
+		target: "self",
+		type: "Stellar",
+		zMove: { effect: 'clearnegativeboost' },
+		contestType: "Beautiful",
+	},
+	congredelascience: {
+		num: 356,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Congre de la science",
+		pp: 5,
+		priority: 0,
+		flags: { nonsky: 1, metronome: 1 },
+		pseudoWeather: 'congredelascience:',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				this.field.setWeather('sandstorm',source);
+				return 5;
+			},
+			onFieldStart(target, source) {
+				this.add('-fieldstart', 'move: Congre de la science');
+			},
+			onFieldResidual() {
+				let moves
+				let randomMove;
+				let nb
+				for (const pokemon of this.getAllActive()) {
+					nb = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
+					for (let i = 0; i < nb; i++) {
+							moves = this.dex.moves.all().filter(move => (
+									(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
+									move.flags['metronome']
+								));
+							if (moves.length) {
+								moves.sort((a, b) => a.num - b.num);
+								randomMove = this.sample(moves);
+							}
+							if (!randomMove) return false;
+							if(pokemon.moveSlots.length < 24) { //on évite d'entrer en terre inconu...
+								pokemon.moveSlots[pokemon.moveSlots.length] = 
+								{
+									id : randomMove.id,
+									move : randomMove.name,
+									pp : randomMove.pp,
+									maxpp : randomMove.pp,
+									disabled: false,
+									used: false,
+									target: randomMove.target,
+									virtual:false,
+								} //Pour une raison obscure l'objet move n'intègre pas l'interface MoveSlot, dcp je fais ça à la main
+							}
+					}
+					this.add('-message', `${pokemon.name} participe au congré de la science !`);
+				}	
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 2,
+			onFieldEnd() {
+				this.add('-fieldend', 'move: Congre de la science');
+			},
+		},
+		target: "all",
+		type: "Psychic",
+		zMove: { boost: { spa: 1 } },
+		contestType: "Clever",
+	},
 };

@@ -6897,7 +6897,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['beam']) {
-				return this.chainModify(1.3);
+				return this.chainModify(1.5);
 			}
 		},
 		onDamagePriority: -30,
@@ -6983,8 +6983,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2,
 		num: 2740,
 	},
-	aniqtoohigh: 
-	{
+	aniqtoohigh: {
+		onStart(pokemon) {
+			pokemon.addVolatile('imprison');
+			pokemon.addVolatile('charge');
+			pokemon.addVolatile('magnetrise');
+		},
 		onFoeTryMoveAbility(move,source){ //event custom qui choppe les mooves venant d'ability et les cancels parce que mdr
 			const abilityHolder = this.effectState.target //this.effectState.target = le pokemon qui a l'ability 
 			//je comprends pas pk on utilise pas plus ça c'est super pratique et c'est marqué qu'on peut faire ça à un endroit random dans le code mdr
