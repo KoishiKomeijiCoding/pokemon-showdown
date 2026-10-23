@@ -104117,7 +104117,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 		}
 	},
 	teslaeteinstein: {
-			ancientpower: ["9L16", "8L16", "8S11", "7L10", "6L10", "5L10", "4T", "4L10", "4S0"],
+		learnset: {
 			aurasphere: ["9M", "9L48", "8M", "8L48", "7L37", "7S7", "7S8", "7S9", "7S10", "6L37", "6S5", "5L37", "5S4", "4L37"],
 			blizzard: ["9M", "8M", "7M", "6M", "5M", "4M"],
 			bodypress: ["9M", "8M"],
@@ -104234,5 +104234,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			darkvoid: ["9M"],
 			spacialrend: ["9M"],
 			revivalblessing: ["9M"],
+		}
 	}
-};
+}
