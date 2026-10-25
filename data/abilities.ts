@@ -6394,7 +6394,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
                 this.add('-activate', target, "ability: I'm a Wizard!");
                 this.effectState.shield = false;
                 this.add('-end', target, `bouclier`); 
-				this.actions.useMove("fireboll", target,{ target: source })
+				this.actions.useMove("fireboll", target,{ target: source ,is_from_ability: true});
                 return 0;
             }
         },
@@ -6666,7 +6666,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onAnyTryMove(target, source, effect) {
 				if (['explosion', 'mindblown', 'mistyexplosion', 'selfdestruct', 'allahakbar', 'selfdestruct1g'].includes(effect.id)) {
 					this.attrLastMove('[still]');
-					this.add('cant', target, 'ability: omitted', effect, `[of] ${source}`);
+					this.add('cant', target, 'ability: Eternal Senselessness Bearing the Alias of Chaos who Manipulates Gravity at Will', effect, `[of] ${source}`);
 					this.add('-message', 'because of omitted');
 					return false;
 				}
@@ -6679,7 +6679,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTryHit(target, source, move) {
 				if ((target !== source && move.type === 'Ground') || ['smackdown', 'thousandarrows', 'gravapple'].includes(move.id)) {
 					move.accuracy = true;
-					this.add('-immune', target, '[from] ability: omitted');
+					this.add('-immune', target, '[from] ability: Eternal Senselessness Bearing the Alias of Chaos who Manipulates Gravity at Will');
 					this.add('-message', 'because of omitted');
 					return null;
 				}
@@ -7154,7 +7154,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (boostPositif) {
 				this.add('-activate', target, '[from] ability: Drip')
 				this.add('-message', `${target.name} a du drip !`);
-				this.actions.useMove('batonpass', target);
+				this.actions.useMove('batonpass', target,{ is_from_ability: true});
 			}
 		},
 		flags: {},
