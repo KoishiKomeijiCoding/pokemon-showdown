@@ -70,6 +70,7 @@ interface MoveFlags {
 	argent?:1;//augmente la puissance des moves d'argent dans le talent du Juif
 	backshot?:1;//augmente la puissance des moves de backshot pour l'Inspecteur de l'hygiene
 	beam?:1;//augmente la puissance des moves contenant "beam" pour Inspecteur Gadget
+	tourbillon?:1;//donne aux moves gust et twister la propriete de pivots dans le talent de Hal
 }
 
 export interface HitEffect {

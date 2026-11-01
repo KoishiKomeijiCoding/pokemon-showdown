@@ -6996,6 +6996,79 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "An IQ too high ?",
 		rating: 3,
 		num: 1876,
-	}
+	},
+	boomerang: {
+		onPrepareHit(source, target, move) {
+			if (move.category === 'Status' || move.multihit || move.flags['noparentalbond'] || move.flags['charge'] ||
+				move.flags['futuremove'] || move.spreadHit || move.isZ || move.isMax) return;
+			move.multihit = 2;
+			move.multihitType = 'parentalbond';
+		},
+		// Damage modifier implemented in BattleActions#modifyDamage()
+		onSourceModifySecondaries(secondaries, target, source, move) {
+			if (move.multihitType === 'parentalbond' && move.id === 'secretpower' && move.hit < 2) {
+				// hack to prevent accidentally suppressing King's Rock/Razor Fang
+				return secondaries.filter(effect => effect.volatileStatus === 'flinch');
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Dragon') {
+				this.debug('Voush boost');
+				return this.chainModify(1.5);
+			}
+		},
+			onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['tourbillon']) {
+				move.selfSwitch = true;
+				return this.chainModify(1.5);
+			}
+		},
+		onSwitchOut(pokemon) {
+			pokemon.heal(pokemon.baseMaxhp / 3);
+			this.actions.useMove('tailwind', pokemon,{is_from_ability: true});
+		},
+		flags: {},
+		name: "Boomerang",
+		rating: 4.5,
+		num: 1845,
+	},
+	goblincage: {
+	   onSwitchOut(pokemon) {
+            if (pokemon.baseSpecies.baseSpecies !== 'Cage Gobeline') return;
+            if (pokemon.species.forme === 'BaseC') {
+                pokemon.formeChange('Cage Gobeline Evoluee', this.effect, true);
+				this.add('-activate', pokemon, "ability: Goblin Cage");
+                return;
+                }
+            if (pokemon.species.forme === 'EvolutionC') {
+                pokemon.formeChange('Cage Gobeline', this.effect, true);
+                return;
+                }
+        },
+		onSourceModifyDamage(damage, source, target, move, pokemon) {
+			if (target.hp >= target.maxhp) {
+				this.debug('Cage brisee'); //jsp si cest possible de changer de sprite ici en mode il est plus dans la cage
+				this.actions.useMove('howl', target,{is_from_ability: true})
+				return this.chainModify(0.5);
+			}
+		},
+		onSwitchIn(pokemon) {
+			if (pokemon.species.forme === 'BaseC') {
+                this.add('-activate', pokemon, "ability: Goblin Cage");
+				this.actions.useMove('bide', pokemon);
+			}
+			if (pokemon.species.forme === 'EvolutionC') {
+                this.add('-activate', pokemon, "ability: Goblin Cage");
+				this.actions.useMove('skydrop', pokemon);
+			}
+			
+		},
+		flags: {},
+		name: "Goblin Cage",
+		rating: 4.5,
+		num: 1645,
+	},
 };
 

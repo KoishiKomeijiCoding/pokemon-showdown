@@ -104028,4 +104028,30 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			teleport: ["9M"],
 		}
 	},
+	hal: {
+		learnset:{
+			uturn: ["9M"],
+			voltswitch: ["9M"],
+			flipturn: ["9M"],
+			teleport: ["9M"],
+			partingshot: ["9M"],
+			gust: ["9M"],
+			twister: ["9M"],
+		}
+	},
+	cagegobeline: {
+		learnset:{
+			bide: ["9M"],
+			superpower: ["9M"],
+			swagger: ["9M"],
+			woodhammer: ["9M"],
+			dizzypunch: ["9M"],
+			gigaimpact: ["9M"],
+			closecombat: ["9M"],
+			megapunch: ["9M"],
+			needlearm: ["9M"],
+			stompingtantrum: ["9M"],
+			focuspunch: ["9M"],
+		}
+	},
 };

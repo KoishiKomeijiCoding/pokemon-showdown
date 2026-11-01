@@ -8132,7 +8132,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Gust",
 		pp: 35,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, distance: 1, metronome: 1, wind: 1 },
+		flags: { protect: 1, mirror: 1, distance: 1, metronome: 1, wind: 1, tourbillon: 1 },
 		target: "any",
 		type: "Flying",
 		contestType: "Clever",
@@ -20417,7 +20417,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Twister",
 		pp: 20,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1, tourbillon: 1 },
 		secondary: {
 			chance: 20,
 			volatileStatus: 'flinch',
@@ -22630,7 +22630,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			'grosserveur', "terrorisme", "auuwoh", 'pompeibaby',
 			'bienveillance', 'megaintimidate', 'hawkingroom', 'motivation',
 			'6767', 'serenerock', 'homochromie', 'epsteinfiles', 'intrusion',
-			'aurafarming', 'megaopportunist', 'mercredi', 'poteglace', 'omitted'
+			'aurafarming', 'megaopportunist', 'mercredi', 'poteglace', 'omitted', 'voushvoush', 'jesuisgoku','worldwidecorruption'
 		];
 		const newAbility = this.sample(shitpostAbilities);
 		console.log(newAbility);
