@@ -7162,4 +7162,40 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 5,
 		num: 155,
 	},
+	jackpot:{
+		onModifyCritRatio(critRatio) {
+			return critRatio + 6;
+		},
+		onModifyAccuracy(accuracy, target) {
+			if (typeof accuracy !== 'number') return;
+			if (accuracy < 100) {
+				return this.chainModify(0);
+			}
+		},
+		onModifyMove(move) {
+			if (move.secondaries) {
+				for (const secondary of move.secondaries) {
+					if (secondary.chance) secondary.chance = 100;
+				}
+			}
+			if (move.self?.chance) move.self.chance = 1;
+		},
+		onSourceModifyAccuracy(accuracy, target, source, move) {	
+			return this.chainModify(300); //Xeno A ne missera PAS ces mooves	
+		},
+		onFoeModifyMove(move) {
+			if (move.secondaries) {
+				for (const secondary of move.secondaries) {
+					if (secondary.chance) secondary.chance = 0;
+				}
+			}
+		},
+		onFoeModifyCritRatio(critRatio) {
+			return critRatio - 6;
+		},
+		flags: {},
+		name: "Jackpot",
+		rating: 5,
+		num: 155,
+	},
 };

@@ -104235,5 +104235,18 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			spacialrend: ["9M"],
 			revivalblessing: ["9M"],
 		}
+	},
+	xenoa: {
+		learnset: {
+			makeitrain:["9M"],
+			dazzlinggleam: ["9M"],
+			rouletteofdestiny: ["9M"],
+			flashcannon: ["9M"],
+			thunderbolt: ["9M"],
+			calmmind: ["9M"],
+			powergem: ["9M"],
+			icywind: ["9M"],
+			aurasphere: ["9M"],
+		}
 	}
 }

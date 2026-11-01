@@ -11042,6 +11042,19 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Steel",
 		contestType: "Beautiful",
 	},
+	jackpot: {
+		num: 874,
+		accuracy: 100,
+		basePower: 150,
+		category: "Special",
+		name: "Jackpot",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, argent: 1 },
+		target: "allAdjacentFoes",
+		type: "Steel",
+		contestType: "Beautiful",
+	},
 	maliciousmoonsault: {
 		num: 696,
 		accuracy: true,
@@ -18511,6 +18524,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Status",
 		name: "With this treasure I summon",
 		pp: 1,
+		noPPBoosts: true,
 		priority: 0,
 		flags: { snatch: 1, nonsky: 1, metronome: 1 },
 		volatileStatus: 'withthistreasureisummon',
@@ -23620,5 +23634,93 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Psychic",
 		zMove: { boost: { spa: 1 } },
 		contestType: "Clever",
+	},
+	rouletteofdestiny: {
+		num: 87,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Roulette of Destiny",
+		pp: 1,
+		noPPBoosts: true,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, shitpost:1},
+		onHit(source) {
+			let number = this.random(1,6);
+			if (source.hasAbility("jackpot")) {
+				number = 6
+			}
+			this.add("-message", source.name + "a roll un " + number)
+			if (number == 6) {
+				const boost: SparseBoostsTable = {"atk": 1, "def": 1, "spa": 1, "spd": 1, "spe": 1};
+				this.boost(boost,source);
+				this.heal(source.baseMaxhp,source);
+				this.actions.useMove('jackpot', source);
+			}
+			if (number == 5) {
+				for(let i = 0;i < 3;i++) {
+					const stats: BoostID[] = [];
+					let stat: BoostID;
+					for (stat in source.boosts) {
+						if (source.boosts[stat] < 6) {
+							stats.push(stat);
+						}
+					}
+					if (stats.length) {
+						const randomStat = this.sample(stats);
+						const boost: SparseBoostsTable = {};
+						boost[randomStat] = 1;
+						this.boost(boost);
+					} 
+				}
+				this.heal(source.baseMaxhp/2,source);
+				this.actions.useMove('makeitrain', source);
+			}
+			if (number == 4) {
+				const stats: BoostID[] = [];
+				let stat: BoostID;
+				for (stat in source.boosts) {
+					if (source.boosts[stat] < 6) {
+						stats.push(stat);
+					}
+				}
+				if (stats.length) {
+					const randomStat = this.sample(stats);
+					const boost: SparseBoostsTable = {};
+					boost[randomStat] = 1;
+					this.boost(boost);
+				} 
+				this.heal(source.baseMaxhp/3,source);
+				this.actions.useMove('payday', source);
+			}
+			if (number == 3) {
+				this.actions.useMove('flashcannon', source);
+			}
+			if (number == 2) {
+				for(let i = 0;i < 3;i++) {
+					const stats: BoostID[] = [];
+					let stat: BoostID;
+					for (stat in source.boosts) {
+						if (source.boosts[stat] < 6) {
+							stats.push(stat);
+						}
+					}
+					if (stats.length) {
+						const randomStat = this.sample(stats);
+						const boost: SparseBoostsTable = {};
+						boost[randomStat] = -1;
+						this.boost(boost);
+					} 
+				}
+				this.damage(Math.round(source.maxhp / 2), source, source);
+				this.actions.useMove('mirrorshot', source);
+			}
+			if (number == 1) {
+				this.actions.useMove('explosion',source);
+			}
+		},
+		target: "self",
+		type: "Stellar",
+		contestType: "Cool",
 	},
 };

@@ -21957,5 +21957,15 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 75.0,
 		eggGroups: ["Human-Like"],
 	},
+	xenoa: { //proposition de Phrog
+		num: 10000,
+		name: "Xeno a",
+		types: ["Fairy","Steel"],
+		baseStats: {hp: 77, atk: 99, def: 77, spa: 99, spd: 77, spe: 77 },
+		abilities: { 0: 'jackpot'},
+		heightm: 2.00,
+		weightkg: 75.0,
+		eggGroups: ["Human-Like"],
+	},
 };
 
