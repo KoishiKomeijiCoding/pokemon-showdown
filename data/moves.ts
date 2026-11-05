@@ -23723,4 +23723,216 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Stellar",
 		contestType: "Cool",
 	},
+	badtrip: {
+		num: 10000,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Bad Trip",
+		pp: 10,
+		priority: 0,
+		flags: { nonsky: 1, metronome: 1, shitpost: 1 },
+		pseudoWeather:'badtrip',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				return 5;
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, attacker, defender, move) {
+				if (move.type === 'Bug' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+					return this.chainModify([5325, 4096]);
+				}
+			},
+			onFieldStart(field, source, effect, pokemon) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'Bad Trip', '[from] ability: ' + effect.name, `[of] ${source}`);
+				} else {
+					this.add('-fieldstart', 'Bad Trip');
+				}
+			},
+			onFieldResidual(pokemon) {
+				const x = Math.floor (Math.random()*(8))
+				for (const pokemon of this.getAllActive()) {
+					if (!pokemon.hasType("Bug")) {
+						if (x == 1) {
+						for (const target of pokemon.foes()) {
+						target.addVolatile('confusion', pokemon);
+							}
+				console.log(pokemon)
+				const item = pokemon.getItem();
+				if (pokemon.hp && item.isBerry) {
+					this.actions.useMove('belch', pokemon);
+							}
+						}
+					}
+				}
+			},
+			onEffectivenessPriority: 1,
+			onEffectiveness(typeMod, target, type, move) {
+				// The effectiveness of Freeze Dry on Water isn't reverted
+				if (move && move.id === 'freezedry' && type === 'Water') return;
+				if (move && !this.dex.getImmunity(move, type)) return 1;
+				// Ignore normal effectiveness, prevents bug with Tera Shell
+				if (typeMod) return -typeMod;
+		},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 7,
+			onFieldEnd() {
+				this.add('-fieldend', 'Bad Trip');
+			},
+		},
+		target: "all",
+		type: "Bug",
+		zMove: { boost: { spe: 1 } },
+		contestType: "Clever",
+	},
+	cadeauxdumali: {
+		num: 10000,
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		name: "Cadeaux du Mali",
+		pp: 10,
+		priority: 0,
+		flags: { nonsky: 1, metronome: 1, shitpost: 1 },
+		pseudoWeather: 'cadeauxdumali',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				return 5;
+			},
+		onFieldStart(field, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'Cadeaux du Mali', '[from] ability: ' + effect.name, `[of] ${source}`);
+				} else {
+					this.add('-fieldstart', 'Cadeaux du Mali');
+				}
+			},
+			onFieldResidual(pokemon) {
+				const x = Math.floor (Math.random()*(4))
+				for (const pokemon of this.getAllActive()) {
+					if (pokemon.hasAbility('jaipleindecadeaux')) {
+						if (x == 0) {
+						this.add('-message', pokemon + "J'ai les pneus");
+						this.actions.useMove('pneus', pokemon);
+						}
+						if (x == 1) {
+						this.add('-message', pokemon + "J'ai de l'eau");
+						this.actions.useMove('eau', pokemon);
+						}
+						if (x == 2) {
+						this.add('-message', pokemon + "J'ai la banane plantain");
+						this.actions.useMove('bananeplantain', pokemon);
+						}
+						if (x == 3) {
+						this.add('-message', pokemon + "J'ai le lance pierre, mais je n'ai pas les pierres");
+						this.actions.useMove('lancepierre', pokemon);
+						}
+					}
+				}
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 7,
+			onFieldEnd() {
+				this.add('-fieldend', 'Cadeaux du Mali');
+			},
+		},
+		target: "all",
+		type: "Ice",
+		zMove: { boost: { spe: 1 } },
+		contestType: "Clever",
+
+	},
+	pneus: {
+		num: 8116,
+		accuracy: 100,
+		basePower: 60,
+		category: "Physical",
+		name: "Pneus",
+		pp: 5,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
+		onHit(target,source) {
+			this.add('-clearallboost');
+			for (const pokemon of this.getAllActive()) {
+				pokemon.clearBoosts();
+			}
+			this.field.clearTerrain();
+		},
+		onAfterSubDamage() {
+			this.field.clearTerrain();
+		},
+		target: "randomNormal",
+		type: "Ground",
+		contestType: "Beautiful",
+	},
+	eau: {
+		num: 8117,
+		accuracy: 100,
+		basePower: 50,
+		category: "Special",
+		name: "Eau",
+		pp: 5,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
+		onHit(target,source) {
+			this.actions.useMove('aquaring', target);
+		},
+		target: "randomNormal",
+		type: "Water",
+		contestType: "Beautiful",
+	},
+	bananeplantain: {
+		num: 8118,
+		accuracy: 100,
+		basePower: 10,
+		category: "Physical",
+		name: "Banane Plantain",
+		pp: 5,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
+		onHit(target,source) {
+			this.actions.useMove('stockpile', target);
+		},
+		secondaries: [
+            {
+                chance: 100,
+                boosts: {
+					spe: -4,
+				}
+			},
+		],
+		target: "randomNormal",
+		type: "Grass",
+		contestType: "Beautiful",
+	},
+	lancepierre: {
+		num: 8119,
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		name: "Lance Pierre",
+		pp: 5,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
+		onHit(target,source) {
+			if (target.hasType("Rock")) {
+				this.actions.useMove('rollout', target);
+			} else { 
+				this.actions.useMove('rockblast', target);
+			}
+		},
+		secondaries: [
+            {
+                chance: 100,
+                boosts: {
+					def: -1,
+				}
+			},
+		],
+		target: "randomNormal",
+		type: "Rock",
+		contestType: "Beautiful",
+	},
 };
