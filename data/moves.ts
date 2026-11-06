@@ -23359,7 +23359,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Bug",
 		contestType: "Tough",
 	},
-		killyourself: {
+	killyourself: {
 		num: 9999,
 		accuracy: true,
 		basePower: 999,
@@ -23372,5 +23372,47 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "randomNormal",
 		type: "Electric",
 		contestType: "Tough",
+	},
+	caged: {
+		num: 393,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Caged",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		volatileStatus: 'Caged',
+		condition: {
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Caged');
+			},
+			onUpdate(pokemon) {
+				console.log(this.effectState.source.name)
+				if (this.effectState.source && !this.effectState.source.isActive && pokemon.volatiles['caged'] || (this.effectState.source.species.forme !== 'BaseC')) {
+					console.log(`Removing Caged volatile on ${pokemon}`);
+					pokemon.removeVolatile('caged');
+				}
+			},
+			onTryMove(attacker, defender, move) {
+				return false;
+			},
+            onAnyInvulnerability(target, source, move) {
+                return false;
+            },
+			onResidual(pokemon) {
+				this.damage(pokemon.baseMaxhp / 8);
+			},
+			onTrapPokemon(pokemon) {
+				pokemon.tryTrap();
+			},
+			onEnd(target) {
+				this.add('-end', target, 'Caged');
+			},
+		},
+		target: "self",
+		type: "Psychic",
+		zMove: { boost: { evasion: 1 } },
+		contestType: "Clever",
 	},
 };

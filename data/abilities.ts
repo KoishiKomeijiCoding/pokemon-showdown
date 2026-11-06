@@ -7034,39 +7034,23 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4.5,
 		num: 1845,
 	},
-	goblincage: {
-	   onSwitchOut(pokemon) {
-            if (pokemon.baseSpecies.baseSpecies !== 'Cage Gobeline') return;
-            if (pokemon.species.forme === 'BaseC') {
-                pokemon.formeChange('Cage Gobeline Evoluee', this.effect, true);
-				this.add('-activate', pokemon, "ability: Goblin Cage");
-                return;
-                }
-            if (pokemon.species.forme === 'EvolutionC') {
-                pokemon.formeChange('Cage Gobeline', this.effect, true);
-                return;
-                }
-        },
-		onSourceModifyDamage(damage, source, target, move, pokemon) {
-			if (target.hp >= target.maxhp) {
-				this.debug('Cage brisee'); //jsp si cest possible de changer de sprite ici en mode il est plus dans la cage
-				this.actions.useMove('howl', target,{is_from_ability: true})
-				return this.chainModify(0.5);
-			}
+	urrurr: {
+		onResidual(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Cage Gobeline' || pokemon.transformed || !pokemon.hp) return;
+			if (pokemon.hp < pokemon.maxhp / 2) {
+				if (pokemon.species.forme === 'BaseC') {
+					pokemon.formeChange('cagegobelinefree');
+				}
+			} 
 		},
-		onSwitchIn(pokemon) {
-			if (pokemon.species.forme === 'BaseC') {
-                this.add('-activate', pokemon, "ability: Goblin Cage");
-				this.actions.useMove('bide', pokemon);
+		onDamagingHit(damage, target, source, move) {
+			console.log(target.species.forme);
+			if (this.checkMoveMakesContact(move, source, target, true) && target.species.forme === 'BaseC') {
+				source.addVolatile('caged',target);
 			}
-			if (pokemon.species.forme === 'EvolutionC') {
-                this.add('-activate', pokemon, "ability: Goblin Cage");
-				this.actions.useMove('skydrop', pokemon);
-			}
-			
 		},
 		flags: {},
-		name: "Goblin Cage",
+		name: "Urr Urr",
 		rating: 4.5,
 		num: 1645,
 	},
