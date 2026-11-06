@@ -11042,6 +11042,19 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Steel",
 		contestType: "Beautiful",
 	},
+	jackpot: {
+		num: 874,
+		accuracy: 100,
+		basePower: 150,
+		category: "Special",
+		name: "Jackpot",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, argent: 1 },
+		target: "allAdjacentFoes",
+		type: "Steel",
+		contestType: "Beautiful",
+	},
 	maliciousmoonsault: {
 		num: 696,
 		accuracy: true,
@@ -18511,6 +18524,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Status",
 		name: "With this treasure I summon",
 		pp: 1,
+		noPPBoosts: true,
 		priority: 0,
 		flags: { snatch: 1, nonsky: 1, metronome: 1 },
 		volatileStatus: 'withthistreasureisummon',
@@ -22630,7 +22644,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			'grosserveur', "terrorisme", "auuwoh", 'pompeibaby',
 			'bienveillance', 'megaintimidate', 'hawkingroom', 'motivation',
 			'6767', 'serenerock', 'homochromie', 'epsteinfiles', 'intrusion',
-			'aurafarming', 'megaopportunist', 'mercredi', 'poteglace', 'omitted', 'voushvoush', 'jesuisgoku','worldwidecorruption'
+			'aurafarming', 'megaopportunist', 'mercredi', 'poteglace', 'omitted','aniqtoohigh','gogogadget'
 		];
 		const newAbility = this.sample(shitpostAbilities);
 		console.log(newAbility);
@@ -23247,12 +23261,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { nonsky: 1, metronome: 1, shitpost: 1 },
 		pseudoWeather:'douche',
 		condition: {
-			duration: 5,
+			duration: 3,
 			durationCallback(source, effect) {
-				if (source?.hasItem('terrainextender')) {
-					return 8;
-				}
-				return 5;
+				return 3;
 			},
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
@@ -23293,12 +23304,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { nonsky: 1, metronome: 1, shitpost: 1 },
 		pseudoWeather: 'debatpolitique',
 		condition: {
-			duration: 5,
+			duration: 3,
 			durationCallback(source, effect) {
-				if (source?.hasItem('terrainextender')) {
-					return 8;
-				}
-				return 5;
+				return 3;
 			},
 		onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
@@ -23414,5 +23422,347 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Psychic",
 		zMove: { boost: { evasion: 1 } },
 		contestType: "Clever",
+	},
+	underwhelminggadgetjob: {
+        num: 9989,
+        accuracy: 95,
+        basePower: 10,
+        category: "Physical",
+        name: "Underwhelming Gadgetjob",
+        pp: 5,
+        priority: 0,
+        multihit: 6,
+        multiaccuracy: true,
+        secondary: {
+            chance: 10,
+            status: 'underwhelmed',
+            volatileStatus: 'underwhelmed',
+            boosts: {
+                spe: -1,
+            },
+        },
+        onBasePower(basePower, pokemon, target) {
+            if (target.status === 'underwhelmed') {
+                return this.chainModify(2);
+            }
+        },
+        flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
+        target: "allAdjacent",
+        type: "Steel",
+        contestType: "Tough",
+    },
+    genkidama: {
+        num: 800,
+        accuracy: 100,
+        basePower: 200,
+        category: "Special",
+        name: "Genkidama",
+        pp: 10,
+        priority: 0,
+        flags: { charge: 1, protect: 1, mirror: 1, metronome: 1, beam: 1 },
+        onTryMove(attacker, defender, move) {
+            if (attacker.removeVolatile(move.id)) {
+                return;
+            }
+            this.add('-prepare', attacker, move.name);
+            if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+                return;
+            }
+            attacker.addVolatile('twoturnmove', defender);
+            return null;
+        },
+        target: "allAdjacent",
+        type: "Stellar",
+    },
+    soulswap: {
+        num: 10000,
+        accuracy: true,
+        basePower: 0,
+        category: "Status",
+        name: "Soul Swap",
+        pp: 5,
+        priority: 0,
+        flags: { protect: 1, mirror: 1, bypasssub: 1, noassist: 1, failcopycat: 1, failinstruct: 1, shitpost: 1 },
+        onHit(target, source) {
+            if (!target.hp) return false;
+            this.add('-activate', source, 'move: Soul Swap', target);
+
+            for (const poke of [source, target]) {
+                if (poke.volatiles['dynamax']) delete poke.volatiles['dynamax'];
+            }
+
+			// Items
+            const sourceItem = source.takeItem();
+            const targetItem = target.takeItem();
+            if (sourceItem) {
+                target.setItem(sourceItem, source);
+                this.add('-item', target, sourceItem, '[from] move: Soul Swap');
+            }
+            if (targetItem) {
+                source.setItem(targetItem, target);
+                this.add('-item', source, targetItem, '[from] move: Soul Swap');
+            }
+			
+			// Il faudra aussi inverser les niveaux
+
+			// Stats
+            const statsOf = (poke: Pokemon) => ({
+                atk: poke.storedStats.atk, def: poke.storedStats.def,
+                spa: poke.storedStats.spa, spd: poke.storedStats.spd, spe: poke.storedStats.spe,
+            });
+            const sourceStats = statsOf(source);
+            const targetStats = statsOf(target);
+            target.storedStats = sourceStats;
+			source.storedStats = targetStats;
+			
+			// Changements de statistiques
+            const sourceBoosts = { ...source.boosts };
+            const targetBoosts = { ...target.boosts };
+            let i: BoostID;
+            for (i in source.boosts) {
+                source.boosts[i] = targetBoosts[i] || 0;
+                target.boosts[i] = sourceBoosts[i] || 0;
+            }
+            this.add('-swapboost', source, target, '[from] move: Soul Swap');
+			
+			// Status
+			const sourceStatus = source.status;
+			const targetStatus = target.status;
+			target.status = sourceStatus;
+			source.status = targetStatus;
+			this.add('-swapstatus', source, target, '[from] move: Soul Swap');
+
+			// Volatiles => ne fct pas encore
+            const volatilesOf = (pokemon: Pokemon) => {
+				const pokemonVolatiles: {[k: string]: typeof pokemon.volatiles[ID]} = {}; // vibecode
+                for (const k in pokemon.volatiles) {
+                    if (this.dex.conditions.getByID(k as ID).noCopy) continue;
+                    pokemonVolatiles[k] = pokemon.volatiles[k];
+                }
+                return pokemonVolatiles;
+            };
+            const sourceVolatiles = volatilesOf(source);
+            const targetVolatiles = volatilesOf(target);
+            for (const k in sourceVolatiles) source.removeVolatile(k);
+            for (const k in targetVolatiles) target.removeVolatile(k);
+            for (const k in targetVolatiles) {
+                source.volatiles[k] = this.initEffectState({ ...targetVolatiles[k], target: source });
+            }
+            for (const k in sourceVolatiles) {
+                target.volatiles[k] = this.initEffectState({ ...sourceVolatiles[k], target: target });
+			}
+
+			// A REPRENDRE VRMT FORT
+            if (source.species.baseSpecies === 'Taira no Fumikado') {
+                const swapped = this.dex.deepClone(source.species);
+                swapped.name = 'Taira no Fumikado-Swapped';
+                swapped.forme = 'Swapped';
+                swapped.spriteid = 'tairanofumikadoswapped';
+                swapped.types = [...target.getTypes()];
+                // swapped.abilities = { 0: source.getAbility().name };
+                source.formeChange(swapped, this.effect, false);
+                source.transformed = true;
+                let statName: StatIDExceptHP;
+                for (statName in source.storedStats) {
+                    source.storedStats[statName] = targetStats[statName];
+                }
+                this.add('-transform', source, target, '[from] move: Soul Swap');
+            }
+			
+			target.setAbility('homonculusnightmare', source, this.effect);
+            this.add('-message', `${target.name} est piege dans le cauchemar de l'homoncule !`); // je laisse ça car le chat a slay avec cette phrase ptdr
+
+            source.updateSpeed();
+            target.updateSpeed();
+            this.add('-message', `${source.name} et ${target.name} ont échangé de corps !`);
+        },
+        target: "normal",
+        type: "Ghost",
+        contestType: "Clever",
+    },
+	theoriedelarelativite: {
+		num: 14,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Theorie de la relativite",
+		pp: 20,
+		priority: 0,
+		flags: { snatch: 1, dance: 1, metronome: 1, shitpost: 1 },
+		onHit(pokemon) {
+			let compteur = 0;
+			if(this.field.terrain != '') {
+				compteur = compteur + 1;
+				this.field.clearTerrain();
+			}
+			if(this.field.weather != '') {
+				compteur = compteur + 1;
+				this.field.clearWeather();
+			}
+			const tab = Object.keys(this.field.pseudoWeather);
+			for (const i in tab) {
+				compteur = compteur + 1;
+				this.field.removePseudoWeather(tab[i]);
+			}//on virre tout les pseudos weathers
+
+			for(let i = 0; i < compteur; i++) {
+				this.actions.useMove('acupressure', pokemon);
+			}
+
+		},
+		target: "self",
+		type: "Stellar",
+		zMove: { effect: 'clearnegativeboost' },
+		contestType: "Beautiful",
+	},
+	congredelascience: {
+		num: 356,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Congre de la science",
+		pp: 5,
+		priority: 0,
+		flags: { nonsky: 1, metronome: 1 },
+		pseudoWeather: 'congredelascience:',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				return 5;
+			},
+			onFieldStart(target, source) {
+				this.add('-fieldstart', 'move: Congre de la science');
+			},
+			onFieldResidual() {
+				let moves
+				let randomMove;
+				let nb
+				for (const pokemon of this.getAllActive()) {
+					nb = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
+					for (let i = 0; i < nb; i++) {
+							moves = this.dex.moves.all().filter(move => (
+									(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
+									move.flags['metronome']
+								));
+							if (moves.length) {
+								moves.sort((a, b) => a.num - b.num);
+								randomMove = this.sample(moves);
+							}
+							if (!randomMove) return false;
+							if(pokemon.moveSlots.length < 24) { //on évite d'entrer en terre inconu...
+								pokemon.moveSlots[pokemon.moveSlots.length] = 
+								{
+									id : randomMove.id,
+									move : randomMove.name,
+									pp : randomMove.pp,
+									maxpp : randomMove.pp,
+									disabled: false,
+									used: false,
+									target: randomMove.target,
+									virtual:false,
+								} //Pour une raison obscure l'objet move n'intègre pas l'interface MoveSlot, dcp je fais ça à la main
+							}
+					}
+					this.add('-message', `${pokemon.name} participe au congré de la science !`);
+				}	
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 2,
+			onFieldEnd() {
+				this.add('-fieldend', 'move: Congre de la science');
+			},
+		},
+		target: "all",
+		type: "Psychic",
+		zMove: { boost: { spa: 1 } },
+		contestType: "Clever",
+	},
+	rouletteofdestiny: {
+		num: 87,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Roulette of Destiny",
+		pp: 1,
+		noPPBoosts: true,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, shitpost:1},
+		onHit(source) {
+			let number = this.random(1,6);
+			if (source.hasAbility("jackpot")) {
+				number = 6
+			}
+			this.add("-message", source.name + "a roll un " + number)
+			if (number == 6) {
+				const boost: SparseBoostsTable = {"atk": 1, "def": 1, "spa": 1, "spd": 1, "spe": 1};
+				this.boost(boost,source);
+				this.heal(source.baseMaxhp,source);
+				this.actions.useMove('jackpot', source);
+			}
+			if (number == 5) {
+				for(let i = 0;i < 3;i++) {
+					const stats: BoostID[] = [];
+					let stat: BoostID;
+					for (stat in source.boosts) {
+						if (source.boosts[stat] < 6) {
+							stats.push(stat);
+						}
+					}
+					if (stats.length) {
+						const randomStat = this.sample(stats);
+						const boost: SparseBoostsTable = {};
+						boost[randomStat] = 1;
+						this.boost(boost);
+					} 
+				}
+				this.heal(source.baseMaxhp/2,source);
+				this.actions.useMove('makeitrain', source);
+			}
+			if (number == 4) {
+				const stats: BoostID[] = [];
+				let stat: BoostID;
+				for (stat in source.boosts) {
+					if (source.boosts[stat] < 6) {
+						stats.push(stat);
+					}
+				}
+				if (stats.length) {
+					const randomStat = this.sample(stats);
+					const boost: SparseBoostsTable = {};
+					boost[randomStat] = 1;
+					this.boost(boost);
+				} 
+				this.heal(source.baseMaxhp/3,source);
+				this.actions.useMove('payday', source);
+			}
+			if (number == 3) {
+				this.actions.useMove('flashcannon', source);
+			}
+			if (number == 2) {
+				for(let i = 0;i < 3;i++) {
+					const stats: BoostID[] = [];
+					let stat: BoostID;
+					for (stat in source.boosts) {
+						if (source.boosts[stat] < 6) {
+							stats.push(stat);
+						}
+					}
+					if (stats.length) {
+						const randomStat = this.sample(stats);
+						const boost: SparseBoostsTable = {};
+						boost[randomStat] = -1;
+						this.boost(boost);
+					} 
+				}
+				this.damage(Math.round(source.maxhp / 2), source, source);
+				this.actions.useMove('mirrorshot', source);
+			}
+			if (number == 1) {
+				this.actions.useMove('explosion',source);
+			}
+		},
+		target: "self",
+		type: "Stellar",
+		contestType: "Cool",
 	},
 };

@@ -658,6 +658,7 @@ const EMPTY_CONDITION: Condition = Utils.deepFreeze(new Condition({ name: '', ex
 export class DexConditions {
 	readonly dex: ModdedDex;
 	readonly conditionCache = new Map<ID, Condition>();
+	//allCache: readonly Condition[] | null = null;
 
 	constructor(dex: ModdedDex) {
 		this.dex = dex;
@@ -707,4 +708,14 @@ export class DexConditions {
 		this.conditionCache.set(id, this.dex.deepFreeze(condition));
 		return condition;
 	}
+
+	/*all(): readonly Condition[] {
+        if (this.allCache) return this.allCache;
+        const conditions = [];
+        for (const id in this.dex.data.Conditions) {
+            conditions.push(this.getByID(id as ID));
+        }
+        this.allCache = Object.freeze(conditions);
+        return this.allCache;
+    }*/
 }

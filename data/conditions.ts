@@ -38,6 +38,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onBeforeMovePriority: 1,
 		onBeforeMove(pokemon) {
+			if (pokemon.hasAbility('jackpot')) return;
 			if (this.randomChance(1, 4)) {
 				this.add('cant', pokemon, 'par');
 				return false;
@@ -57,7 +58,14 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 			// 1-3 turns
 			this.effectState.startTime = this.random(2, 5);
+			if (source.hasAbility('jackpot')) {
+				this.effectState.startTime = 5; //aller
+			}
+			if (target.hasAbility('jackpot')) {
+				this.effectState.startTime = 2;
+			}
 			this.effectState.time = this.effectState.startTime;
+			if (target.hasAbility('jackpot')) {}
 
 			if (target.removeVolatile('nightmare')) {
 				this.add('-end', target, 'Nightmare', '[silent]');
@@ -96,7 +104,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onBeforeMovePriority: 10,
 		onBeforeMove(pokemon, target, move) {
 			if (move.flags['defrost'] && !(move.id === 'burnup' && !pokemon.hasType('Fire'))) return;
-			if (this.randomChance(1, 5)) {
+			if (this.randomChance(1, 5) || pokemon.hasAbility('jackpot')) {
 				pokemon.cureStatus();
 				return;
 			}
@@ -172,6 +180,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 			const min = sourceEffect?.id === 'axekick' ? 3 : 2;
 			this.effectState.time = this.random(min, 6);
+			if (target.hasAbility('jackpot')) this.effectState.time = 2;
 		},
 		onEnd(target) {
 			this.add('-end', target, 'confusion');
@@ -184,7 +193,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				return;
 			}
 			this.add('-activate', pokemon, 'confusion');
-			if (!this.randomChance(33, 100)) {
+			if (!this.randomChance(33, 100) || pokemon.hasAbility('jackpot')) {
 				return;
 			}
 			this.activeTarget = pokemon;

@@ -270,7 +270,7 @@ export class Pokemon {
 	spreadMoveOnSwitchIn: boolean;
 	corruption: Pokemon | null;
 	hascorrupted: Pokemon[];
-	caged: Pokemon | null;
+	ameCollectee:number;
 	leftoCounter: number;
 	syrupTriggered: boolean;
 	stellarBoostedTypes: string[];
@@ -491,7 +491,7 @@ export class Pokemon {
 		this.heroMessageDisplayed = false;
 		this.swordBoost = false;
 		this.okinaCetteConne = false;
-		this.caged = null;
+		this.ameCollectee = 1000;
 		this.corruption = null;
 		this.hascorrupted = [];
 		this.leftoCounter = 0;

@@ -6394,7 +6394,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
                 this.add('-activate', target, "ability: I'm a Wizard!");
                 this.effectState.shield = false;
                 this.add('-end', target, `bouclier`); 
-				this.actions.useMove("fireboll", target,{ target: source })
+				this.actions.useMove("fireboll", target,{ target: source ,is_from_ability: true});
                 return 0;
             }
         },
@@ -6657,7 +6657,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 3003,
 	},
-	omitted: {
+	eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill: {
 		onStart(source) {
 			this.field.addPseudoWeather('supergravity', source);
 			// source.addVolatile('eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill');
@@ -6666,7 +6666,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onAnyTryMove(target, source, effect) {
 				if (['explosion', 'mindblown', 'mistyexplosion', 'selfdestruct', 'allahakbar', 'selfdestruct1g'].includes(effect.id)) {
 					this.attrLastMove('[still]');
-					this.add('cant', target, 'ability: omitted', effect, `[of] ${source}`);
+					this.add('cant', target, 'ability: Eternal Senselessness Bearing the Alias of Chaos who Manipulates Gravity at Will', effect, `[of] ${source}`);
 					this.add('-message', 'because of omitted');
 					return false;
 				}
@@ -6679,7 +6679,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTryHit(target, source, move) {
 				if ((target !== source && move.type === 'Ground') || ['smackdown', 'thousandarrows', 'gravapple'].includes(move.id)) {
 					move.accuracy = true;
-					this.add('-immune', target, '[from] ability: omitted');
+					this.add('-immune', target, '[from] ability: Eternal Senselessness Bearing the Alias of Chaos who Manipulates Gravity at Will');
 					this.add('-message', 'because of omitted');
 					return null;
 				}
@@ -6691,7 +6691,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			pokemon.removeVolatile('eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill');
 		},
 		flags: {},
-		name: 'omitted',
+		name: 'Eternal Senselessness Bearing the Alias of Chaos who Manipulates Gravity at Will', //ratio je le garde comme ça
 		rating: 2,
 		num: 3003,
 	},
@@ -6897,7 +6897,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['beam']) {
-				return this.chainModify(1.3);
+				return this.chainModify(1.5);
 			}
 		},
 		onDamagePriority: -30,
@@ -6983,8 +6983,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2,
 		num: 2740,
 	},
-	aniqtoohigh: 
-	{
+	aniqtoohigh: {
+		onStart(pokemon) {
+			pokemon.addVolatile('imprison');
+			pokemon.addVolatile('charge');
+			pokemon.addVolatile('magnetrise');
+		},
 		onFoeTryMoveAbility(move,source){ //event custom qui choppe les mooves venant d'ability et les cancels parce que mdr
 			const abilityHolder = this.effectState.target //this.effectState.target = le pokemon qui a l'ability 
 			//je comprends pas pk on utilise pas plus ça c'est super pratique et c'est marqué qu'on peut faire ça à un endroit random dans le code mdr
@@ -7054,5 +7058,201 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4.5,
 		num: 1645,
 	},
-};
+	homonculusdream: {
+        onStart(pokemon) {
+            if (pokemon.ameCollectee === undefined) {
+                pokemon.ameCollectee = 1000;
+                this.add('-start', pokemon, 'Ame a collecter: 1000');
+            } else if (pokemon.ameCollectee > 0) {
+                this.add('-start', pokemon, `Ame a collecter: ${pokemon.ameCollectee}`);
+            }
+        },
+		onAnyDamage(damage, target, source, effect) {
+			// On vérifie si on doit retirer des âmes
+			if (!(damage > 0) || !target.hp) return;
+            const holder = this.effectState.target;
+            if (target === holder) return;
+            if (holder.ameCollectee <= 0) return;
 
+			// On retire les âmes d'une valeur égale au nombre de HP perdus
+            holder.ameCollectee -= Math.min(damage, target.hp);
+			if (holder.ameCollectee > 0) return;
+            holder.ameCollectee = 0;
+
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) { 
+			// Les âmes doivent être toutes collectées
+			if (pokemon.ameCollectee !== 0) return;
+			if (!pokemon.hp || !pokemon.isActive) return;
+            this.add('-activate', pokemon, 'Ame collectee');
+			this.add('-end', pokemon, `Ame a collecter: ${pokemon.ameCollectee}`);
+
+			// On copie les statistiques brutes du Pokémon
+            const currentStats = {
+				'hp': pokemon.maxhp,
+                'atk': pokemon.storedStats.atk, 
+				'def': pokemon.storedStats.def,
+                'spa': pokemon.storedStats.spa, 
+				'spd': pokemon.storedStats.spd, 
+				'spe': pokemon.storedStats.spe,
+            };
+			
+			// Si on est toujours en forme Fumikado on change simplement de forme !
+            if (pokemon.species.id === 'tairanofumikado' && !pokemon.transformed) {
+                pokemon.formeChange('tairanofumikadoemperor', this.effect, true);
+            } 
+			
+			// Sinon on clone le Pokémon actuel, on double ses stats et on modifie nom, forme et abilities pour pouvoir changer de forme
+			else {
+                const newSpecies = this.dex.deepClone(pokemon.species);
+                newSpecies.name = 'Taira no Fumikado-Emperor';
+                newSpecies.forme = 'Emperor';
+                newSpecies.abilities = { 0: 'True Emperor' };
+				
+        	    pokemon.formeChange(newSpecies, this.effect, true);
+
+				const listeIdStat = ["hp", "atk", "def", "spa", "spd", "spe"];
+                for (const idStat of listeIdStat) {
+                    //pokemon.baseStoredStats[idStat] = currentStats[idStat] * 2;
+                }
+                pokemon.updateSpeed();
+            }
+
+            pokemon.clearBoosts();
+            this.add('-clearboost', pokemon);
+            for (const i of Object.keys(pokemon.volatiles)) {
+                if (i === 'dynamax') continue;
+                pokemon.removeVolatile(i);
+            }
+            if (pokemon.status) pokemon.cureStatus(true);
+            this.add('-message', `${pokemon.name} a collecté 1000 âmes et révèle sa vraie nature : le Vrai Empereur ! Citoyens de la capitale, inclinez-vous ! Une nouvelle ère s'annonce pour Mugenri !`);
+		},
+        flags: {},
+        name: "Homonculus Dream",
+        rating: 3,
+        num: 9000,
+    },
+    homonculusnightmare: {
+        onResidualOrder: 29,
+        onResidual(pokemon) {
+            const usable = pokemon.moveSlots.filter(slot => slot.pp > 0 && !slot.disabled);
+            if (!usable.length) {
+                this.debug('Homonculus Nightmare: no PP left to lose');
+                return;
+            }
+            const slot = this.sample(usable);
+            slot.pp = Math.max(0, slot.pp - 64);
+            this.add('-activate', pokemon, 'ability: Homonculus Nightmare');
+            this.add('-message', `${pokemon.name} oublie comment utiliser ${slot.move} !`);
+        },
+        flags: {},
+        name: "Homonculus Nightmare",
+        rating: 0,
+        num: 9001,
+    },
+	trueemperor: {
+        onStart(pokemon) {
+            this.add('-ability', pokemon, 'True Emperor');
+            if (pokemon.addedType !== 'Stellar') {
+                pokemon.addedType = 'Stellar';
+                this.add('-start', pokemon, 'typeadd', 'Stellar');
+            }
+        },
+        onSetStatus(status, target, source, effect) {
+            if (effect as Move && (effect as Move).status) {
+                this.add('-immune', target, '[from] ability: True Emperor');
+            }
+            return false;
+        },
+        onTryAddVolatile(status, target) {
+            this.add('-immune', target, '[from] ability: True Emperor');
+            return null;
+        },
+        onTryBoost(boost, target, source, effect) {
+            if (source && target === source) return;
+            let showMsg = false;
+            let i: BoostID;
+            for (i in boost) {
+                if (boost[i]! < 0) {
+                    delete boost[i];
+                    showMsg = true;
+                }
+            }
+            if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+                this.add("-fail", target, "unboost", "[from] ability: True Emperor", `[of] ${target}`);
+            }
+        },
+        onDamage(damage, target, source, effect) {
+            if (effect.effectType !== 'Move') {
+                this.add('-immune', target, '[from] ability: True Emperor', '[silent]');
+                return false;
+            }
+        },
+        onDragOut(pokemon) {
+            this.add('-activate', pokemon, '[from] ability: True Emperor');
+            return null;
+        },
+		flags: {},
+        name: "True Emperor",
+        rating: 5,
+        num: 9002,
+	},
+	drip:{
+		onAfterBoost(boost, target, source, effect) {
+			let boostPositif = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! > 0) {
+					boostPositif = true;
+				}
+			}
+			if (boostPositif) {
+				this.add('-activate', target, '[from] ability: Drip')
+				this.add('-message', `${target.name} a du drip !`);
+				this.actions.useMove('batonpass', target,{ is_from_ability: true});
+			}
+		},
+		flags: {},
+		name: "Drip",
+		rating: 5,
+		num: 155,
+	},
+	jackpot:{
+		onModifyCritRatio(critRatio) {
+			return critRatio + 6;
+		},
+		onModifyAccuracy(accuracy, target) {
+			if (typeof accuracy !== 'number') return;
+			if (accuracy < 100) {
+				return this.chainModify(0);
+			}
+		},
+		onModifyMove(move) {
+			if (move.secondaries) {
+				for (const secondary of move.secondaries) {
+					if (secondary.chance) secondary.chance = 100;
+				}
+			}
+			if (move.self?.chance) move.self.chance = 1;
+		},
+		onSourceModifyAccuracy(accuracy, target, source, move) {	
+			return this.chainModify(300); //Xeno A ne missera PAS ces mooves	
+		},
+		onFoeModifyMove(move) {
+			if (move.secondaries) {
+				for (const secondary of move.secondaries) {
+					if (secondary.chance) secondary.chance = 0;
+				}
+			}
+		},
+		onFoeModifyCritRatio(critRatio) {
+			return critRatio - 6;
+		},
+		flags: {},
+		name: "Jackpot",
+		rating: 5,
+		num: 155,
+	},
+};
