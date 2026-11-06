@@ -21969,7 +21969,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	},
 	parasectmega: {
 		num: 10000,
-		name: "Mega Parasect",
+		name: "Parasect-Mega",
 		baseSpecies: "Parasect",
 		forme: "Mega",
 		types: ["Bug","Grass"],
