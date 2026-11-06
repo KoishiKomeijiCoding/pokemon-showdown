@@ -21957,7 +21957,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 75.0,
 		eggGroups: ["Human-Like"],
 	},
-	xenoa: { //proposition de Phrog
+	xenoa: { //pas proposition de Phrog
 		num: 10000,
 		name: "Xeno a",
 		types: ["Fairy","Steel"],
@@ -21967,6 +21967,18 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 75.0,
 		eggGroups: ["Human-Like"],
 	},
+	parasectmega: {
+		num: 10000,
+		name: "Mega Parasect",
+		baseSpecies: "Parasect",
+		forme: "Mega",
+		types: ["Bug","Grass"],
+		baseStats: {hp: 60, atk: 135, def: 125, spa: 50, spd: 125, spe: 30 },
+		abilities: { 0: 'effectspore'},
+		heightm: 1.80,
+		weightkg: 90.0,
+		eggGroups: ["Bug", "Grass"],
+	}
 	hal: { //c est un piaf dans angry birds
 		num: 10000,
 		name: "Hal",

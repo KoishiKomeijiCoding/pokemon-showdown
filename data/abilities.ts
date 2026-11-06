@@ -6734,15 +6734,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2.5,
 		num: 9994,
 	},
-	jaipleindecadeaux: {	onSwitchIn(pokemon) { // onStart ?
-			const moveId = 'present'; // ← Change this to any move you want!
-			const move = this.dex.getActiveMove(moveId);
-			this.add('-ability', pokemon, 'Jai plein de cadeaux');
-			for (const target of pokemon.adjacentFoes()) {
-				if (move) {
-					this.actions.useMove(move, pokemon,{ target: target, is_from_ability: true });
-				}
-			}
+	jaipleindecadeaux: {
+		onStart(source) {
+			this.field.addPseudoWeather('cadeauxdumali', source);
 		},
 		onDamagingHit(damage, target, source, effect) {
 				if (Math.floor(Math.random() * (3)) == 2) {
@@ -7254,5 +7248,84 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Jackpot",
 		rating: 5,
 		num: 155,
+	},
+	champihallucino: {
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target) && source.runStatusImmunity('powder')) {
+				const r = this.random(100);
+				if (r < 11) {
+					source.trySetStatus('slp', target);
+				} else if (r < 21) {
+					source.trySetStatus('par', target);
+				} else if (r < 30) {
+					source.trySetStatus('psn', target);
+				} else if (r < 40) {
+					source.trySetStatus('cancer', target);
+				}
+			}
+		},
+		onStart(source) {
+			this.field.addPseudoWeather('badtrip', source);
+			if (this.field.getPseudoWeather('supergravity')) {
+				this.add('-start', source, 'typeadd', 'Dark');
+			}
+			if (this.field.getPseudoWeather('dataserver')) {
+				this.add('-start', source, 'typeadd', 'Electric');
+			}
+			if (this.field.getPseudoWeather('epsteintemple')) {
+				this.add('-start', source, 'typeadd', 'Rock');
+			}
+			if (this.field.getPseudoWeather('epsteinisland')) {
+				this.add('-start', source, 'typeadd', 'Ground');
+			}
+			if (this.field.getPseudoWeather('debatpolitique')) {
+				this.add('-start', source, 'typeadd', 'Dragon');
+			}
+			if (this.field.getPseudoWeather('trickroom')) {
+				this.add('-start', source, 'typeadd', 'Psychic');
+			}
+			if (this.field.getPseudoWeather('douche')) {
+				this.add('-start', source, 'typeadd', 'Water');
+			}
+			if (this.field.getPseudoWeather('congredelascience')) {
+				this.add('-start', source, 'typeadd', 'Stellar');
+			}
+			if (this.field.getPseudoWeather('cadeauxdumali')) {
+				this.add('-start', source, 'typeadd', 'Ice');
+			}
+		},
+		onResidual(source) {
+			if (this.field.getPseudoWeather('supergravity')) {
+				this.add('-start', source, 'typeadd', 'Dark');
+			}
+			if (this.field.getPseudoWeather('dataserver')) {
+				this.add('-start', source, 'typeadd', 'Electric');
+			}
+			if (this.field.getPseudoWeather('epsteintemple')) {
+				this.add('-start', source, 'typeadd', 'Rock');
+			}
+			if (this.field.getPseudoWeather('epsteinisland')) {
+				this.add('-start', source, 'typeadd', 'Ground');
+			}
+			if (this.field.getPseudoWeather('debatpolitique')) {
+				this.add('-start', source, 'typeadd', 'Dragon');
+			}
+			if (this.field.getPseudoWeather('trickroom')) {
+				this.add('-start', source, 'typeadd', 'Psychic');
+			}
+			if (this.field.getPseudoWeather('douche')) {
+				this.add('-start', source, 'typeadd', 'Water');
+			}
+			if (this.field.getPseudoWeather('congredelascience')) {
+				this.add('-start', source, 'typeadd', 'Stellar');
+			}
+			if (this.field.getPseudoWeather('cadeauxdumali')) {
+				this.add('-start', source, 'typeadd', 'Ice');
+			}
+		},
+		flags: {},
+		name: "Champi Hallucino",
+		rating: 2,
+		num: 2857,
 	},
 };
