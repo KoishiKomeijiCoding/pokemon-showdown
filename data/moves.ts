@@ -23786,13 +23786,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					return this.chainModify([5325, 4096]);
 				}
 			},
-			onFieldStart(field, source, effect, pokemon) {
-				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'Bad Trip', '[from] ability: ' + effect.name, `[of] ${source}`);
-				} else {
+			onFieldStart(target, source) {
 					this.add('-fieldstart', 'Bad Trip');
-				}
-			},
+			}, 
 			onFieldResidual(pokemon) {
 				const x = Math.floor (Math.random()*(8))
 				for (const pokemon of this.getAllActive()) {

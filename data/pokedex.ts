@@ -21978,16 +21978,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 1.80,
 		weightkg: 90.0,
 		eggGroups: ["Bug", "Grass"],
-	}
-	hal: { //c est un piaf dans angry birds
-		num: 10000,
-		name: "Hal",
-		types: ["Flying"],
-		baseStats: {hp: 88, atk: 88, def: 88, spa: 88, spd: 88, spe: 88 },
-		abilities: { 0: 'Boomerang'},
-		heightm: 0.85,
-		weightkg: 20.0,
-		eggGroups: ["Monster", "Grass"],
 	},
 	cagegobeline: { //goblin caaage urrrhurrrh
 		num: 10000,

@@ -1164,6 +1164,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 9,
 		isNonstandard: "Future",
 	},
+	parasectite: {
+		name: "Parasectite",
+		spritenum: 545,
+		megaStone: { "Parasect": "Parasect-Mega" },
+		itemUser: ["Parasect"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2559,
+		gen: 9,
+		isNonstandard: "Future",
+	},
 	cloversweet: {
 		name: "Clover Sweet",
 		spritenum: 707,
