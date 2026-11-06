@@ -261,7 +261,6 @@ export class Pokemon {
 	swordBoost: boolean;
 	shieldBoost: boolean;
 	okinaCetteConne:boolean;
-	ameCollectee: number;
 	canGemAlert:boolean;
 	epsteinPower:boolean;
 	pompeiBaby:boolean;
@@ -271,6 +270,7 @@ export class Pokemon {
 	spreadMoveOnSwitchIn: boolean;
 	corruption: Pokemon | null;
 	hascorrupted: Pokemon[];
+	ameCollectee:number;
 	leftoCounter: number;
 	syrupTriggered: boolean;
 	stellarBoostedTypes: string[];
