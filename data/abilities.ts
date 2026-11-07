@@ -6551,10 +6551,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
 				} else {
-					this.boost({ atk: +2 }, target, pokemon, null, true);
+					this.boost({ atk: +1 }, target, pokemon, null, true);
 				}
 			}
-			this.boost({ atk: 2 }, pokemon);
+			this.boost({ atk: 1 }, pokemon);
 		},
 		flags: {},
 		name: "Execution d'Always Furrious",
@@ -7219,6 +7219,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifyAccuracy(accuracy, target) {
 			if (typeof accuracy !== 'number') return;
+			if (this.field.getPseudoWeather('gravity')) {
+				accuracy = accuracy * 5/3
+			}
+			if (this.field.getPseudoWeather('supergravity')) {
+				accuracy = accuracy * 10
+			}
 			if (accuracy < 100) {
 				return this.chainModify(0);
 			}
