@@ -21674,7 +21674,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-end', pokemon, 'Normalisator');
 			},
 		},
-		flags: { protect: 1, mirror: 1, nonsky: 1,shitpost:1 },
+		flags: { protect: 1, mirror: 1, nonsky: 1,shitpost:1,contact: 1, },
 		target: "normal",
 		type: "Normal",
 		zMove: { basePower: 180 },
@@ -21705,7 +21705,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			}
 		},
-		flags: { protect: 1, mirror: 1, nonsky: 1, shitpost:1, cantusetwice: 1},
+		flags: { protect: 1, mirror: 1, nonsky: 1, shitpost:1, cantusetwice: 1,contact: 1,},
 		target: "allAdjacentFoes",
 		forceSwitch: true,
 		type: "Poison",
@@ -21793,7 +21793,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Fuck you",
 		pp: 20,
 		priority: 3,
-		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1,shitpost:1 },
+		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1,shitpost:1,contact: 1, },
 		onTry(source) {
 			if (source.activeMoveActions > 1) {
 				this.hint("Fake Out only works on your first turn out.");
@@ -21889,7 +21889,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "I'm omniing it",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, slicing: 1, shitpost: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, shitpost: 1 },
 		multihit: 10,
 		multiaccuracy: true,
 		target: "normal",
@@ -21903,7 +21903,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Stand Ready For my Worm",
 		pp: 15,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1, shitpost: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
 		critRatio: 3,
 		target: "normal",
 		type: "Stellar",
@@ -22342,7 +22342,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Corruption",
 		pp: 5,
 		priority: 4,
-		flags: { noassist: 1, failcopycat: 1, failinstruct: 1,shitpost: 1},
+		flags: { noassist: 1, failcopycat: 1, failinstruct: 1,shitpost: 1,contact: 1,},
 		stallingMove: true,
 		volatileStatus: 'corruption',
 		onTryHit(target, source, move) {
@@ -22629,7 +22629,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	name: "Brainrot",
 	pp: 40,
 	priority: 3,
-	flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
+	flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1,contact: 1, },
     onTryHit(target) {
 		if (target.getAbility().flags['cantsuppress']) {
 			return false;
@@ -23027,7 +23027,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Reveal",
 		pp: 5,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, contact: 1,},
 		onModifyType(move, pokemon) {
 			const types = pokemon.getTypes();
 			let type = types[0];
@@ -23095,7 +23095,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Mega Saut",
 		pp: 5,
 		priority: 0,
-		flags: { reflectable: 1, mirror: 1, metronome: 1, shitpost: 1, saut: 1 },
+		flags: { reflectable: 1, mirror: 1, metronome: 1, shitpost: 1, saut: 1,contact: 1, },
 		onHit(target, source, move) {
 			return source.addVolatile('trapped', source, move, 'trapper');
 		},
@@ -23245,7 +23245,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Baisse toi mec",
 		pp: 10,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1,contact: 1,},
 		target: "normal",
 		type: "Water",
 		contestType: "Tough",
@@ -23376,7 +23376,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		willCrit: true,
 		pp: 5,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1,contact: 1,},
 		target: "randomNormal",
 		type: "Electric",
 		contestType: "Tough",
@@ -23396,16 +23396,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-start', pokemon, 'Caged');
 			},
 			onUpdate(pokemon) {
-				console.log(this.effectState.source.name)
 				if (this.effectState.source && !this.effectState.source.isActive && pokemon.volatiles['caged'] || (this.effectState.source.species.forme !== 'BaseC')) {
-					console.log(`Removing Caged volatile on ${pokemon}`);
+					this.add('-message', pokemon.name + "est libéré de la cage ! ")
 					pokemon.removeVolatile('caged');
 				}
 			},
 			onTryMove(attacker, defender, move) {
+				this.add('-message', attacker.name + "est coincé dans la cage ! ")
 				return false;
 			},
-            onAnyInvulnerability(target, source, move) {
+            onInvulnerability(target, source, move) {
                 return false;
             },
 			onResidual(pokemon) {
@@ -23446,7 +23446,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
                 return this.chainModify(2);
             }
         },
-        flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
+        flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1,contact: 1,},
         target: "allAdjacent",
         type: "Steel",
         contestType: "Tough",
@@ -23833,7 +23833,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Cadeaux du Mali",
 		pp: 10,
 		priority: 0,
-		flags: { nonsky: 1, metronome: 1, shitpost: 1 },
+		flags: { nonsky: 1, metronome: 1, shitpost: 1},
 		pseudoWeather: 'cadeauxdumali',
 		condition: {
 			duration: 5,

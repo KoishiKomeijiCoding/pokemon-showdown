@@ -21405,7 +21405,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Water 1", "Field"],
 	},
-		miradrip: {
+	miradrip: {
 		num: 20000,
 		name: "Miradrip",
 		types: ["Normal"],
@@ -21974,7 +21974,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Bug","Grass"],
 		baseStats: {hp: 60, atk: 135, def: 125, spa: 50, spd: 125, spe: 30 },
-		abilities: { 0: 'effectspore'},
+		abilities: { 0: 'champihallucino'},
 		heightm: 1.80,
 		weightkg: 90.0,
 		eggGroups: ["Bug", "Grass"],
@@ -22005,7 +22005,17 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
         eggGroups: ["Monster", "Grass"],
         battleOnly: "Goblin Cage",
 		formeOrder: ["Cage Gobeline", "Cage Gobeline Free"],
-	}
+	},
+	hal: { //c est un piaf dans angry birds
+		num: 10000,
+		name: "Hal",
+		types: ["Flying","Bird"],
+		baseStats: {hp: 88, atk: 88, def: 88, spa: 88, spd: 88, spe: 88 },
+		abilities: { 0: 'Boomerang'},
+		heightm: 0.85,
+		weightkg: 20.0,
+		eggGroups: ["Monster", "Grass"],
+	},
 
 };
 
