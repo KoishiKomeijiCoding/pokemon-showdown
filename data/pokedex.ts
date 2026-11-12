@@ -21978,7 +21978,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 1.80,
 		weightkg: 90.0,
 		eggGroups: ["Bug", "Grass"],
-	}
+	},
 	hal: { //c est un piaf dans angry birds
 		num: 10000,
 		name: "Hal",
@@ -22015,7 +22015,42 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
         eggGroups: ["Monster", "Grass"],
         battleOnly: "Goblin Cage",
 		formeOrder: ["Cage Gobeline", "Cage Gobeline Free"],
-	}
-
+	},
+	franckducos: { //azote solide
+		num: 10000,
+		name: "Franck Ducos",
+		forme: "FD",
+		types: ["Ice","Poison"],
+		baseStats: {hp: 77, atk: 37, def: 157, spa: 37, spd: 157, spe: 127 },
+		abilities: { 0: 'Azote Solide'},
+		heightm: 1.73,
+		weightkg: 77.0,
+		eggGroups: ["Field"],
+		otherFormes: ["Kcnarf Cosud"],
+        formeOrder: ["Franck Ducos", "Kcnarf Cosud"],
+	},
+	kcnarfcosud: { //demon de l'azote
+		num: 10000,
+		name: "Kcnarf Cosud",
+		forme: "KD",
+		types: ["Ice","Dark"],
+		baseStats: {hp: 77, atk: 157, def: 37, spa: 157, spd: 37, spe: 127 },
+		abilities: { 0: 'Azote Solide'},
+		heightm: 1.73,
+		weightkg: 77.0,
+		eggGroups: ["Field"],
+		battleOnly: "Franck Ducos",
+        formeOrder: ["Franck Ducos", "Kcnarf Cosud"],
+	},
+		tableikea: { //je sais pas comment la monter
+		num: 10000,
+		name: "Table Ikea",
+		types: ["Grass","Normal"],
+		baseStats: {hp: 85, atk: 70, def: 165, spa: 50, spd: 80, spe: 10 },
+		abilities: { 0: 'Coin de table'},
+		heightm: 0.7,
+		weightkg: 40.0,
+		eggGroups: ["Monster", "Grass"],
+	},
 };
 

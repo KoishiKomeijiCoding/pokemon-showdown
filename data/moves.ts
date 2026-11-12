@@ -23896,10 +23896,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
 		onHit(target,source) {
-			this.add('-clearallboost');
-			for (const pokemon of this.getAllActive()) {
-				pokemon.clearBoosts();
-			}
+			this.actions.useMove('rapidspin', target);
 			this.field.clearTerrain();
 		},
 		onAfterSubDamage() {
@@ -23976,5 +23973,29 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "randomNormal",
 		type: "Rock",
 		contestType: "Beautiful",
+	},
+	dsc: {
+		num: 8129,
+		accuracy: 100,
+		basePower: 77,
+		category: "Special",
+		name: "DSC",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
+		onHit(pokemon, target) {
+			for (const target of pokemon.foes()) {
+				if (target.item) {
+					this.add('-item', target, target.getItem().name, '[from] ability: Azote Solide', `[of] ${pokemon}`);
+				}
+			}
+		},
+		secondary: {
+			chance: 10,
+			status: 'frz',
+		},
+		target: "allAdjacent",
+		type: "Ice",
+		contestType: "Clever",
 	},
 };
