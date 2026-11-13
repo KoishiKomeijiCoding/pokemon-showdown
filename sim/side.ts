@@ -983,7 +983,7 @@ export class Side {
 
 		if (this.requestState === 'move') {
 			if (pokemon.trapped) {
-				return this.emitChoiceError(`Can't switch: The active Pokémon is trapped`, { pokemon, update: req => {
+				return this.emitChoiceError(pokemon.ability === 'trueemperor' ? `Le vrai empereur ne fuit pas !` : `Can't switch: The active Pokémon is trapped`, { pokemon, update: req => {
 					let updated = false;
 					if (req.maybeTrapped) {
 						delete req.maybeTrapped;

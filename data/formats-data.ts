@@ -6270,6 +6270,49 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	ashbaby: {
 		tier: "shitpostou"
 	},
+	ashbabyburned: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	omnimanworm: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	okinamataraspring: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	okinamatarasummer: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	okinamataraautumn: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	okinamatarawinter: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	okinamataraallseasons: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	epsteinsummoned: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	sorcierevolue: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	parasectmega: {
+		tier: "shitpostou",
+	},
+	cagegobelinefree: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
 	sixseven: {
 		tier: "shitpostou"
 	},
@@ -6300,7 +6343,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	miradrip: {
 		tier: "shitpostou"
 	},
-	fillepixiudesixans: {
+	fillepixiu: {
 		tier: "shitpostou"
 	},
 	vesuve: {
@@ -6351,10 +6394,82 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	tairanofumikado: {
         tier: "shitpostou"
     },
-    tairanofumikadoemperor: {
-        tier: "shitpostuber"
-    },
-    tairanofumikadoswapped: {
-        tier: "shitpostou"
-    },
+	crs: {
+		tier: "shitpostou"
+	},
+	herowizardtrio: {
+		tier: "shitpostuber"
+	},
+	kingratio: {
+		tier: "shitpostou"
+	},
+	gerardmax: {
+		tier: "shitpostou"
+	},
+	roibleu: {
+		tier: "shitpostou"
+	},
+	regitube: {
+		tier: "shitpostou"
+	},
+	piccolo: {
+		tier: "shitpostou"
+	},
+	leloup: {
+		tier: "shitpostou"
+	},
+	tungtungtungsahur: {
+		tier: "shitpostou"
+	},
+	sorcierdeglaceheros: {
+		tier: "shitpostou"
+	},
+	haijisenri: {
+		tier: "shitpostou"
+	},
+	wilhelmvonclausewitzhalcyonhisuimaru: {
+		tier: "shitpostou"
+	},
+	mariosus: {
+		tier: "shitpostou"
+	},
+	ninjaclown: {
+		tier: "shitpostou"
+	},
+	mamadounoel: {
+		tier: "shitpostou"
+	},
+	megaknight: {
+		tier: "shitpostou"
+	},
+	juif: {
+		tier: "shitpostou"
+	},
+	inspecteurdelhygiene: {
+		tier: "shitpostou"
+	},
+	opinuspoliticus: {
+		tier: "shitpostou"
+	},
+	inspecteurgadget: {
+		tier: "shitpostou"
+	},
+	songoku: {
+		tier: "shitpostuber"
+	},
+	teslaeteinstein: {
+		tier: "shitpostou"
+	},
+	xenoa: {
+		tier: "shitpostou"
+	},
+	cagegobeline: {
+		tier: "shitpostou"
+	},
+	hal: {
+		tier: "shitpostou"
+	},
+	zinedinezidane: {
+		tier: "shitpostou"
+	},
 };
