@@ -573,7 +573,7 @@ export class Battle {
 		target: string | Pokemon | Side | Field | Battle | null, source?: string | Pokemon | Effect | false | null,
 		sourceEffect?: Effect | string | null, relayVar?: any, customCallback?: unknown
 	) {
-		if (this.eventDepth >= 8) {
+		if (this.eventDepth >= 80) {
 			// oh fuck
 			this.add('message', 'STACK LIMIT EXCEEDED');
 			this.add('message', 'PLEASE REPORT IN BUG THREAD');
@@ -763,7 +763,7 @@ export class Battle {
 		// 	if (!Battle.eventCounter[eventid]) Battle.eventCounter[eventid] = 0;
 		// 	Battle.eventCounter[eventid]++;
 		// }
-		if (this.eventDepth >= 8) {
+		if (this.eventDepth >= 80) {
 			// oh fuck
 			this.add('message', 'LOL RATIO LE SERV A CRASH (Stack overflow)');
 			this.add('message', 'PLEASE REPORT IN BUG THREAD');

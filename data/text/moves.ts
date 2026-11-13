@@ -7853,7 +7853,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magic: {
 		name: "Magic",
-		shortDesc: "Status move with random absurd battle effects.",
+		desc: "Turns the target permanently into Diggersby, Cinderace, Lopunny or Azumarill (random), and puts Bounce in one of its move slots. Fails on a True Emperor. 1 PP.",
+		shortDesc: "Turns the target into a rabbit and gives it Bounce.",
 	},
 	fireboll: {
 		name: "Fireboll",
@@ -7885,15 +7886,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	supergravity: {
 		name: "Super Gravity",
-		shortDesc: "Creates Super Gravity for several turns.",
-	},
-	masterofgravity: {
-		name: "Master of Gravity",
-		shortDesc: "Applies a gravity-control volatile.",
+		shortDesc: "5 turns: Gravity effects, and every move's accuracy is multiplied by 10.",
 	},
 	monologue: {
 		name: "Monologue",
-		shortDesc: "Charge-based status move with long speeches.",
+		desc: "Turn 1: the user makes a speech and makes every adjacent foe drowsy, even if they would dodge or protect. Turn 2: the user raises its Attack, Defense, Sp. Atk, Sp. Def and Speed by 1 stage. Can be Snatched.",
+		shortDesc: "Turn 1: Yawn on all adjacent foes (cannot miss). Turn 2: +1 to all stats.",
 	},
 	impostor: {
 		name: "Impostor",
@@ -7965,7 +7963,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	soulswap: {
 		name: "Soul Swap",
-		shortDesc: "Swaps a soul or volatile effect between combatants.",
+		desc: "Swaps bodies with the target: both take the other's species (so types, sprite, base stats and max HP, recalculated with each one's own EVs, IVs, nature and level; the current HP percentage is kept), and swap stat changes, status, volatile effects, and held item (a Mega Stone can then be used by its new holder). Abilities and moves are kept. An opposing target gets Homonculus Nightmare. Fails on a True Emperor target. 5 PP, no PP Ups.",
+		shortDesc: "Swaps bodies (species, stats, HP %, boosts, status, effects, item) with the target. An opposing target gets Homonculus Nightmare.",
+	},
+	soulswapfoes: {
+		name: "Soul Swap Foes",
+		desc: "Swaps the bodies of two adjacent foes with each other, as Soul Swap does (species, stats, boosts, status, effects, item), without the user being involved. Both get Homonculus Nightmare. True Emperor foes are ignored; fails if fewer than two foes can be swapped. 5 PP, no PP Ups.",
+		shortDesc: "Swaps the bodies of two foes; both get Homonculus Nightmare.",
 	},
 	theoriedelarelativite: {
 		name: "Théorie de la Relativité",
@@ -7974,5 +7978,110 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	congredelascience: {
 		name: "Congre de la Science",
 		shortDesc: "Set up the Congre de la Science.",
+	},
+	bismillahcestlestenebres: {
+		name: "Bismillah c'est les tenebres",
+		desc: "Priority +1. For 3 turns, every foe is wiretapped: a foe that switches out is hit by the user's Pursuit, Self-Destruct-like moves and stealing moves (Thief, Covet, Pluck, Bug Bite, Snatch, Trick, Switcheroo, Wonderful Berry, Spectral Thief) are blocked and answered with Balles. Ends if the user leaves the field.",
+		shortDesc: "+1 priority. Wiretaps all foes 3 turns: switch = Pursuit, self-destruct/theft blocked + Balles.",
+	},
+	gaslacrimo: {
+		name: "Gas Lacrimo",
+		desc: "Lowers the accuracy of all foes by 2 stages, makes them lose 1/16 of their max HP at the end of each turn for 3 turns, and sets Misty Terrain.",
+		shortDesc: "Foes: -2 accuracy, lose 1/16 HP/turn for 3 turns. Sets Misty Terrain.",
+	},
+	watchhogblast: {
+		name: "WatchHog Blast",
+		desc: "A powerful 150 BP, 90% accuracy physical Normal-type attack with no additional effect.",
+		shortDesc: "150 BP, no additional effect.",
+	},
+	thunderbolt1g: {
+		name: "Thunderbolt 1G",
+		desc: "95 BP. 10% chance to inflict Paralysis 1G (Speed divided by 4, 25% chance of being fully paralyzed each turn).",
+		shortDesc: "10% chance to inflict Paralysis 1G.",
+	},
+	thunder1g: {
+		name: "Thunder 1G",
+		desc: "120 BP, 70% accuracy. 10% chance to inflict Paralysis 1G (Speed divided by 4, 25% chance of being fully paralyzed each turn).",
+		shortDesc: "10% chance to inflict Paralysis 1G.",
+	},
+	jackpot: {
+		name: "Jackpot",
+		desc: "Hits all adjacent foes. Boosted 1.3x by Big Nugget.",
+		shortDesc: "150 BP Steel special hit on all adjacent foes.",
+	},
+	psyko1g: {
+		name: "Psyko 1G",
+		desc: "Has a 33% chance to lower the target's Special Attack and Special Defense by 1 stage.",
+		shortDesc: "33% chance to lower the target's SpA and SpD by 1.",
+	},
+	blizzard1gprestadium: {
+		name: "Blizzard 1G pre-Stadium",
+		desc: "120 BP, 90% accuracy, hits all adjacent foes. 30% chance to inflict Freeze 1G, which can never be cured.",
+		shortDesc: "30% chance to inflict Freeze 1G (incurable).",
+	},
+	recover1g: {
+		name: "Recover 1G",
+		desc: "The user restores 1/2 of its maximum HP. Has 20 PP instead of 5.",
+		shortDesc: "Heals the user by 1/2 of its max HP. 20 PP.",
+	},
+	icebeam1g: {
+		name: "Ice Beam 1G",
+		desc: "95 BP. 10% chance to inflict Freeze 1G, which can never be cured.",
+		shortDesc: "10% chance to inflict Freeze 1G (incurable).",
+	},
+	thunderwave1g: {
+		name: "Thunder Wave 1G",
+		desc: "Paralyzes the target with Paralysis 1G: Speed is divided by 4 and a 25% chance of being fully paralyzed each turn.",
+		shortDesc: "Inflicts Paralysis 1G on the target.",
+	},
+	selfdestruct1g: {
+		name: "Self-Destruct 1G",
+		desc: "The user faints after using this move, even if it misses. Hits all adjacent Pokemon.",
+		shortDesc: "260 BP. The user faints. Hits all adjacent Pokemon.",
+	},
+	fireblast1g: {
+		name: "Fire Blast 1G",
+		desc: "120 BP, 85% accuracy. 10% chance to inflict Burn 1G (1/8 of max HP lost each turn and halved physical damage).",
+		shortDesc: "10% chance to inflict Burn 1G.",
+	},
+	caged: {
+		name: "Caged",
+		desc: "Locks the target in a cage: it cannot move and loses 1/8 of its max HP every turn, until the user of the cage leaves or changes forme.",
+		shortDesc: "The target can't move and loses 1/8 HP per turn.",
+	},
+	rouletteofdestiny: {
+		name: "Roulette of Destiny",
+		desc: "The user rolls a die. 6: all stats +1, full heal and Jackpot. 5: three random stat boosts, heals 1/2 and Make It Rain. 4: one random boost, heals 1/3 and Pay Day. 3: Flash Cannon. 2: three random stat drops, loses 1/2 HP and Mirror Shot. 1: Explosion. With the Jackpot ability, always rolls a 6.",
+		shortDesc: "Rolls a die (1-6) for a random effect.",
+	},
+	badtrip: {
+		name: "Bad Trip",
+		desc: "For 5 turns, Bug-type moves from grounded Pokemon are boosted by 1.3x and type effectiveness is inverted. Each turn there is a chance that non-Bug Pokemon holding a Berry use Belch.",
+		shortDesc: "5 turns: inverted type chart, Bug moves 1.3x.",
+	},
+	cadeauxdumali: {
+		name: "Cadeaux du Mali",
+		desc: "For 5 turns, each turn the Pokemon with Jai plein de cadeaux use one of Pneus, Eau, Banane Plantain or Lance Pierre.",
+		shortDesc: "5 turns: gift moves for Jai plein de cadeaux users.",
+	},
+	pneus: {
+		name: "Pneus",
+		desc: "A 60 BP Ground physical hit on a random adjacent target. Afterwards, resets all stat changes of every Pokemon on the field and removes the active terrain.",
+		shortDesc: "Resets all stat changes and removes terrain.",
+	},
+	eau: {
+		name: "Eau",
+		desc: "A 50 BP Water special hit on a random adjacent target, which then uses Aqua Ring.",
+		shortDesc: "The target then uses Aqua Ring.",
+	},
+	bananeplantain: {
+		name: "Banane Plantain",
+		desc: "A 10 BP Grass physical hit on a random adjacent target. Lowers the target's Speed by 4 stages, then the target uses Stockpile.",
+		shortDesc: "Lowers the target's Speed by 4. Target uses Stockpile.",
+	},
+	lancepierre: {
+		name: "Lance Pierre",
+		desc: "A 70 BP Rock physical hit on a random adjacent target. Lowers its Defense by 1 stage, then the target uses Rollout if it is Rock-type, otherwise Rock Blast.",
+		shortDesc: "Lowers the target's Defense by 1. Target uses Rollout or Rock Blast.",
 	},
 };

@@ -215,9 +215,16 @@ export class BattleActions {
 		}
 	) {
 		pokemon.activeMoveActions++;
-		const zMove = options?.zMove;
+		let zMove = options?.zMove;
 		const maxMove = options?.maxMove;
 		const externalMove = options?.externalMove;
+		// Talent "Le Z" : toutes les attaques lancées sont des attaques Z (sans cristal, sans limite d'utilisation)
+		if (!zMove && !maxMove && !externalMove && pokemon.hasAbility('lez')) {
+			const preMove = this.dex.getActiveMove(moveOrMoveName);
+			if (preMove.id !== 'struggle' && !preMove.isZ && !preMove.isMax) {
+				zMove = preMove.category === 'Status' ? preMove.name : (this.Z_MOVES[preMove.type] || this.Z_MOVES.Normal);
+			}
+		}
 		const originalTarget = options?.originalTarget;
 		let sourceEffect = options?.sourceEffect;
 		let target = this.battle.getTarget(pokemon, maxMove || zMove || moveOrMoveName, targetLoc, originalTarget);
@@ -300,7 +307,7 @@ export class BattleActions {
 				this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
 			}
 			this.battle.add('-zpower', pokemon);
-			pokemon.side.zMoveUsed = true;
+			if (!pokemon.hasAbility('lez')) pokemon.side.zMoveUsed = true;
 		}
 
 		const oldActiveMove = move;
@@ -372,11 +379,23 @@ export class BattleActions {
 			const tryMoveResult = this.battle.runEvent('TryMoveAbility', pokemon, null, null, move);
 			if (!tryMoveResult) return false;
 		}
-		pokemon.moveThisTurnResult = undefined;
-		const oldMoveResult: boolean | null | undefined = pokemon.moveThisTurnResult;
-		const moveResult = this.useMoveInner(move, pokemon, options);
-		if (oldMoveResult === pokemon.moveThisTurnResult) pokemon.moveThisTurnResult = moveResult;
-		return moveResult;
+		// Garde-fou : les attaques déclenchées par des talents/attaques custom peuvent s'enchaîner à l'infini
+		// (ex. HMMMM + Wandering Spirit). Au-delà de 30 niveaux imbriqués, on coupe la chaîne au lieu de crasher.
+		const depth = ((this.battle as any).useMoveDepth || 0) as number;
+		if (depth >= 30 || this.battle.eventDepth >= 70) {
+			this.battle.debug('useMove: chaîne trop profonde, interrompue');
+			return false;
+		}
+		(this.battle as any).useMoveDepth = depth + 1;
+		try {
+			pokemon.moveThisTurnResult = undefined;
+			const oldMoveResult: boolean | null | undefined = pokemon.moveThisTurnResult;
+			const moveResult = this.useMoveInner(move, pokemon, options);
+			if (oldMoveResult === pokemon.moveThisTurnResult) pokemon.moveThisTurnResult = moveResult;
+			return moveResult;
+		} finally {
+			(this.battle as any).useMoveDepth = depth;
+		}
 	}
 	useMoveInner(
 		moveOrMoveName: Move | string, pokemon: Pokemon, options?: {
@@ -1444,8 +1463,10 @@ export class BattleActions {
 			zMove.isZOrMaxPowered = true;
 			return zMove;
 		}
-		const zMove = this.dex.getActiveMove(this.Z_MOVES[move.type]);
-		zMove.basePower = move.zMove!.basePower!;
+		const zMove = this.dex.getActiveMove(this.Z_MOVES[move.type] || this.Z_MOVES.Normal);
+		zMove.basePower = move.zMove?.basePower ?? 100;
+		// Types sans attaque Z dédiée (ex : Stellar) : l'attaque Z garde le type de l'attaque d'origine
+		if (!this.Z_MOVES[move.type]) zMove.type = move.type;
 		zMove.category = move.category;
 		// copy the priority for Quick Guard
 		zMove.priority = move.priority;
@@ -1820,7 +1841,7 @@ export class BattleActions {
 
 		if (isCrit && !suppressMessages) this.battle.add('-crit', target);
 
-		if (pokemon.status === 'brn' && move.category === 'Physical' && !pokemon.hasAbility('guts')) {
+		if ((pokemon.status === 'brn' || pokemon.status === 'brn1g') && move.category === 'Physical' && !pokemon.hasAbility('guts')) {
 			if (this.battle.gen < 6 || move.id !== 'facade') {
 				baseDamage = this.battle.modify(baseDamage, 0.5);
 			}

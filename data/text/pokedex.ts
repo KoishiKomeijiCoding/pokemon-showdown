@@ -3770,10 +3770,13 @@ export const PokedexText: { [id: IDEntry]: PokedexText } = {
 	tairanofumikado: {
         name: "Taira no Fumikado",
     },
-    tairanofumikadoemperor: {
-        name: "Taira no Fumikado-Emperor",
-    },
-    tairanofumikadoswapped: {
-        name: "Taira no Fumikado-Swapped",
-    },
+	crs: {
+		name: "CRS",
+	},
+	herowizardtrio: {
+		name: "Hero Wizard Trio",
+	},
+	zinedinezidane: {
+		name: "Zinedine Zidane",
+	},
 };
