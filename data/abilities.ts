@@ -7442,14 +7442,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.clearBoosts();
 			}
 		},
-		onInvulnerability(target, source, move) {
+		/*onInvulnerability(target, source, move) {
 			if (!this.effectState.vol || source === target) return;
 			if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows'].includes(move.id)) {
 				return;
 			}
 			this.add('-message', `${target.name} plane au-dessus de la mêlée : ${move.name} passe sous ses semelles de sorcier !`);
 			return false;
-		},
+		},*/
 		// Éclaboussure de Rebondifeu, uniquement pour les attaques offensives monocibles :
 		// les autres adversaires adjacents à la cible (camp adverse, y compris en free-for-all) perdent 1/16 PV
 		onSourceDamagingHit(damage, target, source, move) {
