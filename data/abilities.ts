@@ -7429,10 +7429,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!pokemon.hp) return;
 			this.effectState.tours++;
 			// En l'air (invulnérable) pendant le tour d'entrée seulement ; il atterrit à la fin du 1er tour
-			if (this.effectState.tours >= 1) {
+			/*if (this.effectState.tours >= 1) {
 				if (this.effectState.vol) this.add('-message', `${pokemon.name} atterrit !`);
 				this.effectState.vol = false;
-			}
+			}*/
 			if (this.effectState.tours === 3) {
 				this.add('-activate', pokemon, 'ability: Triumvirat');
 				this.add('-message', `${pokemon.name} glace le terrain !`);
