@@ -7499,4 +7499,39 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 5,
 		num: 3040,
 	},
+	coindetable: {
+		onResidual(pokemon,source,target){
+			const x = Math.floor (Math.random()*(4))
+				for (const pokemon of this.getAllActive()) {
+					if (pokemon.hasAbility('coindetable')) {
+						if (Math.floor(Math.random() * (3)) == 2) {
+							this.boost({def: 1});
+						}
+					} else { 
+						if (!pokemon.hasAbility('coindetable')) {
+						this.damage(pokemon.baseMaxhp / 16, pokemon);
+						}
+					}
+				}
+		},
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			const r = this.random(100);
+				if (r < 11) {
+					this.damage(source.baseMaxhp / 32, source, target);
+				} else if (r < 21) {
+					this.damage(source.baseMaxhp / 16, source, target);
+				} else if (r < 30) {
+					this.damage(source.baseMaxhp / 8, source, target);
+				} else if (r < 40) {
+					this.damage(source.baseMaxhp / 4, source, target);
+				}
+				
+			
+		},
+		flags: {},
+		name: "Coin de table",
+		rating: 4.5,
+		num: 1646,
+	},
 };

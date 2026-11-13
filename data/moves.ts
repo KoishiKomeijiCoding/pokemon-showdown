@@ -23850,10 +23850,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
 		onHit(target,source) {
-			this.add('-clearallboost');
-			for (const pokemon of this.getAllActive()) {
-				pokemon.clearBoosts();
-			}
+			this.actions.useMove('rapidspin', target);
 			this.field.clearTerrain();
 		},
 		onAfterSubDamage() {
@@ -24069,5 +24066,5 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Electric",
 		zMove: { basePower: 190 },
 		contestType: "Cool",
-	},
+	}
 };

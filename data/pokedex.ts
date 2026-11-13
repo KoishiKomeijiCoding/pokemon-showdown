@@ -21904,6 +21904,16 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Red",
 		eggGroups: ["Bug", "Grass"],
 	},
+	hal: { //c est un piaf dans angry birds
+		num: 10000,
+		name: "Hal",
+		types: ["Flying","Bird"],
+		baseStats: {hp: 88, atk: 88, def: 88, spa: 88, spd: 88, spe: 88 },
+		abilities: { 0: 'Boomerang'},
+		heightm: 0.85,
+		weightkg: 20.0,
+		eggGroups: ["Monster", "Grass"],
+	},
 	cagegobeline: { //goblin caaage urrrhurrrh
 		num: 10000,
 		name: "Cage Gobeline",
@@ -21933,17 +21943,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
         battleOnly: "Goblin Cage",
 		formeOrder: ["Cage Gobeline", "Cage Gobeline Free"],
 	},
-	hal: { //c est un piaf dans angry birds
-		num: 10000,
-		name: "Hal",
-		types: ["Flying","Bird"],
-		baseStats: {hp: 88, atk: 88, def: 88, spa: 88, spd: 88, spe: 88 },
-		abilities: { 0: 'Boomerang'},
-		heightm: 0.85,
-		weightkg: 20.0,
-		color: "Green",
-		eggGroups: ["Monster", "Grass"],
-	},
 	crs: { // Compagnie Républicaine de Sécurité
 		num: 10000,
 		name: "CRS",
@@ -21955,7 +21954,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		eggGroups: ["Human-Like"],
 	},
-
 	herowizardtrio: {
 		num: 10000,
 		name: "Hero Wizard Trio",
@@ -21978,6 +21976,16 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 80,
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
+	},
+	tableikea: { //je sais pas comment la monter
+		num: 10000,
+		name: "Table Ikea",
+		types: ["Grass","Normal"],
+		baseStats: {hp: 85, atk: 70, def: 165, spa: 50, spd: 80, spe: 10 },
+		abilities: { 0: 'Coin de table'},
+		heightm: 0.7,
+		weightkg: 40.0,
+		eggGroups: ["Monster", "Grass"],
 	},
 };
 
