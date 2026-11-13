@@ -7429,27 +7429,27 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!pokemon.hp) return;
 			this.effectState.tours++;
 			// En l'air (invulnérable) pendant le tour d'entrée seulement ; il atterrit à la fin du 1er tour
-			/*if (this.effectState.tours >= 1) {
+			if (this.effectState.tours >= 1) {
 				if (this.effectState.vol) this.add('-message', `${pokemon.name} atterrit !`);
 				this.effectState.vol = false;
-			}*/
-			if (this.effectState.tours === 3) {
+			}
+			/*if (this.effectState.tours === 3) {
 				this.add('-activate', pokemon, 'ability: Triumvirat');
 				this.add('-message', `${pokemon.name} glace le terrain !`);
 				for (const target of pokemon.foes()) {
 					target.trySetStatus('frz', pokemon);
 				}
 				pokemon.clearBoosts();
-			}
+			}*/
 		},
-		/*onInvulnerability(target, source, move) {
+		onInvulnerability(target, source, move) {
 			if (!this.effectState.vol || source === target) return;
 			if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows'].includes(move.id)) {
 				return;
 			}
 			this.add('-message', `${target.name} plane au-dessus de la mêlée : ${move.name} passe sous ses semelles de sorcier !`);
 			return false;
-		},*/
+		},
 		// Éclaboussure de Rebondifeu, uniquement pour les attaques offensives monocibles :
 		// les autres adversaires adjacents à la cible (camp adverse, y compris en free-for-all) perdent 1/16 PV
 		onSourceDamagingHit(damage, target, source, move) {
