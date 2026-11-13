@@ -7412,7 +7412,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-message', `${pokemon.name} s'envole !`);
 			this.field.setWeather('snowscape', pokemon, this.effect);
 			this.effectState.zapEnCours = true;
-			this.actions.useMove('icywind', pokemon);
+			this.actions.useMove('icywind', pokemon,{is_from_ability: true});
 			this.effectState.zapEnCours = false;
 		},
 		// Zap juste après son attaque normale du tour
@@ -7420,7 +7420,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.effectState.zapEnCours || !pokemon.hp) return;
 			if (!this.effectState.tours) return; // pas de Zap pendant le 1er tour
 			this.effectState.zapEnCours = true;
-			this.actions.useMove('zap', pokemon);
+			this.actions.useMove('zap', pokemon,{is_from_ability: true});
 			this.effectState.zapEnCours = false;
 		},
 		onResidualOrder: 28,
