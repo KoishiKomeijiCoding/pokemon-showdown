@@ -16,7 +16,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					&& item.name !== "Electrodite" 
 					&& item.name !== "Trevenanit" 
 					&& item.name !== "Obliterite"
-					&& item.name !== "Congozelite") {
+					&& item.name !== "Congozelite"
+					&& item.name !== "Parasectite") {
 					for (const megaEvo of Object.values(item.megaStone)) {
 						this.modData('FormatsData', this.toID(megaEvo)).isNonstandard = null;
 					}

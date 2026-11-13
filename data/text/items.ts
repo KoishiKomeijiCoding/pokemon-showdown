@@ -134,9 +134,15 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Berry Sweet",
 		shortDesc: "Evolves Milcery into Alcremie when held and spun around.",
 	},
+	pseudoweatherextender: {
+		name: "Pseudoweather Extender",
+		desc: "The duration of any pseudo-weather (Trick Room, Gravity, Magic Room, Wonder Room, Epstein Temple...) set by the holder is extended by 2 turns.",
+		shortDesc: "Pseudo-weathers set by the holder last 2 more turns.",
+	},
 	bignugget: {
 		name: "Big Nugget",
-		shortDesc: "A big nugget of pure gold that gives off a lustrous gleam.",
+		desc: "A big nugget of pure gold. The holder's Silver-flagged moves (Make It Rain, Jackpot, Pay Day, Payback...) have their power multiplied by 1.3.",
+		shortDesc: "Holder's Silver (argent) moves have 1.3x power.",
 	},
 	bigroot: {
 		name: "Big Root",

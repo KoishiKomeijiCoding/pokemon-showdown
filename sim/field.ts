@@ -197,6 +197,8 @@ export class Field {
 			if (!(status as any).onFieldRestart) return false;
 			return this.battle.singleEvent('FieldRestart', status, state, this, source, sourceEffect);
 		}
+		// (testé avant la pose : Magic Room neutralise les objets, y compris l'Extender)
+		const hasExtender = !!source?.hasItem?.('pseudoweatherextender');
 		state = this.pseudoWeather[status.id] = this.battle.initEffectState({
 			id: status.id,
 			source,
@@ -206,6 +208,11 @@ export class Field {
 		if (status.durationCallback) {
 			if (!source) throw new Error(`setting fieldcond without a source`);
 			state.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
+		}
+		// Pseudoweather Extender : +2 tours de durée pour les pseudo-météos posées par le porteur
+		if (source && state.duration && hasExtender) {
+			state.duration += 2;
+			this.battle.add('-message', `${source.name} prolonge ${status.name} de 2 tours grâce à son Pseudoweather Extender !`);
 		}
 		if (!this.battle.singleEvent('FieldStart', status, state, this, source, sourceEffect)) {
 			delete this.pseudoWeather[status.id];

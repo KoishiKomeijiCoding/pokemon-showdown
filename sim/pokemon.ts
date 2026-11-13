@@ -159,7 +159,19 @@ export class Pokemon {
 	 * message, like U-turn or Baton Pass, this will be the ID of
 	 * the calling effect.
 	 */
-	switchFlag: ID | boolean;
+	_switchFlag!: ID | boolean;
+	get switchFlag(): ID | boolean {
+		return this._switchFlag;
+	}
+	set switchFlag(value: ID | boolean) {
+		// True Emperor : aucun switch possible (U-turn, Parting Shot, Eject Button, Baton Pass...)
+		if (value && this.hp && !this.fainted && !this.faintQueued && this.ability === 'trueemperor') {
+			if (this._switchFlag !== value) this.battle.add('-message', `Le vrai empereur ne fuit pas !`);
+			this._switchFlag = false;
+			return;
+		}
+		this._switchFlag = value;
+	}
 	forceSwitchFlag: boolean;
 	skipBeforeSwitchOutEventFlag: boolean;
 	draggedIn: number | null;
@@ -271,6 +283,9 @@ export class Pokemon {
 	corruption: Pokemon | null;
 	hascorrupted: Pokemon[];
 	ameCollectee:number;
+	soulShield: number;
+	/** Bonus de stats de base (hors PV) du Vrai Empereur : persiste après un switch */
+	emperorBonus: number;
 	leftoCounter: number;
 	syrupTriggered: boolean;
 	stellarBoostedTypes: string[];
@@ -492,6 +507,8 @@ export class Pokemon {
 		this.swordBoost = false;
 		this.okinaCetteConne = false;
 		this.ameCollectee = 1000;
+		this.soulShield = 0;
+		this.emperorBonus = 0;
 		this.corruption = null;
 		this.hascorrupted = [];
 		this.leftoCounter = 0;
@@ -531,6 +548,10 @@ export class Pokemon {
 
 	//sert à changer level d'un poke
 	changeLevel(number:number) {
+		if (number < 0 && this.ability === 'trueemperor') {
+			this.battle.add('-message', `Le Vrai Empereur n'est pas affecté par la baisse de niveau !`);
+			return;
+		}
 		this.set.level = this.set.level + number
 		this.level = this.level + number
 		const ability = this.ability
@@ -1291,11 +1312,19 @@ export class Pokemon {
 		return delta;
 	}
 
-	clearBoosts() {
+	clearBoosts(): boolean {
+		if (this.hp && this.ability === 'trueemperor' && this.battle.effect?.id !== 'homonculusdream') {
+			this.battle.add('-message', `Le Vrai Empereur n'est pas affecté par l'effacement de boosts !`);
+			// Resynchronise l'affichage du client (un -clearallboost a pu être envoyé juste avant)
+			let stat: BoostID;
+			for (stat in this.boosts) this.battle.add('-setboost', this, stat, this.boosts[stat], '[silent]');
+			return false;
+		}
 		let boostName: BoostID;
 		for (boostName in this.boosts) {
 			this.boosts[boostName] = 0;
 		}
+		return true;
 	}
 
 	setBoost(boosts: SparseBoostsTable) {
@@ -1332,7 +1361,7 @@ export class Pokemon {
 	transformInto(pokemon: Pokemon, effect?: Effect) {
 		const species = pokemon.species;
 		if (
-			pokemon.fainted || this.illusion || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
+			pokemon.fainted || pokemon.ability === 'trueemperor' || this.illusion || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
 			(pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5) ||
 			species.name === 'Eternatus-Eternamax' ||
 			(['Ogerpon', 'Terapagos'].includes(species.baseSpecies) && (this.terastallized || pokemon.terastallized)) ||
@@ -1397,6 +1426,7 @@ export class Pokemon {
 			for (const volatile of volatilesToCopy) {
 				if (pokemon.volatiles[volatile]) {
 					this.addVolatile(volatile);
+					if (!this.volatiles[volatile]) continue; // ex. True Emperor refuse tout état volatil
 					if (volatile === 'gmaxchistrike') this.volatiles[volatile].layers = pokemon.volatiles[volatile].layers;
 					if (volatile === 'dragoncheer') this.volatiles[volatile].hasDragonType = pokemon.volatiles[volatile].hasDragonType;
 				}
@@ -1459,6 +1489,11 @@ export class Pokemon {
 
 		const stats = this.battle.spreadModify(this.species.baseStats, this.set);
 		if (this.species.maxHP) stats.hp = this.species.maxHP;
+		if (!isTransform && this.emperorBonus) {
+			const delta = this.emperorStatDelta();
+			let bonusStat: StatIDExceptHP;
+			for (bonusStat in delta) stats[bonusStat] += delta[bonusStat];
+		}
 
 		if (!this.maxhp) {
 			this.baseMaxhp = stats.hp;
@@ -1555,6 +1590,171 @@ export class Pokemon {
 			this.apparentType = this.terastallized;
 		}
 		return true;
+	}
+
+	/** Différence de stats (hors PV) produite par +emperorBonus sur les stats de base. */
+	emperorStatDelta(): Omit<StatsTable, 'hp'> {
+		const base = { ...this.species.baseStats };
+		const boosted = { ...base };
+		for (const k of ['atk', 'def', 'spa', 'spd', 'spe'] as const) boosted[k] += this.emperorBonus;
+		const plain = this.battle.spreadModify(base, this.set);
+		const plus = this.battle.spreadModify(boosted, this.set);
+		return { atk: plus.atk - plain.atk, def: plus.def - plain.def, spa: plus.spa - plain.spa, spd: plus.spd - plain.spd, spe: plus.spe - plain.spe };
+	}
+
+	/** Vrai Empereur : +20 aux stats de base (hors PV), de façon permanente (même après un switch). */
+	applyEmperorBonus(bonus = 20) {
+		if (this.emperorBonus) return;
+		this.emperorBonus = bonus;
+		const delta = this.emperorStatDelta();
+		let k: StatIDExceptHP;
+		for (k in delta) {
+			this.storedStats[k] += delta[k];
+			if (!this.transformed) this.baseStoredStats[k] += delta[k];
+		}
+		this.updateSpeed();
+	}
+
+	/** Affiche (ou met à jour) un compteur côté client via -start / -end ; `state.shown` mémorise l'étiquette affichée. */
+	showCounter(state: EffectState, label: string, abilityName?: string) {
+		if (state.shown === label) return;
+		if (state.shown) this.battle.add('-end', this, state.shown);
+		if (abilityName) this.battle.add('-ability', this, abilityName);
+		this.battle.add('-start', this, label);
+		state.shown = label;
+	}
+
+	/** Affiche le bouclier d'âmes restant (compteur côté client). */
+	showShield() {
+		if (this.ability !== 'trueemperor') return;
+		const state = this.abilityState;
+		if (this.soulShield > 0) {
+			this.showCounter(state, `Bouclier d'ames: ${this.soulShield}`);
+		} else if (state.shown) {
+			this.battle.add('-end', this, state.shown);
+			state.shown = '';
+		}
+	}
+
+	/**
+	 * Fumikado : les âmes collectées forment un bouclier qui absorbe les dégâts.
+	 * Renvoie les dégâts restants après absorption.
+	 */
+	absorbSoulShield(damage: number): number {
+		if (!(damage > 0) || !(this.soulShield > 0)) return damage;
+		const absorbed = Math.min(damage, this.soulShield);
+		this.soulShield -= absorbed;
+		this.battle.add('-message', `Le bouclier d'âmes de ${this.name} absorbe ${absorbed} dégâts ! (${this.soulShield} âmes restantes)`);
+		this.showShield();
+		return damage - absorbed;
+	}
+
+	/**
+	 * Soul Swap : échange complet (PV max en gardant le %, stats, boosts, statut, volatils, objet)
+	 * entre ce Pokémon et `other`. Les movepools et les talents ne bougent pas.
+	 */
+	soulSwapWith(other: Pokemon, user: Pokemon) {
+		const a: Pokemon = this;
+		const b = other;
+		for (const p of [a, b]) {
+			if (p.volatiles['dynamax']) p.removeVolatile('dynamax');
+		}
+
+		// Espèce (et sprite) : les corps sont échangés. Les stats sont recalculées à partir des stats de base de la
+		// nouvelle espèce (avec les EV/IV/nature/niveau de chacun, et le bonus du Vrai Empereur s'il y en a un).
+		// Pas fait pour un Pokémon transformé ou sous Illusion.
+		if (!a.transformed && !b.transformed && !a.illusion && !b.illusion) {
+			const ratioA = a.maxhp ? a.hp / a.maxhp : 0;
+			const ratioB = b.maxhp ? b.hp / b.maxhp : 0;
+			const swaps: [Pokemon, Species, Species, string, number][] = [
+				[a, b.species, b.baseSpecies, a.addedType, ratioA],
+				[b, a.species, a.baseSpecies, b.addedType, ratioB],
+			];
+			for (const [p, species, baseSpecies, addedType, ratio] of swaps) {
+				if (!p.setSpecies(species, this.battle.effect)) continue;
+				p.baseSpecies = baseSpecies;
+				p.addedType = addedType;
+				p.details = p.getUpdatedDetails();
+				this.battle.add('detailschange', p, p.details);
+				// PV max de la nouvelle espèce, en gardant le pourcentage de PV actuel
+				const newMax = p.species.maxHP || this.battle.statModify(p.species.baseStats, p.set, 'hp');
+				p.baseMaxhp = newMax;
+				p.maxhp = newMax;
+				p.hp = p.hp ? Math.min(newMax, Math.max(1, Math.round(ratio * newMax))) : 0;
+			}
+		}
+
+		// Objets, échangés après l'espèce pour que les pierres Méga deviennent transférables (un Pokémon qui refuse de perdre son objet bloque l'échange d'objets)
+		const itemA = a.takeItem(user);
+		if (itemA !== false) {
+			const itemB = b.takeItem(user);
+			if (itemB === false) {
+				if (itemA) a.setItem(itemA);
+			} else {
+				if (itemA) {
+					b.setItem(itemA, user);
+					this.battle.add('-item', b, itemA, '[from] move: Soul Swap');
+				}
+				if (itemB) {
+					a.setItem(itemB, user);
+					this.battle.add('-item', a, itemB, '[from] move: Soul Swap');
+				}
+			}
+		}
+
+		// Chacun peut maintenant (ou non) méga-évoluer avec la pierre reçue
+		for (const p of [a, b]) {
+			if (p.canMegaEvo !== false) p.canMegaEvo = this.battle.actions.canMegaEvo(p);
+		}
+		this.battle.add('-heal', a, a.getHealth, '[silent]');
+		this.battle.add('-heal', b, b.getHealth, '[silent]');
+
+		// Boosts
+		const boostsA = { ...a.boosts };
+		const boostsB = { ...b.boosts };
+		let i: BoostID;
+		for (i in a.boosts) {
+			a.boosts[i] = boostsB[i] || 0;
+			b.boosts[i] = boostsA[i] || 0;
+		}
+		this.battle.add('-swapboost', a, b, '[from] move: Soul Swap');
+
+		// Statut (avec ses compteurs)
+		const statusA = a.status, stateA = a.statusState;
+		const statusB = b.status, stateB = b.statusState;
+		if (statusA) this.battle.add('-curestatus', a, statusA, '[silent]');
+		if (statusB) this.battle.add('-curestatus', b, statusB, '[silent]');
+		a.status = statusB;
+		a.statusState = this.battle.initEffectState({ ...stateB, target: a });
+		b.status = statusA;
+		b.statusState = this.battle.initEffectState({ ...stateA, target: b });
+		if (a.status) this.battle.add('-status', a, a.status, '[silent]');
+		if (b.status) this.battle.add('-status', b, b.status, '[silent]');
+
+		// Volatils (sans événements ; on ignore ceux liés à un autre Pokémon ou à un tour précis)
+		const skip = [
+			'dynamax', 'transform', 'trapped', 'trapper', 'twoturnmove', 'lockedmove',
+			'mustrecharge', 'commanding', 'commanded', 'choicelock',
+		];
+		const volatilesOf = (p: Pokemon) => {
+			const out: { [k: string]: EffectState } = {};
+			for (const k in p.volatiles) {
+				if (skip.includes(k)) continue;
+				if (this.battle.dex.conditions.getByID(k as ID).noCopy) continue;
+				if (p.volatiles[k].linkedPokemon || p.volatiles[k].linkedStatus) continue;
+				out[k] = p.volatiles[k];
+			}
+			return out;
+		};
+		const volA = volatilesOf(a);
+		const volB = volatilesOf(b);
+		for (const k in volA) delete a.volatiles[k];
+		for (const k in volB) delete b.volatiles[k];
+		for (const k in volB) a.volatiles[k] = this.battle.initEffectState({ ...volB[k], target: a });
+		for (const k in volA) b.volatiles[k] = this.battle.initEffectState({ ...volA[k], target: b });
+
+		a.updateSpeed();
+		b.updateSpeed();
 	}
 
 	updateMaxHp() {
@@ -1735,6 +1935,7 @@ export class Pokemon {
 	/** Unlike clearStatus, gives cure message */
 	cureStatus(silent = false) {
 		if (!this.hp || !this.status) return false;
+		if (this.status === 'frz1g') return false; // Freeze 1G : aucune guérison possible
 		this.battle.add('-curestatus', this, this.status, silent ? '[silent]' : '[msg]');
 		if (this.status === 'slp' && this.removeVolatile('nightmare')) {
 			this.battle.add('-end', this, 'Nightmare', '[silent]');
@@ -1815,6 +2016,7 @@ export class Pokemon {
 	 */
 	clearStatus() {
 		if (!this.hp || !this.status) return false;
+		if (this.status === 'frz1g') return false; // Freeze 1G : aucune guérison possible
 		if (this.status === 'slp' && this.removeVolatile('nightmare')) {
 			this.battle.add('-end', this, 'Nightmare', '[silent]');
 		}
@@ -2076,6 +2278,7 @@ export class Pokemon {
 		if (linkedStatus && source) {
 			if (!source.volatiles[linkedStatus.toString()]) {
 				source.addVolatile(linkedStatus, this, sourceEffect);
+				if (!source.volatiles[linkedStatus.toString()]) return result;
 				source.volatiles[linkedStatus.toString()].linkedPokemon = [this];
 				source.volatiles[linkedStatus.toString()].linkedStatus = status;
 			} else {

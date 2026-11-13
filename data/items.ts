@@ -543,6 +543,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 130,
 		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.flags['argent']) {
+				return this.chainModify([5325, 4096]);
+			}
+		},
 		num: 581,
 		gen: 5,
 	},
@@ -1157,6 +1163,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 544,
 		megaStone: { "Clefable": "Clefable-Mega" },
 		itemUser: ["Clefable"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2559,
+		gen: 9,
+		isNonstandard: "Future",
+	},
+	parasectite: {
+		name: "Parasectite",
+		spritenum: 545,
+		megaStone: { "Parasect": "Parasect-Mega" },
+		itemUser: ["Parasect"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
@@ -3607,10 +3625,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onAfterSetStatusPriority: -1,
 		onAfterSetStatus(status, pokemon) {
+			if (status.id === 'frz1g') return; // Freeze 1G ne peut pas être guéri
 			pokemon.eatItem();
 		},
 		onUpdate(pokemon) {
-			if (pokemon.status || pokemon.volatiles['confusion']) {
+			if ((pokemon.status && pokemon.status !== 'frz1g') || pokemon.volatiles['confusion']) {
 				pokemon.eatItem();
 			}
 		},
@@ -8220,6 +8239,16 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: -1,
 		gen: 6,
 		isNonstandard: "CAP",
+	},
+	pseudoweatherextender: {
+		// Implémenté dans sim/field.ts (addPseudoWeather), sur le modèle du talent Persistent.
+		name: "Pseudoweather Extender",
+		spritenum: 0,
+		fling: {
+			basePower: 30,
+		},
+		num: 9100,
+		gen: 9,
 	},
 	vilevial: {
 		name: "Vile Vial",

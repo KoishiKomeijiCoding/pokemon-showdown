@@ -2455,11 +2455,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	poteglace: {
 		name: "Pote Glace",
-		shortDesc: "Uses Icy Wind and freezes foes after enough turns.",
-	},
-	consume: {
-		name: "CONSUME",
-		shortDesc: "Leech Seed turns into a drain on the user.",
+		desc: "On entry, this Pokemon uses Icy Wind and sets Snow. After enough turns it freezes all foes, resets its stat changes and changes form.",
+		shortDesc: "Entry: Icy Wind + Snow. Freezes foes on turn 3.",
 	},
 	eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill: {
 		name: "Eternal Senselessness Bearing the Alias of Chaos who Manipulates Gravity at Will",
@@ -2499,15 +2496,15 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	homonculusdream: {
 		name: "Homonculus Dream",
-		shortDesc: "Collects souls to evolve into an empowered form.",
+		shortDesc: "Collects souls from damage dealt to others; at 1000, becomes True Emperor with a 1000-soul shield (its stat drops, status and negative effects are cleared; positive boosts stay).",
 	},
 	homonculusnightmare: {
 		name: "Homonculus Nightmare",
-		shortDesc: "Randomly removes PP from one move each turn.",
+		shortDesc: "Each turn, permanently removes a random move from the moveset.",
 	},
 	trueemperor: {
 		name: "True Emperor",
-		shortDesc: "Adds Stellar typing and blocks debuffs and status.",
+		shortDesc: "Sets Sun+Misty Terrain; Stellar; +20 base stats; can't switch; boosts and level can't be lowered or cleared; blocks status, item and ability theft.",
 	},
 	drip: {
 		name: "Drip",
@@ -2516,5 +2513,60 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	aniqtoohigh: {
 		name: "An IQ Too High ?",
 		shortDesc: "Gives imprison,charge and magnetic rise also return attacks that came from abilities.",
+	},
+	racisme: {
+		name: "Racisme",
+		desc: "This Pokemon deals 2x damage to Pokemon whose Pokedex color is Black, and takes half damage from Black-colored Pokemon.",
+		shortDesc: "x2 damage dealt to Black-colored Pokemon; takes half damage from them.",
+	},
+	triumvirat: {
+		name: "Triumvirat",
+		desc: "On entry, this Pokemon uses Icy Wind and sets Snow. From its second turn on, it uses Zap after each of its moves. From entry it is semi-invulnerable like a Pokemon using Fly during its first turn only, landing at the end of it. At the end of its third turn all foes are frozen and its stat changes are reset. Its single-target damaging moves also deal 1/16 max HP to the other adjacent foes of the target (like Flame Burst).",
+		shortDesc: "Entry: Icy Wind, Snow. Zap after each move from turn 2. Fly-like invulnerability on turn 1 only. Freezes foes on turn 3. Single-target hits splash other adjacent foes.",
+	},
+	chinoiseries: {
+		name: "Chinoiseries",
+		desc: "This Pokemon has the effects of both Contrary and Queenly Majesty: stat changes are reversed, and priority moves cannot target this Pokemon or its allies.",
+		shortDesc: "Contrary + Queenly Majesty.",
+	},
+	lez: {
+		name: "Le Z",
+		desc: "Every move this Pokemon uses is used as a Z-Move, without needing a Z-Crystal and with no limit on uses.",
+		shortDesc: "All of this Pokemon's moves are Z-Moves.",
+	},
+	eruptionvolcanique: {
+		name: "Eruption volcanique",
+		desc: "When hit, the holder uses Eruption and Earthquake once.",
+		shortDesc: "When hit, uses Eruption and Earthquake.",
+	},
+	jaipleindecadeaux: {
+		name: "Jai plein de cadeaux",
+		desc: "Sets Cadeaux du Mali on entry. When hit, 1/3 chance to bite the attacker with a random biting move.",
+		shortDesc: "Sets Cadeaux du Mali. May bite back when hit.",
+	},
+	hmmmm: {
+		name: "HMMMM",
+		desc: "On entry, uses Mega Saut on every adjacent foe. Leaping moves are 1.3x stronger.",
+		shortDesc: "Uses Mega Saut on entry. Leaping moves 1.3x.",
+	},
+	boomerang: {
+		name: "Boomerang",
+		desc: "Moves hit twice (Parental Bond), Dragon moves have 1.5x Special Attack, whirling moves are 1.5x stronger and switch out. Heals 1/3 HP and sets Tailwind when switching out.",
+		shortDesc: "Parental Bond; heals and sets Tailwind on switch-out.",
+	},
+	urrurr: {
+		name: "Urr Urr",
+		desc: "Cage Gobeline: contact moves cage the attacker. Below half HP, breaks free into its free forme.",
+		shortDesc: "Cages contact attackers; breaks free below 1/2 HP.",
+	},
+	jackpot: {
+		name: "Jackpot",
+		desc: "Foes' secondary effects never activate and their critical hit ratio is lowered by 6 stages. Roulette of Destiny always rolls a 6 and confusion lasts 2 turns.",
+		shortDesc: "Foes' secondary effects and crits are disabled.",
+	},
+	champihallucino: {
+		name: "Champi Hallucino",
+		desc: "Sets Bad Trip on entry. Contact attackers may be put to sleep, paralyzed, poisoned or given Cancer. Adds types according to the active field effects.",
+		shortDesc: "Sets Bad Trip; contact may inflict status.",
 	},
 };

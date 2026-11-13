@@ -18,6 +18,7 @@ interface AbilityFlags {
 	noreceiver?: 1; // Receiver and Power of Alchemy will not activate if an ally faints with this Ability
 	notrace?: 1; // Trace cannot copy this Ability
 	notransform?: 1; // Disables the Ability if the user is Transformed
+	shitpost?: 1; // Talent shitpost
 }
 
 export interface AbilityData extends Partial<Ability>, AbilityEventMethods, PokemonEventMethods {

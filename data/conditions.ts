@@ -128,6 +128,73 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 	},
+	frz1g: {
+		// Freeze 1G : fonctionne comme le gel, mais éternel (aucun dégel naturel, aucune attaque de feu, aucune guérison).
+		name: 'frz1g',
+		effectType: 'Status',
+		onStart(target, source, sourceEffect) {
+			if (sourceEffect && sourceEffect.effectType === 'Ability') {
+				this.add('-status', target, 'frz1g', '[silent]');
+			} else {
+				this.add('-status', target, 'frz1g', '[silent]');
+			}
+			this.add('-message', `${target.name} est gelé pour toujours (Freeze 1G) !`);
+			if (target.species.name === 'Shaymin-Sky' && target.baseSpecies.baseSpecies === 'Shaymin') {
+				target.formeChange('Shaymin', this.effect, true);
+			}
+		},
+		onBeforeMovePriority: 10,
+		onBeforeMove(pokemon, target, move) {
+			this.add('cant', pokemon, 'frz1g');
+			return false;
+		},
+	},
+	par1g: {
+		// Paralysie 1G : comme la paralysie, mais la Vitesse est divisée par 4 au lieu de 2.
+		name: 'par1g',
+		effectType: 'Status',
+		onStart(target, source, sourceEffect) {
+			if (sourceEffect && sourceEffect.effectType === 'Ability') {
+				this.add('-status', target, 'par1g', '[silent]');
+			} else {
+				this.add('-status', target, 'par1g', '[silent]');
+			}
+			this.add('-message', `${target.name} est paralysé (Paralysie 1G) ! Sa Vitesse est divisée par 4 !`);
+		},
+		onModifySpePriority: -101,
+		onModifySpe(spe, pokemon) {
+			spe = this.finalModify(spe);
+			if (!pokemon.hasAbility('quickfeet')) {
+				spe = Math.floor(spe * 25 / 100);
+			}
+			return spe;
+		},
+		onBeforeMovePriority: 1,
+		onBeforeMove(pokemon) {
+			if (pokemon.hasAbility('jackpot')) return;
+			if (this.randomChance(1, 4)) {
+				this.add('cant', pokemon, 'par1g');
+				return false;
+			}
+		},
+	},
+	brn1g: {
+		// Brûlure 1G : comme la brûlure (Atq physique /2), mais 1/8 des PV par tour au lieu de 1/16.
+		name: 'brn1g',
+		effectType: 'Status',
+		onStart(target, source, sourceEffect) {
+			if (sourceEffect && sourceEffect.effectType === 'Ability') {
+				this.add('-status', target, 'brn1g', '[silent]');
+			} else {
+				this.add('-status', target, 'brn1g', '[silent]');
+			}
+			this.add('-message', `${target.name} est brûlé (Brûlure 1G) !`);
+		},
+		onResidualOrder: 10,
+		onResidual(pokemon) {
+			this.damage(pokemon.baseMaxhp / 8);
+		},
+	},
 	psn: {
 		name: 'psn',
 		effectType: 'Status',
@@ -187,6 +254,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onBeforeMovePriority: 3,
 		onBeforeMove(pokemon) {
+			if (!pokemon.volatiles['confusion']) return;
 			pokemon.volatiles['confusion'].time--;
 			if (!pokemon.volatiles['confusion'].time) {
 				pokemon.removeVolatile('confusion');

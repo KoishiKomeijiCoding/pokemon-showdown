@@ -31,6 +31,8 @@ Ratings and how they work:
 	ex. Imposter, Shadow Tag
 
 */
+import { ClauseDialogues } from './clause-dialogues';
+
 
 export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	noability: {
@@ -701,6 +703,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			for (const volatile of volatilesToCopy) {
 				if (ally.volatiles[volatile]) {
 					pokemon.addVolatile(volatile);
+					if (!pokemon.volatiles[volatile]) continue;
 					if (volatile === 'gmaxchistrike') pokemon.volatiles[volatile].layers = ally.volatiles[volatile].layers;
 					if (volatile === 'dragoncheer') pokemon.volatiles[volatile].hasDragonType = ally.volatiles[volatile].hasDragonType;
 				}
@@ -762,8 +765,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	curiousmedicine: {
 		onStart(pokemon) {
 			for (const ally of pokemon.adjacentAllies()) {
-				ally.clearBoosts();
-				this.add('-clearboost', ally, '[from] ability: Curious Medicine', `[of] ${pokemon}`);
+				if (ally.clearBoosts()) this.add('-clearboost', ally, '[from] ability: Curious Medicine', `[of] ${pokemon}`);
 			}
 		},
 		flags: {},
@@ -2435,7 +2437,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return null;
 			}
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Intrusion",
 		rating: 2.5,
 		num: 64,
@@ -3154,7 +3156,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onEnd() {
 			delete this.effectState.boosts;
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Super Opportunist",
 		rating: 3,
 		num: 290,
@@ -5450,7 +5452,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.epsteinPower) {
 				pokemon.epsteinPower = false
 				const targets = pokemon.adjacentFoes()
-				if (!targets) return;
+				if (!targets.length) return;
 				this.add('-ability', pokemon, 'Epstein Files');
 				targets[Math.floor(Math.random() * targets.length)].changeLevel(-1)
 			}
@@ -5460,6 +5462,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifyTarget(targetRelayVar, source) {
 			const targets = source.adjacentFoes()
+			if (!targets.length) return;
 			const index = Math.floor(Math.random() * targets.length)
 			let min = targets[index].level
 			let current = targets[index]
@@ -5471,7 +5474,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			targetRelayVar.target = current;
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Epstein Files",
 		rating: 2.5,
 		num: 254,
@@ -5871,7 +5874,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return false;
 			}
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Mecaniques 1G",
 		rating: 3.5,
 		num: 9998,
@@ -5899,7 +5902,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.pompeiBaby = false
             }
         },
-        flags: {},
+        flags: { shitpost: 1 },
         name: "Pompei Baby",
         rating: 3.5,
         num: 9997,
@@ -5914,7 +5917,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagingHit(damage, target, source, effect) {
 			this.boost({ atk: 1 });
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Motivation",
 		rating: 4,
 		num: 9996,
@@ -5934,7 +5937,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
                 this.add('-sethp', target, target.getHealth, '[from] ability: 6767', '[silent]');
             }
         },
-        flags: {},
+        flags: { shitpost: 1 },
         name: "6767",
         rating: 3.5,
         num: 9996,
@@ -5947,7 +5950,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.field.addPseudoWeather('gravity', source);
 			this.add('-message', 'Hawking utilise ses pouvoirs psychics pour mettre toute les rooms et la gravity !');
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Hawking Room",
 		rating: 3.5,
 		num: 9996,
@@ -5967,7 +5970,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Mega-Intimidate",
 		rating: 3.5,
 		num: 9995,
@@ -5991,19 +5994,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagingHit(damage, target, source, move) {
 				this.damage(source.baseMaxhp / 8, source, target);
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Bienveillance",
 		rating: 2.5,
 		num: 24
 	},
 	electricityyyy: {
-		onSwitchIn(pokemon) { // onStart ?
+		onStart(pokemon) { // onStart ?
 			const moveId = 'zap';
 			const move = this.dex.getActiveMove(moveId);
 			this.add('-ability', pokemon, 'ELECTRICITYYYY');
 			this.actions.useMove(move, pokemon,{is_from_ability: true});
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "ELECTRICITYYYY",
 		rating: 2.5,
 		num: 9994,
@@ -6039,7 +6042,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				move.category = 'Physical';
 			}
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "auuwoh",
 		rating: 2.5,
 		num: 9994,
@@ -6066,7 +6069,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Are you sure ?",
 		rating: 3.5,
 		num: 22,
@@ -6087,7 +6090,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (pokemon.getStat('spa', false, true) > pokemon.getStat('atk', false, true)) move.category = 'Special';
 			}
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Terrorisme",
 		rating: 3.5,
 		num: 173,
@@ -6126,7 +6129,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(1.3);
 			}
 		},
-		flags: { breakable: 1 },
+		flags: { shitpost: 1, breakable: 1 },
 		name: "Gros Serveur",
 		rating: 3,
 		num: 114,
@@ -6192,7 +6195,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "HiddenStar in FourSeasons",
 		rating: 4,
 		num: 1000,
@@ -6216,7 +6219,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			this.field.clearWeather();
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Hidden Star in All Seasons",
 		rating: 4,
 		num: 1001,
@@ -6232,7 +6235,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.actions.useMove('earthquake', target,{is_from_ability: true}); //lors de la mort fait juste éruption mais pas earthquake (éruption fait 0 % du coup)
 			source.vesuveCounter = 0; 
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Eruption volcanique",
 		rating: 4,
 		num: 1002,
@@ -6250,7 +6253,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(1.3);
 			}
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Musique Cool",
 		rating: 4.5,
 		num: 3,
@@ -6278,7 +6281,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onEnd(pokemon) { // reset 
 			pokemon.spreadMoveOnSwitchIn = false; // on reset le flag pour le prochain switchin
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Chiantman",
 		rating: 4,
 		num: 234,
@@ -6289,7 +6292,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			source.heal(source.baseMaxhp / 3);
 			source.changeLevel(5)
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Pancake",
 		rating: 3.5,
 		num: 224,
@@ -6315,6 +6318,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 						attacker.canMegaEvo = attacker.canMegaEvo === false ? false : this.actions.canMegaEvo(attacker)
 					}	
 		},
+		flags: { shitpost: 1 },
 		name: "Joyaux Rare",
 		rating: 3.5,
 		num: 224,
@@ -6323,7 +6327,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMove(move, attacker,defender) {
 			for (const target of attacker.adjacentFoes()) {
 				if (target?.item === "leftovers") {
-					const item = target.takeItem();
+					const item = target.takeItem(attacker);
+					if (!item) continue; // objet protégé (ex : True Emperor)
 					attacker.leftoCounter = attacker.leftoCounter  + 1
 					this.add('-activate', attacker, 'ability: Wonderful Slice of Lefto')
 					this.add('-message',"Le chien vole les lefto de" + target.name)
@@ -6343,6 +6348,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return false;
 			}
 		},
+		flags: { shitpost: 1 },
 		name: "Wonderful Slice of Lefto",
 		rating: 2.5,
 		num: 9991,
@@ -6364,7 +6370,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(2);
 			}
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Cinq nuits chez Freddy",
 		rating: 2.5,
 		num: 9990,
@@ -6404,7 +6410,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
                 return null;
             }
         },
-        flags: {},            
+        flags: { shitpost: 1 },            
         name: "I'm a Wizard",
         rating: 3,
         num: 998,
@@ -6439,7 +6445,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Scrappy', `[of] ${target}`);
 			}
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Normal Normalize",
 		rating: 0,
 		num: 96,
@@ -6455,7 +6461,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return null;
 			}
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Mercredi",
 		rating: 0,
 		num: 96,
@@ -6481,7 +6487,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(accMod[this.effectState.fallen]);
 			}
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Ratio Supreme",
 		rating: 4,
 		num: 999,
@@ -6513,7 +6519,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onEnd(pokemon) {
 			pokemon.removeVolatile('Dynamax')
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Pouvoir Gigamax",
 		rating: 5,
 		num: 3000,
@@ -6535,7 +6541,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			pokemon.addVolatile('aurafarming');
 		},
 		condition: {},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Aura Farming",
 		rating: 4,
 		num: 999,
@@ -6551,12 +6557,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
 				} else {
-					this.boost({ atk: +2 }, target, pokemon, null, true);
+					this.boost({ atk: +1 }, target, pokemon, null, true);
 				}
 			}
-			this.boost({ atk: 2 }, pokemon);
+			this.boost({ atk: 1 }, pokemon);
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Execution d'Always Furrious",
 		rating: 3.5,
 		num: 9995,
@@ -6565,6 +6571,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidualOrder: 50,
 		onResidualSubOrder: 1,
 		onDamagingHit(damage, target, source, move) {
+			if (source.ability === 'trueemperor') return;
 			const moves = this.dex.moves.all().filter(move => (
 				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
 				move.flags['shitpost']
@@ -6589,13 +6596,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-ability', target, 'AI Slop');
 			this.add('-message', `${source.name} a reçu ${randomMove.name} !`);
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "AI Slop",
 		rating: 0,
 		num: 3001,
 	},
 	poteglace: {
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
+			this.field.setWeather('snowscape', pokemon, this.effect);
 			const moveId = 'icywind';
 			const move = this.dex.getActiveMove(moveId);
 			this.actions.useMove(move, pokemon, {is_from_ability: true})
@@ -6631,66 +6639,37 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const elixir = pokemon.activeTurns;
 			this.add('-end', pokemon, `elixir: ${elixir-1}`, '[silent]') 	
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Pote Glace",
 		rating: 2,
 		num: 3002,
-	},
-	consume: {
-		onResidualOrder: 8,
-		onResidual(pokemon) {
-			const target = this.getAtSlot(pokemon.volatiles['leechseed'].sourceSlot);
-			if (!target || target.fainted || target.hp <= 0) {					
-				this.debug('Nothing to leech into');
-					return;
-			}
-			const damage = this.damage(pokemon.baseMaxhp / 16, pokemon, target);
-			if (damage) {
-				this.heal(damage, target, pokemon);
-			}
-		},
-		onFaint(target) {
-			//
-		},
-		flags: {},
-		name: "CONSUME",
-		rating: 3,
-		num: 3003,
 	},
 	eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill: {
 		onStart(source) {
 			this.field.addPseudoWeather('supergravity', source);
 			// source.addVolatile('eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill');
-			this.add("-message", 'Keh heh heh heh... Why, hello there... It has been a while. I never expected that "you lot" would make it to this place. It is a bit too much of a "coincidence", do you not agree? Though on the topic of "coincidences", you and I do share a "coincidental similarity". The "coincidental similarity" that we each know the other s "secret". As well as the "coincidental similarity" that we each harbor "murderous intent" towards the other. You wish to erase all those who know "the secret of your ability". And I can not stand for others to be made aware of the "secret" that I, in fact, bear the moniker of "Disciple of Darkness". For that is "proof" concerning my "sublime" "duty", and therefore "confidential information". Although, to an "informant" such as yourself, this could rather be classified as "valuable information". In the first place, this "Disciple of Darkness" denomination... Keh hah hah hah hah! Very well! You, too, shall kneel before this "new" "power" that "my humble self" possesses!');
+			this.add("-message", this.sample(ClauseDialogues.intro));
 		},
-		onAnyTryMove(target, source, effect) {
-				if (['explosion', 'mindblown', 'mistyexplosion', 'selfdestruct', 'allahakbar', 'selfdestruct1g'].includes(effect.id)) {
-					this.attrLastMove('[still]');
-					this.add('cant', target, 'ability: Eternal Senselessness Bearing the Alias of Chaos who Manipulates Gravity at Will', effect, `[of] ${source}`);
-					this.add('-message', 'because of omitted');
-					return false;
-				}
-			},
 		onModifyMove(move, pokemon) {
 			if (!this.field.getPseudoWeather('supergravity') && !this.field.getPseudoWeather('gravity')) return;
 			// if (!pokemon.volatiles['eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill']) return;
+			if (move.target === 'self') return; // les attaques sur soi-même (ex : Monologue) ne doivent pas viser les adversaires
 			move.target = 'allAdjacentFoes'; //ptdr azy
 		},
-		onTryHit(target, source, move) {
-				if ((target !== source && move.type === 'Ground') || ['smackdown', 'thousandarrows', 'gravapple'].includes(move.id)) {
-					move.accuracy = true;
-					this.add('-immune', target, '[from] ability: Eternal Senselessness Bearing the Alias of Chaos who Manipulates Gravity at Will');
-					this.add('-message', 'because of omitted');
-					return null;
-				}
-			},
-		onDamagingHit(target, source, move) {
-				this.add("-message",'The person known ™ as myself also known as ™ Wilhelm von Clausewitz Halcyon HISUIMARU is filled completely ™ and utterly with the feeling, an emotional reaction ™, that is commonly described in short ™ as disgust towards the man ™ coated in figurative trash. Due to these ™ intense emotions that I, the Eternal Senselessness Bearing the Alias of Chaos ™ who Manipulates Gravity at Will, feel towards this ™ man that I dare not call human, only a monster ™ (and also the coach), but only the trash like man, I ™ will beat down all who stand in my literal and figurative ™ way. To achieve this goal I must achieve even ™ greater power than the power over gravity that ™ I manipulate at will. The figure that I deem ™ to be less than a human, only a monster, is the same ™ as me in this regard. The collection, that is the capture ™, of all the figurative trash, that retains a disposition ™ of one that could be called a god, and yet is an average folk is an action ™ that is unforgivable. You, that is to say, the one reading ™ this message, cannot affect me with your measly powers ™ . The monster also known in short as the Trashy Man ™, is unpleasant on the eyes ™, especially when he is committing ™ an act as simple as walking around at his lesuire.');
-		}, 
+		// Une réplique différente à chaque action
+		onBeforeMove(pokemon, target, move) {
+			this.add("-message", this.sample(ClauseDialogues.move));
+		},
+		onDamagingHit(damage, target, source, move) {
+			this.add("-message", this.sample(ClauseDialogues.hit));
+		},
+		onFaint(pokemon) {
+			this.add("-message", this.sample(ClauseDialogues.faint));
+		},
 		onEnd(pokemon) {
 			pokemon.removeVolatile('eternalsenselessnessbearingthealiasofchaoswhomanipulatesgravityatwill');
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: 'Eternal Senselessness Bearing the Alias of Chaos who Manipulates Gravity at Will', //ratio je le garde comme ça
 		rating: 2,
 		num: 3003,
@@ -6703,13 +6682,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			impostor.addVolatile('impostor');
 			this.add('message', "Il y a maintenant un imposteur parmis nous!");
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: 'Amogus', 
 		rating: 2,
 		num: 3003,
 	},
 	ballondiscret: {	
-		onSwitchIn(pokemon) { // onStart ?
+		onStart(pokemon) { // onStart ?
 			const moveId = 'smokescreen'; // ← Change this to any move you want!
 			const move = this.dex.getActiveMove(moveId);
 			this.add('-ability', pokemon, 'Ballon Discret');
@@ -6729,7 +6708,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(1.5);
 			}
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Ballon Discret",
 		rating: 2.5,
 		num: 9994,
@@ -6749,12 +6728,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.actions.useMove(Paslescookies, target, { target: source, is_from_ability: true});
 				}
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Jai plein de cadeaux",
 		rating: 2.5,
 		num: 9995,
 	},
-	hmmmm: {	onSwitchIn(pokemon) { // onStart ?
+	hmmmm: {	onStart(pokemon) { // onStart ?
 			const moveId = 'megasaut'; // ← Change this to any move you want!
 			const move = this.dex.getActiveMove(moveId);
 			this.add('-ability', pokemon, 'hmmmm');
@@ -6770,7 +6749,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(1.3);
 			}
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "HMMMM",
 		rating: 2.5,
 		num:5688,
@@ -6815,7 +6794,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(2.5);
 			}
 		},
-		flags: { breakable: 1 },
+		flags: { shitpost: 1, breakable: 1 },
 		name: "World Wide Corruption",
 		rating: 2,
 		num: 2955,
@@ -6827,12 +6806,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(1.2);
 			}
 		},
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			this.actions.useMove('douche', pokemon);
 			this.actions.useMove('haze', pokemon);
 			this.actions.useMove('savon', pokemon);
 		},
-		flags: { breakable: 1 },
+		flags: { shitpost: 1, breakable: 1 },
 		name: "On gache pas le savon",
 		rating: 2,
 		num: 7955,
@@ -6847,13 +6826,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.actions.useMove('taunt', target);
 			}
 		},
-		flags: { breakable: 1 },
+		flags: { shitpost: 1, breakable: 1 },
 		name: "Opinion politique",
 		rating: 2,
 		num: 7995,
 	},
 	auramalveillante: {
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			const x = Math.floor (Math.random()*(100))
 			if (x == 90) {
 					this.actions.useMove('killyourself', pokemon,{is_from_ability: true});
@@ -6882,7 +6861,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(1.5);
 			}
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Aura Malveillante",
 		rating: 3,
 		num: 1876,
@@ -6907,7 +6886,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.actions.useMove('metronome', pokemon,{is_from_ability: true});
 			}
 		},
-		flags: { breakable: 1 },
+		flags: { shitpost: 1, breakable: 1 },
 		name: "Go Go Gadget",
 		rating: 3,
 		num: 5,
@@ -6925,7 +6904,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					delete boost[b];
 					if (source.hp) {
 						this.add('-ability', target, 'Aura de Goku');
-						this.boost(negativeBoost, source, target, null, true);	
+						if (!(this as any).gokuReflecting) {
+							(this as any).gokuReflecting = true;
+							try {
+								this.boost(negativeBoost, source, target, null, true);
+							} finally {
+								(this as any).gokuReflecting = false;
+							}
+						}	
 					}
 				}
 			}
@@ -6950,7 +6936,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 		},
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			let activated = false;
 			for (const target of pokemon.adjacentFoes()) {
 				if (!activated) {
@@ -6972,7 +6958,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return null;
 			}
 		},
-		flags: { breakable: 1 },
+		flags: { shitpost: 1, breakable: 1 },
 		name: "Je suis Goku",
 		rating: 2,
 		num: 2740,
@@ -6990,7 +6976,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-message', abilityHolder.name + " a volé le moove de " + source.name);
 			return false;
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "An IQ too high ?",
 		rating: 3,
 		num: 1876,
@@ -7027,7 +7013,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			pokemon.heal(pokemon.baseMaxhp / 3);
 			this.actions.useMove('tailwind', pokemon,{is_from_ability: true});
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Boomerang",
 		rating: 4.5,
 		num: 1845,
@@ -7047,19 +7033,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				source.addVolatile('caged',target);
 			}
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Urr Urr",
 		rating: 4.5,
 		num: 1645,
 	},
 	homonculusdream: {
         onStart(pokemon) {
-            if (pokemon.ameCollectee === undefined) {
-                pokemon.ameCollectee = 1000;
-                this.add('-start', pokemon, 'Ame a collecter: 1000');
-            } else if (pokemon.ameCollectee > 0) {
-                this.add('-start', pokemon, `Ame a collecter: ${pokemon.ameCollectee}`);
-            }
+            if (pokemon.ameCollectee === undefined) pokemon.ameCollectee = 1000;
+            if (pokemon.ameCollectee > 0) pokemon.showCounter(this.effectState, `Ame a collecter: ${pokemon.ameCollectee}`);
+        },
+        onEnd(pokemon) {
+            // Le talent est perdu : le compteur disparaît
+            if (this.effectState.shown) this.add('-end', pokemon, this.effectState.shown);
+            this.effectState.shown = '';
         },
 		onAnyDamage(damage, target, source, effect) {
 			// On vérifie si on doit retirer des âmes
@@ -7069,10 +7056,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
             if (holder.ameCollectee <= 0) return;
 
 			// On retire les âmes d'une valeur égale au nombre de HP perdus
-            holder.ameCollectee -= Math.min(damage, target.hp);
-			if (holder.ameCollectee > 0) return;
-            holder.ameCollectee = 0;
-
+            const collected = Math.min(damage, target.hp, holder.ameCollectee);
+            holder.ameCollectee -= collected;
+            if (holder.ameCollectee < 0) holder.ameCollectee = 0;
+            holder.showCounter(this.effectState, `Ame a collecter: ${holder.ameCollectee}`, 'Homonculus Dream');
 		},
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
@@ -7081,49 +7068,39 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.ameCollectee !== 0) return;
 			if (!pokemon.hp || !pokemon.isActive) return;
             this.add('-activate', pokemon, 'Ame collectee');
-			this.add('-end', pokemon, `Ame a collecter: ${pokemon.ameCollectee}`);
+            if (this.effectState.shown) this.add('-end', pokemon, this.effectState.shown);
+            this.effectState.shown = '';
 
-			// On copie les statistiques brutes du Pokémon
-            const currentStats = {
-				'hp': pokemon.maxhp,
-                'atk': pokemon.storedStats.atk, 
-				'def': pokemon.storedStats.def,
-                'spa': pokemon.storedStats.spa, 
-				'spd': pokemon.storedStats.spd, 
-				'spe': pokemon.storedStats.spe,
-            };
-			
-			// Si on est toujours en forme Fumikado on change simplement de forme !
-            if (pokemon.species.id === 'tairanofumikado' && !pokemon.transformed) {
-                pokemon.formeChange('tairanofumikadoemperor', this.effect, true);
-            } 
-			
-			// Sinon on clone le Pokémon actuel, on double ses stats et on modifie nom, forme et abilities pour pouvoir changer de forme
-			else {
-                const newSpecies = this.dex.deepClone(pokemon.species);
-                newSpecies.name = 'Taira no Fumikado-Emperor';
-                newSpecies.forme = 'Emperor';
-                newSpecies.abilities = { 0: 'True Emperor' };
-				
-        	    pokemon.formeChange(newSpecies, this.effect, true);
+			// Les 1000 âmes collectées se transforment en bouclier, et le Vrai Empereur gagne +20 aux stats (hors PV)
+			pokemon.soulShield = 1000;
+			pokemon.applyEmperorBonus(20);
+			pokemon.setAbility('trueemperor', pokemon, this.effect, true);
 
-				const listeIdStat = ["hp", "atk", "def", "spa", "spd", "spe"];
-                for (const idStat of listeIdStat) {
-                    //pokemon.baseStoredStats[idStat] = currentStats[idStat] * 2;
+            // Remise à zéro : baisses de stats, statut et effets négatifs (les boosts positifs et effets utiles restent)
+            let negFound = false;
+            let stat: BoostID;
+            for (stat in pokemon.boosts) {
+                if (pokemon.boosts[stat] < 0) {
+                    pokemon.boosts[stat] = 0;
+                    negFound = true;
                 }
-                pokemon.updateSpeed();
             }
-
-            pokemon.clearBoosts();
-            this.add('-clearboost', pokemon);
-            for (const i of Object.keys(pokemon.volatiles)) {
-                if (i === 'dynamax') continue;
-                pokemon.removeVolatile(i);
-            }
+            if (negFound) this.add('-clearnegativeboost', pokemon, '[silent]');
             if (pokemon.status) pokemon.cureStatus(true);
-            this.add('-message', `${pokemon.name} a collecté 1000 âmes et révèle sa vraie nature : le Vrai Empereur ! Citoyens de la capitale, inclinez-vous ! Une nouvelle ère s'annonce pour Mugenri !`);
+            const negativeEffects = [
+                'confusion', 'leechseed', 'curse', 'nightmare', 'encore', 'taunt', 'torment', 'disable', 'attract', 'yawn',
+                'embargo', 'healblock', 'saltcure', 'syrupbomb', 'octolock', 'partiallytrapped', 'foresight', 'miracleeye',
+                'smackdown', 'telekinesis', 'throatchop', 'torment', 'trapped', 'noretreat', 'gastroacid', 'tarshot',
+                'powder', 'flinch', 'sparklingaria', 'bind', 'wrap', 'firespin', 'whirlpool', 'sandtomb', 'magmastorm',
+                'infestation', 'clamp', 'snaptrap', 'thundercage', 'caged', 'underwhelmed', 'perishsong',
+            ];
+            for (const id of Object.keys(pokemon.volatiles)) {
+                if (negativeEffects.includes(id)) pokemon.removeVolatile(id);
+            }
+            pokemon.showShield();
+            this.add('-message', `${pokemon.name} a collecté 1000 âmes et révèle sa vraie nature : le Vrai Empereur ! Son bouclier d'âmes le protège. Citoyens de la capitale, inclinez-vous ! Une nouvelle ère s'annonce pour Mugenri !`);
 		},
-        flags: {},
+        flags: { shitpost: 1 },
         name: "Homonculus Dream",
         rating: 3,
         num: 9000,
@@ -7131,17 +7108,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
     homonculusnightmare: {
         onResidualOrder: 29,
         onResidual(pokemon) {
-            const usable = pokemon.moveSlots.filter(slot => slot.pp > 0 && !slot.disabled);
-            if (!usable.length) {
-                this.debug('Homonculus Nightmare: no PP left to lose');
-                return;
-            }
-            const slot = this.sample(usable);
-            slot.pp = Math.max(0, slot.pp - 64);
+            // Retire définitivement une attaque au hasard (moves de base ET moves appris en combat)
+            if (!pokemon.hp || !pokemon.moveSlots.length) return;
+            const index = this.random(pokemon.moveSlots.length);
+            const slot = pokemon.moveSlots[index];
+            if (!slot) return;
+            pokemon.moveSlots.splice(index, 1);
+            let baseIndex = pokemon.baseMoveSlots.findIndex(s => s.id === slot.id);
+            if (baseIndex < 0 && !pokemon.transformed && index < pokemon.baseMoveSlots.length) baseIndex = index;
+            if (baseIndex >= 0) pokemon.baseMoveSlots.splice(baseIndex, 1);
             this.add('-activate', pokemon, 'ability: Homonculus Nightmare');
-            this.add('-message', `${pokemon.name} oublie comment utiliser ${slot.move} !`);
+            this.add('-message', `${pokemon.name} oublie à jamais comment utiliser ${this.dex.moves.get(slot.id).name} !`);
         },
-        flags: {},
+        flags: { shitpost: 1 },
         name: "Homonculus Nightmare",
         rating: 0,
         num: 9001,
@@ -7153,16 +7132,63 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
                 pokemon.addedType = 'Stellar';
                 this.add('-start', pokemon, 'typeadd', 'Stellar');
             }
+            this.field.setWeather('sunnyday');
+            this.field.setTerrain('mistyterrain');
+            pokemon.showShield();
+        },
+        onEnd(pokemon) {
+            if (this.effectState.shown) this.add('-end', pokemon, this.effectState.shown);
+            this.effectState.shown = '';
+        },
+        onTrapPokemon(pokemon) {
+            // Le vrai empereur ne fuit pas (le message est affiché dans side.ts)
+            pokemon.trapped = true;
+        },
+        onTryHit(target, source, move) {
+            // Aucun vol / échange de talent, de stats ou de boosts
+            if (!source || source === target) return;
+            const blocked = [
+                'skillswap', 'entrainment', 'simplebeam', 'worryseed', 'gastroacid', 'roleplay', 'doodle',
+                'powerswap', 'guardswap', 'heartswap', 'topsyturvy', 'psychoshift', 'transform', 'soulswap',
+                'soak', 'magicpowder', 'trickortreat', 'forestscurse', 'electrify', 'iondeluge', 'magic',
+            ];
+            if (move.stealsBoosts) {
+                // Spectral Thief : les dégâts passent, mais aucun boost n'est volé
+                move.stealsBoosts = false;
+                this.add('-message', `Le Vrai Empereur n'est pas affecté par le vol de boosts (${move.name}) !`);
+            }
+            if (blocked.includes(move.id)) {
+                const why: { [k: string]: string } = {
+                    skillswap: "les échanges de talent", entrainment: "les changements de talent", simplebeam: "les changements de talent",
+                    worryseed: "les changements de talent", gastroacid: "la suppression de talent", roleplay: "la copie de talent",
+                    doodle: "la copie de talent", powerswap: "les échanges de stats", guardswap: "les échanges de stats",
+                    heartswap: "les échanges de stats", topsyturvy: "l'inversion des boosts", psychoshift: "le transfert de statut",
+                    transform: "la copie de son corps", soulswap: "les échanges de corps", soak: "les changements de type",
+                    magicpowder: "les changements de type", trickortreat: "les changements de type", forestscurse: "les changements de type",
+                    electrify: "les altérations d'attaques", iondeluge: "les altérations d'attaques", magic: "la transformation en lapin",
+                };
+                this.add('-immune', target, '[from] ability: True Emperor');
+                this.add('-message', `Le Vrai Empereur n'est pas affecté par ${why[move.id] || 'cet effet'} (${move.name}) !`);
+                return null;
+            }
         },
         onSetStatus(status, target, source, effect) {
             if (effect as Move && (effect as Move).status) {
                 this.add('-immune', target, '[from] ability: True Emperor');
             }
+            this.add('-message', `Le Vrai Empereur n'est pas affecté par les altérations de statut${effect?.name ? ` (${effect.name})` : ''} !`);
             return false;
         },
-        onTryAddVolatile(status, target) {
-            this.add('-immune', target, '[from] ability: True Emperor');
-            return null;
+        onTryAddVolatile(status, target, source) {
+            // Bloque les états volatils négatifs (Salt Cure, Provoc, Encore, Vampigraine, Confusion...) :
+            // ceux infligés par un adversaire, plus la confusion auto-infligée.
+            if (status.id === 'trapper') return; // moitié "lanceur" du lien de Block / Regard Noir, inoffensive
+            const hostile = !!source && source !== target && !source.isAlly(target);
+            if (hostile || status.id === 'confusion') {
+                this.add('-immune', target, '[from] ability: True Emperor');
+                this.add('-message', `Le Vrai Empereur n'est pas affecté par ${status.name} !`);
+                return null;
+            }
         },
         onTryBoost(boost, target, source, effect) {
             if (source && target === source) return;
@@ -7176,19 +7202,35 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
             }
             if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
                 this.add("-fail", target, "unboost", "[from] ability: True Emperor", `[of] ${target}`);
+                this.add('-message', `Le Vrai Empereur n'est pas affecté par les baisses de stats${effect?.name ? ` (${effect.name})` : ''} !`);
             }
         },
         onDamage(damage, target, source, effect) {
             if (effect.effectType !== 'Move') {
                 this.add('-immune', target, '[from] ability: True Emperor', '[silent]');
+                this.add('-message', `Le Vrai Empereur n'est pas affecté par les dégâts indirects (${effect.name}) !`);
+                return false;
+            }
+            // Bouclier d'âmes : bloque autant de dégâts qu'il reste d'âmes
+            if (!target.soulShield) return;
+            const left = target.absorbSoulShield(damage);
+            if (left <= 0) return 0;
+            return left;
+        },
+        onTakeItem(item, pokemon, source) {
+            // Impossible de lui retirer son objet (il peut toujours s'en défaire lui-même)
+            if ((source && source !== pokemon) || this.activeMove?.id === 'knockoff') {
+                this.add('-activate', pokemon, 'ability: True Emperor');
+                this.add('-message', `Le Vrai Empereur n'est pas affecté par le vol d'objet !`);
                 return false;
             }
         },
         onDragOut(pokemon) {
             this.add('-activate', pokemon, '[from] ability: True Emperor');
+            this.add('-message', `Le Vrai Empereur n'est pas affecté par les switchs forcés !`);
             return null;
         },
-		flags: {},
+		flags: { shitpost: 1, cantsuppress: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1 },
         name: "True Emperor",
         rating: 5,
         num: 9002,
@@ -7208,7 +7250,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.actions.useMove('batonpass', target,{ is_from_ability: true});
 			}
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Drip",
 		rating: 5,
 		num: 155,
@@ -7219,6 +7261,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifyAccuracy(accuracy, target) {
 			if (typeof accuracy !== 'number') return;
+			if (this.field.getPseudoWeather('gravity')) {
+				accuracy = accuracy * 5/3
+			}
+			if (this.field.getPseudoWeather('supergravity')) {
+				accuracy = accuracy * 10
+			}
 			if (accuracy < 100) {
 				return this.chainModify(0);
 			}
@@ -7244,7 +7292,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onFoeModifyCritRatio(critRatio) {
 			return critRatio - 6;
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Jackpot",
 		rating: 5,
 		num: 155,
@@ -7323,41 +7371,134 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-start', source, 'typeadd', 'Ice');
 			}
 		},
-		flags: {},
+		flags: { shitpost: 1 },
 		name: "Champi Hallucino",
 		rating: 2,
 		num: 2857,
 	},
-	azotesolide: {
-		onHit(pokemon, move) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Franck Ducos' || pokemon.transformed || !pokemon.hp) return;
-			if (move.id === 'dsc') {
-				if (pokemon.species.forme === 'FD') {
-					pokemon.formeChange('kcnarfcosud');
-				}
-			} 
-		},
-		onStart(source) {
-			this.field.setWeather('snowscape', source);
-		},
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === 'Ice') {
-				if (!this.boost({ spd: 1 })) {
-					this.add('-immune', target, '[from] ability: Azote Solide');
-				}
-				return null;
+	racisme: {
+		// x2 dégâts infligés aux Pokémon de couleur Noire, et moitié dégâts reçus de leur part.
+		onModifyDamage(damage, source, target, move) {
+			if (target.species.color === 'Black') {
+				this.debug('Racisme boost');
+				this.add('-ability', source, 'Racisme');
+				this.add('-message', `${source.name} charge ${target.name} avec un zèle tout particulier !`);
+				return this.chainModify(2);
 			}
-			if (move.id === 'dsc') {
-				if (pokemon.species.forme === 'FD') {
-					pokemon.formeChange('kcnarfcosud');
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (source.species.color === 'Black') {
+				this.debug('Racisme resist');
+				this.add('-ability', target, 'Racisme');
+				this.add('-message', `${target.name} encaisse les coups de ${source.name} avec une indifférence suspecte !`);
+				return this.chainModify(0.5);
+			}
+		},
+		flags: { shitpost: 1 },
+		name: "Racisme",
+		rating: 3,
+		num: 3010,
+	},
+	triumvirat: {
+		// Entrée : Vent Glace + neige. Après chacune de ses attaques (sauf pendant le 1er tour) : Zap.
+		// Dès l'entrée : "vole" (invulnérable comme Vol) pendant le 1er tour seulement, atterrit à la fin du 1er.
+		// Fin du 3e tour : gèle les adversaires (comme Pote Glace).
+		// Ses attaques offensives monocibles ont un effet d'éclaboussure (Rebondifeu).
+		onStart(pokemon) {
+			this.effectState.tours = 0;
+			this.effectState.vol = true;
+			this.effectState.zapEnCours = false;
+			this.add('-ability', pokemon, 'Triumvirat');
+			this.add('-message', `${pokemon.name} s'envole !`);
+			this.field.setWeather('snowscape', pokemon, this.effect);
+			this.effectState.zapEnCours = true;
+			this.actions.useMove('icywind', pokemon);
+			this.effectState.zapEnCours = false;
+		},
+		// Zap juste après son attaque normale du tour
+		onAfterMove(pokemon, target, move) {
+			if (this.effectState.zapEnCours || !pokemon.hp) return;
+			if (!this.effectState.tours) return; // pas de Zap pendant le 1er tour
+			this.effectState.zapEnCours = true;
+			this.actions.useMove('zap', pokemon);
+			this.effectState.zapEnCours = false;
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (!pokemon.hp) return;
+			this.effectState.tours++;
+			// En l'air (invulnérable) pendant le tour d'entrée seulement ; il atterrit à la fin du 1er tour
+			if (this.effectState.tours >= 1) {
+				if (this.effectState.vol) this.add('-message', `${pokemon.name} atterrit !`);
+				this.effectState.vol = false;
+			}
+			if (this.effectState.tours === 3) {
+				this.add('-activate', pokemon, 'ability: Triumvirat');
+				this.add('-message', `${pokemon.name} glace le terrain !`);
+				for (const target of pokemon.foes()) {
+					target.trySetStatus('frz', pokemon);
 				}
-			} 
+				pokemon.clearBoosts();
+			}
 		},
-		flags: {},
-		name: "Azote Solide",
-		rating: 4.5,
-		num: 1646,
+		onInvulnerability(target, source, move) {
+			if (!this.effectState.vol || source === target) return;
+			if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows'].includes(move.id)) {
+				return;
+			}
+			this.add('-message', `${target.name} plane au-dessus de la mêlée : ${move.name} passe sous ses semelles de sorcier !`);
+			return false;
 		},
+		// Éclaboussure de Rebondifeu, uniquement pour les attaques offensives monocibles :
+		// les autres adversaires adjacents à la cible (camp adverse, y compris en free-for-all) perdent 1/16 PV
+		onSourceDamagingHit(damage, target, source, move) {
+			if (!['normal', 'any', 'adjacentFoe', 'randomNormal', 'scripted'].includes(move.target)) return;
+			for (const autre of source.foes()) {
+				if (autre === target || !autre.hp || !target.isAdjacent(autre)) continue;
+				this.damage(autre.baseMaxhp / 16, autre, source, this.dex.conditions.get('Flame Burst'));
+			}
+		},
+		flags: { shitpost: 1 },
+		name: "Triumvirat",
+		rating: 5,
+		num: 3020,
+	},
+	chinoiseries: {
+		// Contrary + Queenly Majesty
+		onChangeBoost(boost, target, source, effect) {
+			if (effect && effect.id === 'zpower') return;
+			let i: BoostID;
+			for (i in boost) {
+				boost[i]! *= -1;
+			}
+		},
+		onFoeTryMove(target, source, move) {
+			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
+			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
+				return;
+			}
+
+			const dazzlingHolder = this.effectState.target;
+			if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
+				this.attrLastMove('[still]');
+				this.add('cant', dazzlingHolder, 'ability: Chinoiseries', move, `[of] ${target}`);
+				this.add('-message', `${dazzlingHolder.name} a appris à être immunisé aux attaques prioritaires auprès des moines tibétains !`);
+				return false;
+			}
+		},
+		flags: { breakable: 1, shitpost: 1 },
+		name: "Chinoiseries",
+		rating: 4,
+		num: 3030,
+	},
+	lez: {
+		// Implémenté dans sim/battle-actions.ts (runMove) : toutes les attaques lancées sont des attaques Z.
+		flags: { shitpost: 1 },
+		name: "Le Z",
+		rating: 5,
+		num: 3040,
+	},
 	coindetable: {
 		onResidual(pokemon,source,target){
 			const x = Math.floor (Math.random()*(4))
