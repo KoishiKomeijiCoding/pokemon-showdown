@@ -7534,4 +7534,88 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4.5,
 		num: 1646,
 	},
+	azotesolide: {
+		onModifyMovePriority: 1,
+		onModifyMove(move, attacker, defender) {
+			if (attacker.species.baseSpecies !== 'Franck Ducos' || attacker.transformed) return;
+			const atkcnarf = ['dsc', 'atg'];
+			if (move.category === 'Status' && atkcnarf.includes(move.id)) return;
+			const targetForme = (atkcnarf.includes(move.id) ? 'Kcnarf Cosud' : 'Franck Ducos');
+			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
+		},
+		onStart(source) {
+			this.field.setWeather('snowscape', source);
+		},
+			onDamagingHit(damage, target, source, move) {
+			if (move.type === 'Fire') {
+				if (Math.floor(Math.random() * (3)) == 2) {
+					this.boost({ atk: 1, spa: 1, });
+				}
+			}
+		},
+		onUpdate(pokemon) {
+			if (pokemon.status === 'brn') {
+				this.add('-activate', pokemon, 'ability: Azote Solide');
+				pokemon.cureStatus();
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if (status.id !== 'brn') return;
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Azote Solide');
+			}
+			return false;
+		},
+		flags: {},
+		name: "Azote Solide",
+		rating: 4.5,
+		num: 1647,
+	},
+	moaiiii: {
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			for (const pokemon of this.getAllActive()) {
+				let stats: BoostID[] = [];
+				const boost: SparseBoostsTable = {};
+				let statPlus: BoostID;
+				for (statPlus in pokemon.boosts) {
+					if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
+					if (pokemon.boosts[statPlus] < 6) {
+						stats.push(statPlus);
+					}
+				}
+				let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+				if (randomStat) boost[randomStat] = 1;
+
+				stats = [];
+				let statMinus: BoostID;
+				for (statMinus in pokemon.boosts) {
+					if (statMinus === 'accuracy' || statMinus === 'evasion') continue;
+					if (pokemon.boosts[statMinus] > -6 && statMinus !== randomStat) {
+						stats.push(statMinus);
+					}
+				}
+				randomStat = stats.length ? this.sample(stats) : undefined;
+				if (randomStat) boost[randomStat] = -1;
+
+				this.boost(boost, pokemon, pokemon);
+			
+				const r = this.random(100);
+				if (r < 11) {
+					this.field.setTerrain('mistyterrain'); 
+				} else if (r < 21) {
+					this.field.setTerrain('electricterrain');
+				} else if (r < 30) {
+					this.field.setTerrain('psychicterrain');
+				} else if (r < 40) {
+					this.field.setTerrain('grassyterrain');
+				}
+			}
+		},
+		flags: {},
+		name: "Moaiiii",
+		rating: 4.5,
+		num: 1649,
+	},
 };

@@ -24066,5 +24066,133 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Electric",
 		zMove: { basePower: 190 },
 		contestType: "Cool",
-	}
+	},
+	dsc: {
+		num: 3812,
+		accuracy: 100,
+		basePower: 77,
+		category: "Special",
+		name: "DSC",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
+		secondary: {
+			chance: 10,
+			status: 'frz',
+		},
+		onAfterMove(source) {
+			this.field.setWeather('hail', source, this.effect);
+		},
+		onHit(pokemon, source) {
+			const item = pokemon.getItem();
+			if ((item.isBerry || item.isGem) && pokemon.takeItem(source)) {
+				this.add('-enditem', pokemon, item.name, '[from] move: DSC');
+			}
+		},
+		target: "allAdjacentFoes",
+		type: "Ice",
+		zMove: { basePower: 170 },
+		contestType: "Cool",
+	},
+	atg: {
+		num: 3813,
+		accuracy: 100,
+		basePower: 77,
+		category: "Physical",
+		name: "ATG",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
+		secondary: {
+			chance: 10,
+			status: 'frz',
+		},
+		onAfterMove(source) {
+			this.field.setWeather('hail', source, this.effect);
+		},
+		onHit(pokemon, source) {
+			const item = pokemon.getItem();
+			if ((item.isBerry || item.isGem) && pokemon.takeItem(source)) {
+				this.add('-enditem', pokemon, item.name, '[from] move: ATG');
+			}
+		},
+		target: "allAdjacentFoes",
+		type: "Ice",
+		zMove: { basePower: 170 },
+		contestType: "Cool",
+	},
+	zyklonb: {
+		num: 3814,
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		name: "Zyklon-B",
+		pp: 5,
+		priority: 0,
+		onHit(target, source) {
+				const status = this.sample(['tox', 'brn']);
+				target.trySetStatus(status, source);
+		},
+		flags: { protect: 1, metronome: 1, shitpost: 1 },
+		target: "allAdjacentFoes",
+		type: "Dark",
+		zMove: { effect: 'clearnegativeboost' },
+		contestType: "Clever",
+	},
+	posesousethanol: {
+		num: 3814,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Pose sous ethanol",
+		pp: 5,
+		priority: 0,
+		volatileStatus: 'posesousethanol',
+		condition: {
+			duration: 5,
+			onStart(target) {
+				this.add('-start', target, 'Pose sous ethanol');
+			},
+			onImmunity(type) {
+				if (type === 'Poison') return false;
+			},
+			onResidualOrder: 18,
+			onResidual(target, source, pokemon)
+			 {const x = Math.floor (Math.random()*(3))
+				for (const pokemon of this.getAllActive()) {
+						if (x == 0) {
+						target.addVolatile('confusion', source, this.effect);
+						}
+						if (x == 1) {
+						this.actions.useMove('acid', target);
+						}
+						if (x == 2) {
+						this.actions.useMove('zyklonb', target);
+						}
+				}
+			},
+			onEnd(target) {
+				this.add('-end', target, 'Posé sous ethanol');
+			},
+		},
+		flags: {metronome: 1, shitpost: 1 },
+		target: "self",
+		type: "Water",
+		zMove: { effect: 'clearnegativeboost' },
+		contestType: "Clever",
+	},
+	lanceoiseau: {
+		num: 3012,
+		accuracy: 100,
+		basePower: 100,
+		category: "Physical",
+		name: "Lance Oiseau",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, metronome: 1, shitpost: 1 },
+		target: "normal",
+		type: "Bird",
+		zMove: { basePower: 160 },
+		contestType: "Cool",
+	},
 };
