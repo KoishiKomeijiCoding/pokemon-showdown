@@ -6453,7 +6453,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 				return null;
 			}
-		},
+			},
+			onStart(pokemon) {
+					const today = new Date();
+					const estMercredi = today.getDay() === 3;
+					
+
+					if (estMercredi && pokemon.species.id === "doji" && pokemon.species.forme !== "Primal") {
+						this.add('-activate', pokemon, 'ability: Mercredi');
+						this.add('-message', `Nous sommes Mercredi ! Doji est donc près à libérer sa vrais puissance !`);
+  						pokemon.formeChange('dojiprimal',this.effect,true);
+					} 
+			},
 		flags: { shitpost: 1 },
 		name: "Mercredi",
 		rating: 0,
