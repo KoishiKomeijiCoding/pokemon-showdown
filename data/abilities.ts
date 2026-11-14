@@ -5886,20 +5886,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
 				return false;
 			}
-            if (['ashbaby'].includes(target.species.id) && damage >= target.hp && effect && effect.effectType === 'Move' && !target.transformed) {
-                this.add('-ability', target, 'Pompei Baby');
+            if (['ashbaby'].includes(target.species.id) && damage >= target.hp && effect && effect.effectType === 'Move' && !target.transformed && !target.pompeiBaby) {
 				target.pompeiBaby = true
-                return target.hp - 1;
-            }
-        },
-        onResidual(pokemon) {
-            if (pokemon.baseSpecies.baseSpecies !== 'Ash Baby' || pokemon.transformed || !pokemon.hp) return;
-            if (pokemon.pompeiBaby) {
-				this.heal(pokemon.maxhp);
-                this.add('-activate', pokemon, 'ability: Pompei Baby');
-                pokemon.formeChange('Ash Baby Burned"', this.effect, true);
-                pokemon.formeRegression = true;
-				pokemon.pompeiBaby = false
+				this.heal(target.maxhp);
+                this.add('-activate', target, 'ability: Pompei Baby');
+                target.formeChange('Ash Baby Burned"', this.effect, true);
+                target.formeRegression = true;
+                return 0;
             }
         },
         flags: { shitpost: 1 },
@@ -7023,7 +7016,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Cage Gobeline' || pokemon.transformed || !pokemon.hp) return;
 			if (pokemon.hp < pokemon.maxhp / 2) {
 				if (pokemon.species.forme === 'BaseC') {
-					pokemon.formeChange('cagegobelinefree');
+					pokemon.formeChange('cagegobelinefree',this.effect,true);
 				}
 			} 
 		},

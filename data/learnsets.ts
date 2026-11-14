@@ -102730,7 +102730,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 		learnset: {
 		watchhogblast: ["9M"],
 		bellydrum: ["9M"],
-		tailglow: ["9M"],
 		hypervoice: ["9M"],
 		fakeout: ["9M"],
 		afteryou: ["7T", "7L25", "6T", "6L25", "5T", "5L25"],
@@ -104312,7 +104311,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			zapcannon: ["9L66", "8L66", "8S0"],
 			darkvoid: ["9M"],
 			spacialrend: ["9M"],
-			revivalblessing: ["9M"],
 		}
 	},
 	xenoa: {
@@ -105095,7 +105093,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			toxic: ["9M", "8V", "7M", "7V", "6M", "5M", "4M", "3M"],
 			toxicspikes: ["9M", "8M"],
 			trailblaze: ["9M"],
-			transform: ["9L80", "8L80", "8V", "7L1", "7V", "7S24", "6L1", "5L1", "4L1", "4S18", "3L10", "3S0", "3S1"],
 			triattack: ["8M", "8V", "7V"],
 			trick: ["9M", "8M", "7T", "6T", "5T", "4T"],
 			trickroom: ["9M", "8M", "7M", "6M", "5M", "4M"],
