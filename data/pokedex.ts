@@ -21580,7 +21580,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: { 0: "Joyaux Rare" },
 		heightm: 1.50,
 		weightkg: 130.0,
-		color: "Brown",
+		color: "Black",
 		eggGroups: ["Undiscovered"],
 	},
 	mineducongomega: {
@@ -21593,7 +21593,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: { 0: "Joyaux Rare" },
 		heightm: 2.7,
 		weightkg: 185,
-		color: "Brown",
+		color: "Black",
 		eggGroups: ["Monster", "Grass"],
 		requiredItem: "Congozelite",
 	},
@@ -21655,7 +21655,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 			abilities: { 0: "Intrusion" },
 			heightm: 2.7,
 			weightkg: 185,
-			color: "Brown",
+			color: "Black",
 			eggGroups: ["Monster", "Grass"],
 	},
 	kingratio: {
@@ -21713,7 +21713,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: { 0: "Aura Farming"},
 		heightm: 1.80,
 		weightkg: 90,
-		color: "Blue",
+		color: "Green",
 		eggGroups: ["Human-Like"],
 	},
 	leloup: {
@@ -21724,7 +21724,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: { 0: "Execution d'Always Furrious"},
 		heightm: 1.80,
 		weightkg: 90,
-		color: "Blue",
+		color: "Black",
 		eggGroups: ["Human-Like"],
 	},
 	tungtungtungsahur: {
@@ -22027,7 +22027,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
         abilities: { 0: "Azote Solide"},
         heightm: 1.35,
         weightkg: 70.0,
-        color: "White",
+        color: "Black",
         eggGroups: ["Monster", "Grass"],
         battleOnly: "Franck Ducos",
 		formeOrder: ["Franck Ducos", "Kcnarf Cosud"],
