@@ -7341,6 +7341,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.getPseudoWeather('cadeauxdumali')) {
 				this.add('-start', source, 'typeadd', 'Ice');
 			}
+			if (this.field.getPseudoWeather('nitrodiscord')) {
+				this.add('-start', source, 'typeadd', 'Steel');
+			}
 		},
 		onResidual(source) {
 			if (this.field.getPseudoWeather('supergravity')) {
@@ -7369,6 +7372,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (this.field.getPseudoWeather('cadeauxdumali')) {
 				this.add('-start', source, 'typeadd', 'Ice');
+			}
+			if (this.field.getPseudoWeather('nitrodiscord')) {
+				this.add('-start', source, 'typeadd', 'Steel');
 			}
 		},
 		flags: { shitpost: 1 },
@@ -7615,6 +7621,31 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		flags: {},
 		name: "Moaiiii",
+		rating: 4.5,
+		num: 1649,
+	},
+	oughoughough: {
+		onStart(pokemon) {
+			pokemon.abilityState.gluttony = true;
+			this.add('-ability', pokemon, 'Ough Ough Ough');
+			this.effectState.gluttony = true;
+		},
+		onChangeBoost(boost, target, source, effect, pokemon, item) {
+			if (this.effectState.baie == 1) return;
+			if (effect && effect.id === 'zpower') return;
+			this.effectState.baie = 1
+			let i: BoostID;
+			for (i in boost) {
+				boost[i]! *= 2;
+			}
+			if (source.getItem().isBerry) {
+			source.eatItem(true);
+			source.setAbility('gorillatactics', source);
+			this.add('-start', source, 'typeadd', 'Fighting');
+			}
+		},
+		flags: {},
+		name: "OughOughOugh",
 		rating: 4.5,
 		num: 1649,
 	},

@@ -22027,5 +22027,27 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Black",
 		eggGroups: ["Undiscovered"],
 	},
+	kingkong: {
+		num: 10000,
+		name: "King Kong",
+		types: ["Fire","Grass"],
+		baseStats: { hp: 120, atk: 125, def: 115, spa: 10, spd: 105, spe: 75 },
+		abilities: { 0: "OughOughOugh" },
+		heightm: 3.50,
+		weightkg: 200,
+		color: "Black",
+		eggGroups: ["Undiscovered"],
+	},
+	serverowner: {
+		num: 10000,
+		name: "Server Owner",
+		types: ["Dark","Stellar"],
+		baseStats: { hp: 150, atk: 1, def: 149, spa: 1, spd: 149, spe: 150 },
+		abilities: { 0: "Wonder Guard" },
+		heightm: 10.50,
+		weightkg: 230,
+		color: "Purple",
+		eggGroups: ["Undiscovered"],
+	},
 };
 

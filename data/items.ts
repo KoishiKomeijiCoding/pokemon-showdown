@@ -8274,4 +8274,29 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 8,
 		isNonstandard: "CAP",
 	},
+	amisurlechemin: {
+		name: "Ami sur le chemin",
+		spritenum: 0,
+		fling: {
+			basePower: 100,
+		},
+		onPrepareHit(source, target, move) {
+			if (move.category === 'Status' || move.multihit || move.flags['noparentalbond'] || move.flags['charge'] ||
+				move.flags['futuremove'] || move.spreadHit || move.isZ || move.isMax) return;
+			const x = Math.floor (Math.random()*(3))
+						if (x == 0) {
+							move.multihit = 2;
+							move.multihitType = 'parentalbond';
+						}
+		},
+		// Damage modifier implemented in BattleActions#modifyDamage()
+		onSourceModifySecondaries(secondaries, target, source, move) {
+			if (move.multihitType === 'parentalbond' && move.id === 'secretpower' && move.hit < 2) {
+				// hack to prevent accidentally suppressing King's Rock/Razor Fang
+				return secondaries.filter(effect => effect.volatileStatus === 'flinch');
+			}
+		},
+		num: 9101,
+		gen: 9,
+	},
 };
