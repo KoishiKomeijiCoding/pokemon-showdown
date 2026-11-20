@@ -24192,7 +24192,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onResidualOrder: 18,
 			onResidual(target, source, pokemon)
 			 {const x = Math.floor (Math.random()*(3))
-				for (const pokemon of this.getAllActive()) {
+				for (const target of pokemon.adjacentFoes()) {
 						if (x == 0) {
 						target.addVolatile('confusion', source, this.effect);
 						}
@@ -24226,6 +24226,117 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Bird",
 		zMove: { basePower: 160 },
+		contestType: "Cool",
+	},
+	rougenri: {
+		num: 3013,
+		accuracy: 100,
+		basePower: 1,
+		category: "Physical",
+		name: "Rougenri",
+		pp: 5,
+		priority: 0,
+		volatileStatus: 'soulless',
+		condition: {
+			onStart(target) {
+				this.add('-start', target, 'Soulless');
+			}
+		},
+		onHit(target, source) {
+			this.add('-start', target, 'typeadd', 'Fire');
+		},
+		flags: { protect: 1, metronome: 1, shitpost: 1 },
+		target: "allAdjacentFoes",
+		type: "Stellar",
+		zMove: { basePower: 10 },
+		contestType: "Cool",
+	},
+	promotion: {
+		num: 3814,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		name: "Promotion",
+		pp: 1,
+		priority: 0,
+		secondaries: [
+			{
+                chance: 100,
+                boosts: {
+					atk: 1,
+					def: 1,
+					spa: 1,
+					spd: 1,
+					spe: 1,
+                },
+			},
+		],
+		flags: { metronome: 1, shitpost: 1 },
+		target: "normal",
+		type: "Stellar",
+		contestType: "Cool",
+	},
+	retrogradation: {
+		num: 3814,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		name: "Retrogradation",
+		pp: 1,
+		priority: 0,
+		secondaries: [
+			{
+                chance: 100,
+                boosts: {
+					atk: -1,
+					def: -1,
+					spa: -1,
+					spd: -1,
+					spe: -1,
+                },
+			},
+		],
+		flags: { metronome: 1, shitpost: 1 },
+		target: "normal",
+		type: "Stellar",
+		contestType: "Cool",
+	},
+	nitrodiscord: {
+		num: 3814,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Nitro Discord",
+		pp: 5,
+		priority: 0,
+		pseudoWeather: 'nitrodiscord',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				return 5;
+			},
+			onFieldStart(field, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'Nitro Discord', '[from] ability: ' + effect.name, `[of] ${source}`);
+				} else {
+					this.add('-fieldstart', 'Nitro Discord');
+				}
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, attacker, defender, move) {
+				if (move.flags['argent']) {
+				return this.chainModify(1.3);
+				}
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 7,
+			onFieldEnd() {
+				this.add('-fieldend', 'Nitro Discord');
+			},
+		},
+		flags: { metronome: 1, shitpost: 1 },
+		target: "all",
+		type: "Stellar",
 		contestType: "Cool",
 	},
 };
