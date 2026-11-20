@@ -24190,17 +24190,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (type === 'Poison') return false;
 			},
 			onResidualOrder: 18,
-			onResidual(target, source, pokemon)
+			onResidual(pokemon)
 			 {const x = Math.floor (Math.random()*(3))
 				for (const target of pokemon.adjacentFoes()) {
 						if (x == 0) {
-						target.addVolatile('confusion', source, this.effect);
+						target.addVolatile('confusion', target, this.effect);
 						}
 						if (x == 1) {
-						this.actions.useMove('acid', target);
+						this.actions.useMove('acid', pokemon,{ target: target });
 						}
 						if (x == 2) {
-						this.actions.useMove('zyklonb', target);
+						this.actions.useMove('zyklonb', pokemon,{ target: target });
 						}
 				}
 			},
@@ -24301,7 +24301,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Stellar",
 		contestType: "Cool",
 	},
-	nitrodiscord: {
+	nitrodiscord: { //?
 		num: 3814,
 		accuracy: true,
 		basePower: 0,

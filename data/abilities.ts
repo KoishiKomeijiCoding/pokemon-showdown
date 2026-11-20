@@ -7415,6 +7415,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		// Fin du 3e tour : gèle les adversaires (comme Pote Glace).
 		// Ses attaques offensives monocibles ont un effet d'éclaboussure (Rebondifeu).
 		onStart(pokemon) {
+			if (this.effectState.aVole != true) {
+				this.effectState.vol = true;
+				this.add('-message', `${pokemon.name} s'envole !`);
+				this.effectState.aVole = true;
+			}
 			this.effectState.tours = 0;
 			this.effectState.vol = true;
 			this.effectState.zapEnCours = false;
@@ -7634,7 +7639,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-ability', pokemon, 'Ough Ough Ough');
 			this.effectState.gluttony = true;
 		},
-		onChangeBoost(boost, target, source, effect, pokemon, item) {
+		onChangeBoost(boost, target, source, effect) {
 			if (this.effectState.baie == 1) return;
 			if (effect && effect.id === 'zpower') return;
 			this.effectState.baie = 1
