@@ -6134,7 +6134,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Water') {
 				if (!this.boost({ spa: 1 })) {
-					this.add('-immune', target, '[from] ability: Storm Drain');
+					this.add('-immune', target, '[from] ability: Gros Server');
 				}
 				return null;
 			}
@@ -6145,7 +6145,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.validTarget(this.effectState.target, source, redirectTarget)) {
 				if (move.smartTarget) move.smartTarget = false;
 				if (this.effectState.target !== target) {
-					this.add('-activate', this.effectState.target, 'ability: Storm Drain');
+					this.add('-activate', this.effectState.target, 'ability: Gros Server');
 				}
 				return this.effectState.target;
 			}
@@ -6865,9 +6865,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	opinionpolitique: {
 		onDamagingHit(damage, target, source, effect) {
 			const x = Math.floor (Math.random()*(3))
-			if (x == 1) {
-					this.actions.useMove('uproar', source);
-			}
 			if (x == 2) {
 					this.actions.useMove('taunt', target);
 			}
