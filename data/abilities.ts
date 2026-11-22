@@ -51,6 +51,9 @@ function detectiveReveal(battle: Battle, holder: Pokemon, target: Pokemon) {
 	battle.add('-detective', target, ability.name, item.name || '', ...moves);
 	battle.add('-message', `${holder.name} lance un DDoS sur ${target.name} !`);
 	battle.add('-message', `adresse IP : ${battle.sample(IpAddresses)}`);
+	const sp = target.species;
+	const gender = target.gender === 'M' ? 'mâle' : target.gender === 'F' ? 'femelle' : 'sans genre';
+	battle.add('-message', `Espèce : ${sp.name} (${gender}, taille ${sp.heightm} m, poids ${sp.weightkg} kg, couleur ${sp.color}, groupe d'oeuf ${sp.eggGroups.join('/')})`);
 	battle.add('-message', `Talent : ${ability.name}`);
 	battle.add('-message', `Objet : ${item.name || 'aucun'}`);
 	battle.add('-message', `Capacités : ${moves.join(', ')}`);
@@ -66,7 +69,8 @@ function detectiveReveal(battle: Battle, holder: Pokemon, target: Pokemon) {
 		const sign = nature.plus === stat ? '+' : nature.minus === stat ? '-' : '';
 		stats.push(`${label[stat]} ${s[stat]} (EV: ${evs[stat]}${sign}, IV: ${ivs[stat]})`);
 	}
-	battle.add('-message', `Stats exactes : ${stats.join(' | ')}`);
+	// Attention : pas de '|' dans un message (séparateur du protocole), sinon le client coupe la ligne
+	battle.add('-message', `Stats exactes : ${stats.join(' ; ')}`);
 	target.addVolatile('detectiveeye', holder);
 }
 
