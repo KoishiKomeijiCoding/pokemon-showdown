@@ -86441,6 +86441,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	doji: {
 		learnset: {
+			poisonjab: ["9M"],
 			cestlheuredesortirlespoubelles: ["9M"],
 			firstimpression: ["9L35", "8L35"],
 			assurance: ["9L16", "8M", "8L16"],
