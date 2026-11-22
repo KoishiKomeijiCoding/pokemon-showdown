@@ -8274,13 +8274,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 8,
 		isNonstandard: "CAP",
 	},
-	metalbrut: {
-		name: "Metal brut",
+	lingotdefer: {
+		name: "Lingot de fer",
 		spritenum: 0,
 		fling: { basePower: 30 },
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.name === 'Hephaistos') {
-				this.add('-message', `${pokemon.name} reforge son équipement avec le Métal brut !`);
+				this.add('-message', `${pokemon.name} reforge son équipement avec le Lingot de fer !`);
 				pokemon.forgeItems(3);
 			}
 		},

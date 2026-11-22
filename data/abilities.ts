@@ -32,24 +32,27 @@ Ratings and how they work:
 
 */
 import { ClauseDialogues } from './clause-dialogues';
+import { IpAddresses } from './ip-addresses';
 
 
-/** Detective (Sherlock Holmes): reveals everything about a foe and makes it vulnerable to Normal/Psychic moves despite immunities. */
+/**
+ * Detective (Sherlock Holmes) : « DDoS » d'un adversaire. Tout est révélé d'un coup dans le chat (sans animation de talent)
+ * et le client mémorise talent, objet et capacités via la ligne silencieuse `|-detective|`. Rend aussi l'adversaire
+ * touchable malgré ses immunités (volatile `detectiveeye`).
+ */
 function detectiveReveal(battle: Battle, holder: Pokemon, target: Pokemon) {
 	if (!target || target.fainted || target.isAlly(holder)) return;
-	battle.add('-ability', holder, 'Detective');
-	if (target.item) battle.add('-item', target, target.getItem().name, '[from] ability: Detective', `[of] ${holder}`);
-	battle.add('-ability', target, target.getAbility().name, '[from] ability: Detective', `[of] ${holder}`);
+	const item = target.getItem();
+	const ability = target.getAbility();
 	const nature = target.getNature();
 	const s = target.storedStats;
-	const moves = target.moveSlots.map(m => m.move).join(', ');
-	// Même protocole que Forewarn : le client mémorise chaque capacité (visible au survol du Pokémon adverse)
-	for (const slot of target.moveSlots) {
-		battle.add('-activate', holder, 'ability: Forewarn', slot.move, `[of] ${target}`);
-	}
-	battle.add('-message', `${holder.name} enquête sur ${target.name} !`);
-	battle.add('-message', `${target.name} — Capacités : ${moves} | Objet : ${target.getItem().name || 'aucun'} | Talent : ${target.getAbility().name} | Nature : ${nature.name || 'inconnue'}`);
-	battle.add('-message', `${target.name} — PV ${target.hp}/${target.maxhp}, Atq ${s.atk}, Déf ${s.def}, AtqSpé ${s.spa}, DéfSpé ${s.spd}, Vit ${s.spe}`);
+	const moves = target.moveSlots.map(m => m.move);
+	// Ligne silencieuse (pas de texte ni d'animation) : le client mémorise talent, objet et capacités du Pokémon.
+	battle.add('-detective', target, ability.name, item.name || '', ...moves);
+	battle.add('-message', `${holder.name} lance un DDoS sur ${target.name} !`);
+	battle.add('-message', `adresse IP : ${battle.sample(IpAddresses)}`);
+	battle.add('-message', `Capacités : ${moves.join(', ')} | Objet : ${item.name || 'aucun'} | Talent : ${ability.name} | Nature : ${nature.name || 'inconnue'}`);
+	battle.add('-message', `PV ${target.hp}/${target.maxhp} | Atq ${s.atk} | Déf ${s.def} | AtqSpé ${s.spa} | DéfSpé ${s.spd} | Vit ${s.spe}`);
 	target.addVolatile('detectiveeye', holder);
 }
 
@@ -7714,5 +7717,29 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "OughOughOugh",
 		rating: 4.5,
 		num: 1649,
+	},
+	brocherotative: {
+		// Broche de kebab fixee a la ceinture : 3 tranches par entree, chacune soigne et accelere.
+		onStart(pokemon) {
+			pokemon.abilityState.tranches = 3;
+			this.add('-activate', pokemon, 'ability: Broche Rotative');
+			this.add('-message', `${pokemon.name} a une broche pleine : 3 tranches !`);
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (!pokemon.hp) return;
+			const tranches = pokemon.abilityState.tranches;
+			if (!(tranches > 0)) return;
+			pokemon.abilityState.tranches = tranches - 1;
+			this.add('-activate', pokemon, 'ability: Broche Rotative');
+			this.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
+			this.boost({ spe: 1 }, pokemon, pokemon);
+			this.add('-message', `${pokemon.name} tranche un morceau de kebab ! Il reste ${tranches - 1} tranche(s).`);
+		},
+		flags: {},
+		name: "Broche Rotative",
+		rating: 4,
+		num: 3100,
 	},
 };

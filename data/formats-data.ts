@@ -6478,4 +6478,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	hephaistos: {
 		tier: "shitpostou"
 	},
+	punkcybernetique: {
+		tier: "shitpostou"
+	},
 };

@@ -8084,9 +8084,21 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "A 70 BP Rock physical hit on a random adjacent target. Lowers its Defense by 1 stage, then the target uses Rollout if it is Rock-type, otherwise Rock Blast.",
 		shortDesc: "Lowers the target's Defense by 1. Target uses Rollout or Rock Blast.",
 	},
-	dieudelaforge: {
-		name: "Dieu de la forge",
+	masterpiece: {
+		name: "Masterpiece",
 		desc: "The user forges 2 items in addition to the one from its Ability. Each forge draws 3 items and keeps one at random; items stack up to 5 times. Fails if the user does not have the Dieu de la forge Ability.",
 		shortDesc: "User forges 2 items (needs Dieu de la forge).",
+	},
+	lameakebab: {
+		name: "Lame a Kebab",
+		shortDesc: "Drains 1/2 of damage dealt. High crit rate. Refills a slice of Broche Rotative (max 3).",
+	},
+	gicleedesaucealgerienne: {
+		name: "Giclee de Sauce Algerienne",
+		shortDesc: "30% chance to burn the target, 30% chance to lower its Sp. Def by 1.",
+	},
+	durumexpress: {
+		name: "Durum Express",
+		shortDesc: "Heals the user by 1/2 of its max HP and raises its Attack by 1.",
 	},
 };

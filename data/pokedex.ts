@@ -22012,7 +22012,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		gender: "M",
 		baseStats: { hp: 160, atk: 90, def: 90, spa: 80, spd: 80, spe: 80 },
 		abilities: { 0: "Dieu de la forge" },
-		requiredItem: "Metal brut",
+		requiredItem: "Lingot de fer",
 		heightm: 1.8,
 		weightkg: 120.0,
 		color: "Red",
@@ -22089,6 +22089,18 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 230,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
+	},
+	punkcybernetique: { // punk cyborg a crete + broche de kebab
+		num: 10000,
+		name: "Punk Cybernetique",
+		types: ["Electric", "Dark"],
+		gender: "M",
+		baseStats: { hp: 75, atk: 115, def: 70, spa: 90, spd: 70, spe: 105 },
+		abilities: { 0: "Broche Rotative" },
+		heightm: 1.80,
+		weightkg: 85.0,
+		color: "Green",
+		eggGroups: ["Human-Like"],
 	},
 };
 

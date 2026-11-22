@@ -2630,8 +2630,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Vile Vial",
 		shortDesc: "If held by a Venomicon, its Poison- and Flying-type attacks have 1.2x power.",
 	},
-	metalbrut: {
-		name: "Metal brut",
+	lingotdefer: {
+		name: "Lingot de fer",
 		desc: "If held by Hephaistos, the user forges 3 items (chosen one by one) each time it switches in. Hephaistos must hold it.",
 		shortDesc: "Hephaistos: forges 3 items on switch-in.",
 	},

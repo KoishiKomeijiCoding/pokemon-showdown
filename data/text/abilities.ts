@@ -2579,4 +2579,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "At the end of each turn, the user forges an item: 3 items are offered among Leftovers, Sitrus Berry, Rocky Helmet, Air Balloon, Ability Shield, Mental Herb, Expert Belt, Clear Amulet, Bright Powder, Covert Cloak, Red Card, King's Rock, Salac Berry, Mirror Herb, Safety Goggles, Scope Lens, Shell Bell, Shed Shell, Utility Umbrella, Weakness Policy, White Herb and Wide Lens, and the player picks one. Forged items work in addition to the held item. They are lost when the user switches out.",
 		shortDesc: "Forges a chosen extra item each turn.",
 	},
+	brocherotative: {
+		name: "Broche Rotative",
+		shortDesc: "3 slices per entry: each turn eats one, healing 1/8 HP and +1 Spe (no cap).",
+	},
 };
