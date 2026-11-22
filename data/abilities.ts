@@ -5905,20 +5905,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
 				return false;
 			}
-            if (['ashbaby'].includes(target.species.id) && damage >= target.hp && effect && effect.effectType === 'Move' && !target.transformed) {
-                this.add('-ability', target, 'Pompei Baby');
+            if (['ashbaby'].includes(target.species.id) && damage >= target.hp && effect && effect.effectType === 'Move' && !target.transformed && !target.pompeiBaby) {
 				target.pompeiBaby = true
-                return target.hp - 1;
-            }
-        },
-        onResidual(pokemon) {
-            if (pokemon.baseSpecies.baseSpecies !== 'Ash Baby' || pokemon.transformed || !pokemon.hp) return;
-            if (pokemon.pompeiBaby) {
-				this.heal(pokemon.maxhp);
-                this.add('-activate', pokemon, 'ability: Pompei Baby');
-                pokemon.formeChange('Ash Baby Burned"', this.effect, true);
-                pokemon.formeRegression = true;
-				pokemon.pompeiBaby = false
+				this.heal(target.maxhp);
+                this.add('-activate', target, 'ability: Pompei Baby');
+                target.formeChange('Ash Baby Burned"', this.effect, true);
+                target.formeRegression = true;
+                return 0;
             }
         },
         flags: { shitpost: 1 },
@@ -6479,7 +6472,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 				return null;
 			}
-		},
+			},
+			onStart(pokemon) {
+					const today = new Date();
+					const estMercredi = today.getDay() === 3;
+					
+
+					if (estMercredi && pokemon.species.id === "doji" && pokemon.species.forme !== "Primal") {
+						this.add('-activate', pokemon, 'ability: Mercredi');
+						this.add('-message', `Nous sommes Mercredi ! Doji est donc près à libérer sa vrais puissance !`);
+  						pokemon.formeChange('dojiprimal',this.effect,true);
+					} 
+			},
 		flags: { shitpost: 1 },
 		name: "Mercredi",
 		rating: 0,
@@ -7042,7 +7046,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Cage Gobeline' || pokemon.transformed || !pokemon.hp) return;
 			if (pokemon.hp < pokemon.maxhp / 2) {
 				if (pokemon.species.forme === 'BaseC') {
-					pokemon.formeChange('cagegobelinefree');
+					pokemon.formeChange('cagegobelinefree',this.effect,true);
 				}
 			} 
 		},
@@ -7360,6 +7364,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.getPseudoWeather('cadeauxdumali')) {
 				this.add('-start', source, 'typeadd', 'Ice');
 			}
+			if (this.field.getPseudoWeather('nitrodiscord')) {
+				this.add('-start', source, 'typeadd', 'Steel');
+			}
 		},
 		onResidual(source) {
 			if (this.field.getPseudoWeather('supergravity')) {
@@ -7388,6 +7395,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (this.field.getPseudoWeather('cadeauxdumali')) {
 				this.add('-start', source, 'typeadd', 'Ice');
+			}
+			if (this.field.getPseudoWeather('nitrodiscord')) {
+				this.add('-start', source, 'typeadd', 'Steel');
 			}
 		},
 		flags: { shitpost: 1 },
@@ -7424,6 +7434,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		// Fin du 3e tour : gèle les adversaires (comme Pote Glace).
 		// Ses attaques offensives monocibles ont un effet d'éclaboussure (Rebondifeu).
 		onStart(pokemon) {
+			if (this.effectState.aVole != true) {
+				this.effectState.vol = true;
+				this.add('-message', `${pokemon.name} s'envole !`);
+				this.effectState.aVole = true;
+			}
 			this.effectState.tours = 0;
 			this.effectState.vol = true;
 			this.effectState.zapEnCours = false;
@@ -7431,7 +7446,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-message', `${pokemon.name} s'envole !`);
 			this.field.setWeather('snowscape', pokemon, this.effect);
 			this.effectState.zapEnCours = true;
-			this.actions.useMove('icywind', pokemon);
+			this.actions.useMove('icywind', pokemon,{is_from_ability: true});
 			this.effectState.zapEnCours = false;
 		},
 		// Zap juste après son attaque normale du tour
@@ -7439,7 +7454,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.effectState.zapEnCours || !pokemon.hp) return;
 			if (!this.effectState.tours) return; // pas de Zap pendant le 1er tour
 			this.effectState.zapEnCours = true;
-			this.actions.useMove('zap', pokemon);
+			this.actions.useMove('zap', pokemon,{is_from_ability: true});
 			this.effectState.zapEnCours = false;
 		},
 		onResidualOrder: 28,
@@ -7452,14 +7467,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (this.effectState.vol) this.add('-message', `${pokemon.name} atterrit !`);
 				this.effectState.vol = false;
 			}
-			if (this.effectState.tours === 3) {
+			/*if (this.effectState.tours === 3) {
 				this.add('-activate', pokemon, 'ability: Triumvirat');
 				this.add('-message', `${pokemon.name} glace le terrain !`);
 				for (const target of pokemon.foes()) {
 					target.trySetStatus('frz', pokemon);
 				}
 				pokemon.clearBoosts();
-			}
+			}*/
 		},
 		onInvulnerability(target, source, move) {
 			if (!this.effectState.vol || source === target) return;
@@ -7555,5 +7570,149 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Dieu de la forge",
 		rating: 4,
 		num: 3060,
+	},
+	coindetable: {
+		onResidual(pokemon,source,target){
+			const x = Math.floor (Math.random()*(4))
+				for (const pokemon of this.getAllActive()) {
+					if (pokemon.hasAbility('coindetable')) {
+						if (Math.floor(Math.random() * (3)) == 2) {
+							this.boost({def: 1});
+						}
+					} else { 
+						if (!pokemon.hasAbility('coindetable')) {
+						this.damage(pokemon.baseMaxhp / 16, pokemon);
+						}
+					}
+				}
+		},
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			const r = this.random(100);
+				if (r < 11) {
+					this.damage(source.baseMaxhp / 32, source, target);
+				} else if (r < 21) {
+					this.damage(source.baseMaxhp / 16, source, target);
+				} else if (r < 30) {
+					this.damage(source.baseMaxhp / 8, source, target);
+				} else if (r < 40) {
+					this.damage(source.baseMaxhp / 4, source, target);
+				}
+				
+			
+		},
+		flags: {},
+		name: "Coin de table",
+		rating: 4.5,
+		num: 1646,
+	},
+	azotesolide: {
+		onModifyMovePriority: 1,
+		onModifyMove(move, attacker, defender) {
+			if (attacker.species.baseSpecies !== 'Franck Ducos' || attacker.transformed) return;
+			const atkcnarf = ['dsc', 'atg'];
+			if (move.category === 'Status' && atkcnarf.includes(move.id)) return;
+			const targetForme = (atkcnarf.includes(move.id) ? 'Kcnarf Cosud' : 'Franck Ducos');
+			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
+		},
+		onStart(source) {
+			this.field.setWeather('snowscape', source);
+		},
+			onDamagingHit(damage, target, source, move) {
+			if (move.type === 'Fire') {
+				if (Math.floor(Math.random() * (3)) == 2) {
+					this.boost({ atk: 1, spa: 1, });
+				}
+			}
+		},
+		onUpdate(pokemon) {
+			if (pokemon.status === 'brn') {
+				this.add('-activate', pokemon, 'ability: Azote Solide');
+				pokemon.cureStatus();
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if (status.id !== 'brn') return;
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Azote Solide');
+			}
+			return false;
+		},
+		flags: {},
+		name: "Azote Solide",
+		rating: 4.5,
+		num: 1647,
+	},
+	moaiiii: {
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			for (const pokemon of this.getAllActive()) {
+				let stats: BoostID[] = [];
+				const boost: SparseBoostsTable = {};
+				let statPlus: BoostID;
+				for (statPlus in pokemon.boosts) {
+					if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
+					if (pokemon.boosts[statPlus] < 6) {
+						stats.push(statPlus);
+					}
+				}
+				let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+				if (randomStat) boost[randomStat] = 1;
+
+				stats = [];
+				let statMinus: BoostID;
+				for (statMinus in pokemon.boosts) {
+					if (statMinus === 'accuracy' || statMinus === 'evasion') continue;
+					if (pokemon.boosts[statMinus] > -6 && statMinus !== randomStat) {
+						stats.push(statMinus);
+					}
+				}
+				randomStat = stats.length ? this.sample(stats) : undefined;
+				if (randomStat) boost[randomStat] = -1;
+
+				this.boost(boost, pokemon, pokemon);
+			
+				const r = this.random(100);
+				if (r < 11) {
+					this.field.setTerrain('mistyterrain'); 
+				} else if (r < 21) {
+					this.field.setTerrain('electricterrain');
+				} else if (r < 30) {
+					this.field.setTerrain('psychicterrain');
+				} else if (r < 40) {
+					this.field.setTerrain('grassyterrain');
+				}
+			}
+		},
+		flags: {},
+		name: "Moaiiii",
+		rating: 4.5,
+		num: 1649,
+	},
+	oughoughough: {
+		onStart(pokemon) {
+			pokemon.abilityState.gluttony = true;
+			this.add('-ability', pokemon, 'Ough Ough Ough');
+			this.effectState.gluttony = true;
+		},
+		onChangeBoost(boost, target, source, effect) {
+			if (this.effectState.baie == 1) return;
+			if (effect && effect.id === 'zpower') return;
+			this.effectState.baie = 1
+			let i: BoostID;
+			for (i in boost) {
+				boost[i]! *= 2;
+			}
+			if (source.getItem().isBerry) {
+			source.eatItem(true);
+			source.setAbility('gorillatactics', source);
+			this.add('-start', source, 'typeadd', 'Fighting');
+			}
+		},
+		flags: {},
+		name: "OughOughOugh",
+		rating: 4.5,
+		num: 1649,
 	},
 };

@@ -696,7 +696,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	malveillancemax: {
 		num: 10003,
 		accuracy: 100,
-		basePower: 90,
+		basePower: 75,
 		category: "Physical",
 		name: "Malveillance Max",
 		secondaries: [
@@ -21882,7 +21882,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	balles: {
 		num: 817,
 		accuracy: 100,
-		basePower: 50,
+		basePower: 60,
 		category: "Special",
 		name: "Balles",
 		pp: 5,
@@ -21917,7 +21917,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
-		critRatio: 3,
 		target: "normal",
 		type: "Stellar",
 		zMove: { basePower: 190 },
@@ -22485,8 +22484,19 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
         priority: 0,
         flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, allyanim: 1, failencore: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 ,shitpost: 1},
         onHit(target, source, moove) {
-            const lapins = ["diggersby","cinderace","lopunny","azumarill"]
-            target.formeChange(this.sample(lapins),moove,true, target.name + " est transformé en lapin !");//transforminto est forçément temporaire dcp on peut pas utiliser ça
+            const lapins = ["diggersby","cinderace","lopunnymega","azumarill"]
+			const lapin = this.sample(lapins);
+			if (lapin == "azumarill") {
+				target.formeChange(lapin,moove,true,"1", target.name + " est transformé en lapin !"); //le client comprends pas ça mais nique aussi c pas ma faute
+			}
+			if (lapin == "diggersby") {
+				target.formeChange(lapin,moove,true,"H", target.name + " est transformé en lapin !");
+			}
+			if (lapin == "cinderace" || lapin == "lopunnymega") {
+				target.formeChange(lapin,moove,true, target.name + " est transformé en lapin !");//transforminto est forçément temporaire dcp on peut pas utiliser ça
+			}
+		
+
             target.moveSlots[Math.min(Math.floor(Math.random() * (3 + 1)), target.moveSlots.length)] =
             {
                 move: "Bounce",
@@ -23316,7 +23326,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onFieldResidual() {
-				const x = Math.floor (Math.random()*(3))
+				const x = Math.floor (Math.random()*(4))
 				for (const pokemon of this.getAllActive()) {
 					if (!pokemon.hasType("Bug")) {
 						if (x == 1) {
@@ -23325,7 +23335,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						}
 						if (x == 2) {
 						this.add('-message', pokemon + "La Republique c'est moi!!!");
-						this.actions.useMove('uproar', pokemon);
+						this.actions.useMove('hypervoice', pokemon);
+						}
+						if (x == 3) {
+						this.add('-message', pokemon + "Sale juif je te dis moi!!!");
+						this.actions.useMove('boomburst', pokemon);
 						}
 					}
 				}
@@ -23484,7 +23498,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
         basePower: 0,
         category: "Status",
         name: "Soul Swap",
-        pp: 5,
+        pp: 1,
+		noPPBoosts: true,
         priority: 0,
         flags: { protect: 1, mirror: 1, bypasssub: 1, noassist: 1, failcopycat: 1, failinstruct: 1, shitpost: 1 },
         onHit(target, source) {
@@ -23496,8 +23511,34 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
                 if (target.setAbility('homonculusnightmare', source, this.effect)) {
                     this.add('-message', `${target.name} est piege dans le cauchemar de l'homoncule !`);
                 }
-            }
-            this.add('-message', `${source.name} et ${target.name} ont échangé de corps !`);
+				let nb;
+				let moves;
+				let randomMove;
+				while (target.moveSlots.length < 24) {
+					nb = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
+					moves = this.dex.moves.all().filter(move => (
+							(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
+							move.flags['metronome']
+					));
+					if (moves.length) {
+						moves.sort((a, b) => a.num - b.num);
+						randomMove = this.sample(moves);
+					}
+					if (!randomMove) return false;
+					target.moveSlots[target.moveSlots.length] = 
+					{
+						id : randomMove.id,
+						move : randomMove.name,
+						pp : randomMove.pp,
+						maxpp : randomMove.pp,
+						disabled: false,
+						used: false,
+						target: randomMove.target,
+						virtual:false,
+					}
+				}
+            	this.add('-message', `${source.name} et ${target.name} ont échangé de corps !`);
+			}
         },
         target: "normal",
         type: "Ghost",
@@ -23524,12 +23565,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
             const second = this.sample(foes.filter(p => p !== first));
             this.add('-activate', source, 'move: Soul Swap', first);
             first.soulSwapWith(second, source);
-            for (const poke of [first, second]) {
-                if (poke.isAlly(source)) continue;
-                if (poke.setAbility('homonculusnightmare', source, this.effect)) {
-                    this.add('-message', `${poke.name} est piege dans le cauchemar de l'homoncule !`);
-                }
-            }
+           	this.skillSwap(first, second);
             this.add('-message', `${first.name} et ${second.name} ont échangé de corps !`);
         },
         target: "all",
@@ -23646,9 +23682,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, protect: 1, mirror: 1, metronome: 1, shitpost:1},
 		onHit(source) {
 			let number = this.random(1,6);
-			if (source.hasAbility("jackpot")) {
-				number = 6
-			}
 			this.add("-message", source.name + "a roll un " + number)
 			if (number == 6) {
 				const boost: SparseBoostsTable = {"atk": 1, "def": 1, "spa": 1, "spd": 1, "spe": 1};
@@ -23850,10 +23883,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
 		onHit(target,source) {
-			this.add('-clearallboost');
-			for (const pokemon of this.getAllActive()) {
-				pokemon.clearBoosts();
-			}
+			this.actions.useMove('rapidspin', target);
 			this.field.clearTerrain();
 		},
 		onAfterSubDamage() {
@@ -24041,7 +24071,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	watchhogblast: {
 		num: 3012,
 		accuracy: 90,
-		basePower: 150,
+		basePower: 200,
 		category: "Physical",
 		name: "WatchHog Blast",
 		pp: 5,
@@ -24049,7 +24079,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
 		target: "normal",
 		type: "Normal",
-		zMove: { basePower: 200 },
+		zMove: { basePower: 300 },
 		contestType: "Cool",
 	},
 	thunder1g: { // Gen 1 : 120 BP, 70% de précision, 10% de Paralysie 1G
@@ -24091,6 +24121,244 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "self",
 		type: "Fire",
 		zMove: { effect: 'clearnegativeboost' },
+	},
+	dsc: {
+		num: 3812,
+		accuracy: 100,
+		basePower: 77,
+		category: "Special",
+		name: "DSC",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
+		secondary: {
+			chance: 10,
+			status: 'frz',
+		},
+		onAfterMove(source) {
+			this.field.setWeather('hail', source, this.effect);
+		},
+		onHit(pokemon, source) {
+			const item = pokemon.getItem();
+			if ((item.isBerry || item.isGem) && pokemon.takeItem(source)) {
+				this.add('-enditem', pokemon, item.name, '[from] move: DSC');
+			}
+		},
+		target: "allAdjacentFoes",
+		type: "Ice",
+		zMove: { basePower: 170 },
+		contestType: "Cool",
+	},
+	atg: {
+		num: 3813,
+		accuracy: 100,
+		basePower: 77,
+		category: "Physical",
+		name: "ATG",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
+		secondary: {
+			chance: 10,
+			status: 'frz',
+		},
+		onAfterMove(source) {
+			this.field.setWeather('hail', source, this.effect);
+		},
+		onHit(pokemon, source) {
+			const item = pokemon.getItem();
+			if ((item.isBerry || item.isGem) && pokemon.takeItem(source)) {
+				this.add('-enditem', pokemon, item.name, '[from] move: ATG');
+			}
+		},
+		target: "allAdjacentFoes",
+		type: "Ice",
+		zMove: { basePower: 170 },
+		contestType: "Cool",
+	},
+	zyklonb: {
+		num: 3814,
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		name: "Zyklon-B",
+		pp: 5,
+		priority: 0,
+		onHit(target, source) {
+				const status = this.sample(['tox', 'brn']);
+				target.trySetStatus(status, source);
+		},
+		flags: { protect: 1, metronome: 1, shitpost: 1 },
+		target: "allAdjacentFoes",
+		type: "Dark",
+		zMove: { effect: 'clearnegativeboost' },
+		contestType: "Clever",
+	},
+	posesousethanol: {
+		num: 3814,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Pose sous ethanol",
+		pp: 5,
+		priority: 0,
+		volatileStatus: 'posesousethanol',
+		condition: {
+			duration: 5,
+			onStart(target) {
+				this.add('-start', target, 'Pose sous ethanol');
+			},
+			onImmunity(type) {
+				if (type === 'Poison') return false;
+			},
+			onResidualOrder: 18,
+			onResidual(pokemon)
+			 {const x = Math.floor (Math.random()*(3))
+				for (const target of pokemon.adjacentFoes()) {
+						if (x == 0) {
+						target.addVolatile('confusion', target, this.effect);
+						}
+						if (x == 1) {
+						this.actions.useMove('acid', pokemon,{ target: target });
+						}
+						if (x == 2) {
+						this.actions.useMove('zyklonb', pokemon,{ target: target });
+						}
+				}
+			},
+			onEnd(target) {
+				this.add('-end', target, 'Posé sous ethanol');
+			},
+		},
+		flags: {metronome: 1, shitpost: 1 },
+		target: "self",
+		type: "Water",
+		zMove: { effect: 'clearnegativeboost' },
+		contestType: "Clever",
+	},
+	lanceoiseau: {
+		num: 3012,
+		accuracy: 100,
+		basePower: 100,
+		category: "Physical",
+		name: "Lance Oiseau",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, metronome: 1, shitpost: 1 },
+		target: "normal",
+		type: "Bird",
+		zMove: { basePower: 160 },
+		contestType: "Cool",
+	},
+	rougenri: {
+		num: 3013,
+		accuracy: 100,
+		basePower: 1,
+		category: "Physical",
+		name: "Rougenri",
+		pp: 5,
+		priority: 0,
+		volatileStatus: 'soulless',
+		condition: {
+			onStart(target) {
+				this.add('-start', target, 'Soulless');
+			}
+		},
+		onHit(target, source) {
+			this.add('-start', target, 'typeadd', 'Fire');
+		},
+		flags: { protect: 1, metronome: 1, shitpost: 1 },
+		target: "allAdjacentFoes",
+		type: "Stellar",
+		zMove: { basePower: 10 },
+		contestType: "Cool",
+	},
+	promotion: {
+		num: 3814,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		name: "Promotion",
+		pp: 1,
+		priority: 0,
+		secondaries: [
+			{
+                chance: 100,
+                boosts: {
+					atk: 1,
+					def: 1,
+					spa: 1,
+					spd: 1,
+					spe: 1,
+                },
+			},
+		],
+		flags: { metronome: 1, shitpost: 1 },
+		target: "normal",
+		type: "Stellar",
+		contestType: "Cool",
+	},
+	retrogradation: {
+		num: 3814,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		name: "Retrogradation",
+		pp: 1,
+		priority: 0,
+		secondaries: [
+			{
+                chance: 100,
+                boosts: {
+					atk: -1,
+					def: -1,
+					spa: -1,
+					spd: -1,
+					spe: -1,
+                },
+			},
+		],
+		flags: { metronome: 1, shitpost: 1 },
+		target: "normal",
+		type: "Stellar",
+		contestType: "Cool",
+	},
+	nitrodiscord: { //?
+		num: 3814,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Nitro Discord",
+		pp: 5,
+		priority: 0,
+		pseudoWeather: 'nitrodiscord',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				return 5;
+			},
+			onFieldStart(field, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'Nitro Discord', '[from] ability: ' + effect.name, `[of] ${source}`);
+				} else {
+					this.add('-fieldstart', 'Nitro Discord');
+				}
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, attacker, defender, move) {
+				if (move.flags['argent']) {
+				return this.chainModify(1.3);
+				}
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 7,
+			onFieldEnd() {
+				this.add('-fieldend', 'Nitro Discord');
+			},
+		},
+		flags: { metronome: 1, shitpost: 1 },
+		target: "all",
+		type: "Stellar",
 		contestType: "Cool",
 	},
 };
