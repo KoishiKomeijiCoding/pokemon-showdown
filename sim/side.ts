@@ -59,6 +59,7 @@ export interface Choice {
 	ultra: boolean; // true if an ultra burst has already been selected
 	dynamax: boolean; // true if a dynamax has already been selected
 	terastallize: boolean; // true if a terastallization has already been inputted
+	forgeIndex: number | null; // Hephaistos : index de l'objet choisi lors d'une requête de forge
 }
 
 export interface PokemonSwitchRequestData {
@@ -154,6 +155,16 @@ export interface MoveRequest {
 	noCancel?: boolean;
 	update?: boolean;
 }
+export interface ForgeRequest {
+	wait?: undefined;
+	teamPreview?: undefined;
+	forceSwitch?: undefined;
+	active?: undefined;
+	/** Hephaistos : objets proposés (3) pour la forge en cours. */
+	forge: { pokemon: string, offered: { id: string, name: string, desc: string }[], remaining: number };
+	side: SideRequestData;
+	noCancel?: boolean;
+}
 export interface WaitRequest {
 	wait: true;
 	teamPreview?: undefined;
@@ -161,7 +172,7 @@ export interface WaitRequest {
 	side: SideRequestData;
 	noCancel?: boolean;
 }
-export type ChoiceRequest = SwitchRequest | TeamPreviewRequest | MoveRequest | WaitRequest;
+export type ChoiceRequest = SwitchRequest | TeamPreviewRequest | MoveRequest | ForgeRequest | WaitRequest;
 
 export class Side {
 	readonly battle: Battle;
@@ -281,6 +292,7 @@ export class Side {
 			ultra: false,
 			dynamax: false,
 			terastallize: false,
+			forgeIndex: null,
 		};
 
 		// old-gens
@@ -296,6 +308,7 @@ export class Side {
 		if (!this.activeRequest || this.activeRequest.wait) return '';
 		if (this.activeRequest.teamPreview) return 'teampreview';
 		if (this.activeRequest.forceSwitch) return 'switch';
+		if ((this.activeRequest as ForgeRequest).forge) return 'forge';
 		return 'move';
 	}
 
@@ -543,6 +556,7 @@ export class Side {
 		if (this.requestState === 'teampreview') {
 			return this.choice.actions.length >= this.pickedTeamSize();
 		}
+		if (this.requestState === 'forge') return this.choice.forgeIndex !== null;
 
 		// current request is move/switch
 		this.getChoiceIndex(); // auto-pass
@@ -1136,6 +1150,7 @@ export class Side {
 			ultra: false,
 			dynamax: false,
 			terastallize: false,
+			forgeIndex: null,
 		};
 	}
 
@@ -1194,6 +1209,22 @@ export class Side {
 		}
 
 		this.clearChoice();
+
+		if (this.requestState === 'forge') {
+			// Hephaistos : "forge N" (N = 1..3), ou "default"/"auto" pour le premier objet proposé
+			const [forgeType, forgeData] = Utils.splitFirst(input.trim(), ' ');
+			const offered = (this.activeRequest as ForgeRequest).forge.offered;
+			if (forgeType === 'default' || forgeType === 'auto') {
+				this.choice.forgeIndex = 0;
+				return true;
+			}
+			const n = parseInt(forgeData.trim());
+			if (forgeType !== 'forge' || !(n >= 1 && n <= offered.length)) {
+				return this.emitChoiceError(`Can't forge: choose "forge 1" to "forge ${offered.length}"`);
+			}
+			this.choice.forgeIndex = n - 1;
+			return true;
+		}
 
 		const choiceStrings = (input.startsWith('team ') ? [input] : input.split(','));
 
@@ -1358,7 +1389,9 @@ export class Side {
 
 	/** Automatically finish a choice if not currently complete. */
 	autoChoose() {
-		if (this.requestState === 'teampreview') {
+		if (this.requestState === 'forge') {
+			if (this.choice.forgeIndex === null) this.choice.forgeIndex = 0;
+		} else if (this.requestState === 'teampreview') {
 			if (!this.isChoiceDone()) this.chooseTeam();
 		} else if (this.requestState === 'switch') {
 			let i = 0;

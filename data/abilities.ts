@@ -34,6 +34,25 @@ Ratings and how they work:
 import { ClauseDialogues } from './clause-dialogues';
 
 
+/** Detective (Sherlock Holmes): reveals everything about a foe and makes it vulnerable to Normal/Psychic moves despite immunities. */
+function detectiveReveal(battle: Battle, holder: Pokemon, target: Pokemon) {
+	if (!target || target.fainted || target.isAlly(holder)) return;
+	battle.add('-ability', holder, 'Detective');
+	if (target.item) battle.add('-item', target, target.getItem().name, '[from] ability: Detective', `[of] ${holder}`);
+	battle.add('-ability', target, target.getAbility().name, '[from] ability: Detective', `[of] ${holder}`);
+	const nature = target.getNature();
+	const s = target.storedStats;
+	const moves = target.moveSlots.map(m => m.move).join(', ');
+	// Même protocole que Forewarn : le client mémorise chaque capacité (visible au survol du Pokémon adverse)
+	for (const slot of target.moveSlots) {
+		battle.add('-activate', holder, 'ability: Forewarn', slot.move, `[of] ${target}`);
+	}
+	battle.add('-message', `${holder.name} enquête sur ${target.name} !`);
+	battle.add('-message', `${target.name} — Capacités : ${moves} | Objet : ${target.getItem().name || 'aucun'} | Talent : ${target.getAbility().name} | Nature : ${nature.name || 'inconnue'}`);
+	battle.add('-message', `${target.name} — PV ${target.hp}/${target.maxhp}, Atq ${s.atk}, Déf ${s.def}, AtqSpé ${s.spa}, DéfSpé ${s.spd}, Vit ${s.spe}`);
+	target.addVolatile('detectiveeye', holder);
+}
+
 export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	noability: {
 		isNonstandard: "Past",
@@ -7498,5 +7517,43 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Le Z",
 		rating: 5,
 		num: 3040,
+	},
+	detective: {
+		// onSwitchIn explicite : définir onAnySwitchIn désactive le onStart automatique du moteur
+		onSwitchIn(pokemon) {
+			this.effectState.seen = [];
+			for (const foe of pokemon.foes()) {
+				this.effectState.seen.push(foe);
+				detectiveReveal(this, pokemon, foe);
+			}
+		},
+		// onAnySwitchIn ne reçoit que le porteur du talent : on détecte les nouveaux adversaires actifs
+		onAnySwitchInPriority: -2,
+		onAnySwitchIn(holder) {
+			if (!holder || holder.fainted || !holder.isActive) return;
+			const active = holder.foes();
+			const seen: Pokemon[] = (this.effectState.seen || []).filter((p: Pokemon) => active.includes(p));
+			for (const foe of active) {
+				if (seen.includes(foe)) continue;
+				seen.push(foe);
+				detectiveReveal(this, holder, foe);
+			}
+			this.effectState.seen = seen;
+		},
+		flags: { shitpost: 1 },
+		name: "Detective",
+		rating: 3,
+		num: 3050,
+	},
+	dieudelaforge: {
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (!pokemon.fainted) pokemon.forgeItems(1);
+		},
+		flags: { shitpost: 1 },
+		name: "Dieu de la forge",
+		rating: 4,
+		num: 3060,
 	},
 };

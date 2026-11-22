@@ -24070,4 +24070,27 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { basePower: 190 },
 		contestType: "Cool",
 	},
+	dieudelaforge: {
+		num: 20001,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Dieu de la forge",
+		pp: 5,
+		priority: 0,
+		flags: { snatch: 1, shitpost: 1 },
+		onTryHit(pokemon) {
+			if (pokemon.ability !== 'dieudelaforge') {
+				this.add('-fail', pokemon);
+				return null;
+			}
+		},
+		onHit(pokemon) {
+			pokemon.forgeItems(2);
+		},
+		target: "self",
+		type: "Fire",
+		zMove: { effect: 'clearnegativeboost' },
+		contestType: "Cool",
+	},
 };

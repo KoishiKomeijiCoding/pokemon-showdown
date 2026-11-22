@@ -2569,4 +2569,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Sets Bad Trip on entry. Contact attackers may be put to sleep, paralyzed, poisoned or given Cancer. Adds types according to the active field effects.",
 		shortDesc: "Sets Bad Trip; contact may inflict status.",
 	},
+	detective: {
+		name: "Detective",
+		desc: "On entry and whenever a foe switches in, reveals the foe's moves, item, ability, nature and stats. Foes become hittable by Normal and Fighting moves if Ghost and Psychic moves if Dark.",
+		shortDesc: "Reveals foes on entry/switch-in; Normal/Fighting/Psychic ignore immunities.",
+	},
+	dieudelaforge: {
+		name: "Dieu de la forge",
+		desc: "At the end of each turn, the user forges an item: 3 items are offered among Leftovers, Sitrus Berry, Rocky Helmet, Air Balloon, Ability Shield, Mental Herb, Expert Belt, Clear Amulet, Bright Powder, Covert Cloak, Red Card, King's Rock, Salac Berry, Mirror Herb, Safety Goggles, Scope Lens, Shell Bell, Shed Shell, Utility Umbrella, Weakness Policy, White Herb and Wide Lens, and the player picks one. Forged items work in addition to the held item. They are lost when the user switches out.",
+		shortDesc: "Forges a chosen extra item each turn.",
+	},
 };

@@ -1030,4 +1030,14 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			return bp;
 		},
 	},
+	detectiveeye: {
+		name: 'detectiveeye',
+		noCopy: true,
+		onNegateImmunity(pokemon, type) {
+			const source = this.effectState.source as Pokemon | undefined;
+			if (!source || source.fainted || !source.isActive || source.ability !== 'detective') return;
+			if (pokemon.hasType('Ghost') && (type === 'Normal' || type === 'Fighting')) return false;
+			if (pokemon.hasType('Dark') && type === 'Psychic') return false;
+		},
+	},
 };

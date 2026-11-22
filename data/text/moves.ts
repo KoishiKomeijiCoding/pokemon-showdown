@@ -8084,4 +8084,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "A 70 BP Rock physical hit on a random adjacent target. Lowers its Defense by 1 stage, then the target uses Rollout if it is Rock-type, otherwise Rock Blast.",
 		shortDesc: "Lowers the target's Defense by 1. Target uses Rollout or Rock Blast.",
 	},
+	dieudelaforge: {
+		name: "Dieu de la forge",
+		desc: "The user forges 2 items in addition to the one from its Ability. Each forge draws 3 items and keeps one at random; items stack up to 5 times. Fails if the user does not have the Dieu de la forge Ability.",
+		shortDesc: "User forges 2 items (needs Dieu de la forge).",
+	},
 };

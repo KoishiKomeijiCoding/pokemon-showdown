@@ -284,6 +284,11 @@ export class Pokemon {
 	hascorrupted: Pokemon[];
 	ameCollectee:number;
 	soulShield: number;
+	/** Hephaistos : objets forgés (réels, cumulés à l'objet tenu), forges en attente et proposition en cours. */
+	forgedItems: { id: ID, state: EffectState }[];
+	forgePending: number;
+	forgeOffer: ID[] | null;
+	forgeSwapping: boolean;
 	/** Bonus de stats de base (hors PV) du Vrai Empereur : persiste après un switch */
 	emperorBonus: number;
 	leftoCounter: number;
@@ -508,6 +513,10 @@ export class Pokemon {
 		this.okinaCetteConne = false;
 		this.ameCollectee = 1000;
 		this.soulShield = 0;
+		this.forgedItems = [];
+		this.forgePending = 0;
+		this.forgeOffer = null;
+		this.forgeSwapping = false;
 		this.emperorBonus = 0;
 		this.corruption = null;
 		this.hascorrupted = [];
@@ -1615,6 +1624,103 @@ export class Pokemon {
 		this.updateSpeed();
 	}
 
+	/**
+	 * Hephaistos : met `count` forges en attente. Elles sont résolues par une requête de choix
+	 * (3 objets proposés, le joueur en choisit un) émise à la fin de l'action en cours.
+	 * Les objets forgés sont de vrais objets tenus en plus de l'objet porté ; ils sont perdus à la sortie du terrain.
+	 */
+	forgeItems(count: number) {
+		this.forgePending += count;
+	}
+
+	/** Tire 3 objets parmi ceux qui ne sont pas déjà forgés. Renvoie false s'il n'y a plus rien à forger. */
+	drawForgeOffer(): boolean {
+		const available = Pokemon.FORGE_ITEMS.filter(item => !this.forgedItems.some(f => f.id === item.id));
+		if (!available.length) {
+			this.battle.add('-message', `${this.name} a déjà forgé tout ce qu'il pouvait !`);
+			this.forgePending = 0;
+			this.forgeOffer = null;
+			return false;
+		}
+		const pool = available.map(item => item.id);
+		this.battle.prng.shuffle(pool);
+		this.forgeOffer = pool.slice(0, 3) as ID[];
+		return true;
+	}
+
+	applyForgeChoice(index: number) {
+		if (!this.forgeOffer) return;
+		const id = this.forgeOffer[Math.min(index, this.forgeOffer.length - 1)];
+		const offered = this.forgeOffer.map(o => this.battle.dex.items.get(o).name);
+		const item = this.battle.dex.items.get(id);
+		this.forgeOffer = null;
+		this.forgePending = Math.max(0, this.forgePending - 1);
+		const forged = { id, state: { id: `forged:${id}`, target: this, effectOrder: 0, forged: true } as EffectState };
+		this.forgedItems.push(forged);
+		this.battle.add('-message', `${this.name} forge ${item.name} ! (choix parmi : ${offered.join(', ')})`);
+		this.battle.add('-item', this, item.name, '[from] ability: Dieu de la forge');
+		if (item.onStart) {
+			this.withForgedItem(forged, () => this.battle.singleEvent('Start', item, forged.state, this));
+		}
+		this.showCounter(this.abilityState, `Forge: ${this.forgedItems.length} objets`);
+	}
+
+	/** Exécute `fn` en faisant passer l'objet forgé pour l'objet tenu (les callbacks d'objets s'attendent à `pokemon.item`). */
+	withForgedItem<T>(forged: { id: ID, state: EffectState }, fn: () => T): T {
+		const realItem = this.item;
+		const realState = this.itemState;
+		const wasSwapping = this.forgeSwapping;
+		this.forgeSwapping = true;
+		this.item = forged.id;
+		this.itemState = forged.state;
+		try {
+			return fn();
+		} finally {
+			const consumed = this.item !== forged.id;
+			this.item = realItem;
+			this.itemState = realState;
+			this.forgeSwapping = wasSwapping;
+			if (consumed) {
+				const i = this.forgedItems.indexOf(forged);
+				if (i >= 0) this.forgedItems.splice(i, 1);
+				if (this.abilityState.shown) this.showCounter(this.abilityState, `Forge: ${this.forgedItems.length} objets`);
+			}
+		}
+	}
+
+	wrapForgedCallback(forged: { id: ID, state: EffectState }, callback: Function) {
+		const pokemon: Pokemon = this;
+		return function (this: Battle, ...args: any[]) {
+			return pokemon.withForgedItem(forged, () => callback.apply(this, args));
+		};
+	}
+
+	/** Objets proposables par la forge d'Hephaistos (desc = résumé affiché dans l'interface). */
+	static readonly FORGE_ITEMS: { id: ID, desc: string }[] = [
+		{ id: 'leftovers' as ID, desc: 'Récupère 1/16 des PV max chaque tour.' },
+		{ id: 'sitrusberry' as ID, desc: 'Soigne 1/4 des PV quand ≤ 50 % (usage unique).' },
+		{ id: 'rockyhelmet' as ID, desc: 'Blesse (1/6) l\'attaquant qui touche au contact.' },
+		{ id: 'airballoon' as ID, desc: 'Immunité Sol jusqu\'au premier coup reçu.' },
+		{ id: 'abilityshield' as ID, desc: 'Le talent ne peut plus être modifié ni supprimé.' },
+		{ id: 'mentalherb' as ID, desc: 'Guérit un effet de contrôle mental (usage unique).' },
+		{ id: 'expertbelt' as ID, desc: 'Capacités super efficaces +20 %.' },
+		{ id: 'clearamulet' as ID, desc: 'Les stats ne peuvent pas être baissées par l\'adversaire.' },
+		{ id: 'brightpowder' as ID, desc: 'Précision adverse -10 %.' },
+		{ id: 'covertcloak' as ID, desc: 'Immunisé aux effets secondaires des capacités.' },
+		{ id: 'redcard' as ID, desc: 'Renvoie l\'attaquant (usage unique).' },
+		{ id: 'kingsrock' as ID, desc: '10 % de chances d\'apeurer avec ses attaques.' },
+		{ id: 'salacberry' as ID, desc: 'Vitesse +1 quand ≤ 25 % PV (usage unique).' },
+		{ id: 'mirrorherb' as ID, desc: 'Copie les hausses de stats adverses (usage unique).' },
+		{ id: 'safetygoggles' as ID, desc: 'Immunisé aux météos de dégâts et aux poudres.' },
+		{ id: 'scopelens' as ID, desc: 'Taux de coup critique +1.' },
+		{ id: 'shellbell' as ID, desc: 'Récupère 1/8 des dégâts infligés.' },
+		{ id: 'shedshell' as ID, desc: 'Peut toujours quitter le combat.' },
+		{ id: 'utilityumbrella' as ID, desc: 'Ignore les effets du soleil et de la pluie.' },
+		{ id: 'weaknesspolicy' as ID, desc: 'Atq/AtqSpé +2 si touché super efficace (usage unique).' },
+		{ id: 'whiteherb' as ID, desc: 'Annule les baisses de stats (usage unique).' },
+		{ id: 'widelens' as ID, desc: 'Précision +10 %.' },
+	];
+
 	/** Affiche (ou met à jour) un compteur côté client via -start / -end ; `state.shown` mémorise l'étiquette affichée. */
 	showCounter(state: EffectState, label: string, abilityName?: string) {
 		if (state.shown === label) return;
@@ -1768,6 +1874,9 @@ export class Pokemon {
 	}
 
 	clearVolatile(includeSwitchFlags = true) {
+		this.forgedItems = [];
+		this.forgePending = 0;
+		this.forgeOffer = null;
 		this.boosts = {
 			atk: 0,
 			def: 0,
@@ -2156,10 +2265,10 @@ export class Pokemon {
 	}
 
 	hasItem(item: string | string[]) {
-		if (Array.isArray(item)) {
-			if (!item.map(toID).includes(this.item)) return false;
-		} else {
-			if (toID(item) !== this.item) return false;
+		const ids = (Array.isArray(item) ? item : [item]).map(toID);
+		if (!ids.includes(this.item)) {
+			// Hephaistos : les objets forgés comptent comme des objets tenus
+			if (this.forgeSwapping || !this.forgedItems.some(f => ids.includes(f.id))) return false;
 		}
 		return !this.ignoringItem();
 	}
