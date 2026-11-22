@@ -14,9 +14,6 @@ const [,, workerId, count, baseSeed, outDir, maxTurnsArg, modeArg] = process.arg
 const MAX_TURNS = +(maxTurnsArg || 100);
 const MODE = modeArg || 'mixed';
 
-// Bug connu et indépendant de mes ajouts : Lance Oiseau est de type "Bird", absent du tableau des types -> crash dès qu'elle touche.
-// Pour que ce crash ne masque pas d'autres erreurs, on la rend de type Normal dans CE processus de test seulement (KEEP_BIRD=1 pour la garder).
-if (process.env.KEEP_BIRD !== '1') Dex.data.Moves.lanceoiseau.type = 'Normal';
 const NEW_SPECIES = ['Sherlock Holmes', 'Hephaistos', 'Punk Cybernetique'];
 const NEW_MOVES = ['masterpiece', 'enquetespeciale', 'lameakebab', 'gicleedesaucealgerienne', 'durumexpress', 'balles'];
 const NEW_ABILITIES = ['detective', 'dieudelaforge', 'brocherotative'];

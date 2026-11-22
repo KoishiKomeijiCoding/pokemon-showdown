@@ -1168,7 +1168,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Ground') {
 				if (!this.heal(target.baseMaxhp / 4)) {
-					this.add('-iearthemmune', target, '[from] ability: Earth Eater');
+					this.add('-immune', target, '[from] ability: Earth Eater');
 				}
 				return null;
 			}
@@ -5881,8 +5881,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 9999,
 	},
 	mecaniques1g: {
-		onStart() {
-			this.add('-ability', "Mécaniques 1G");
+		onStart(pokemon) {
+			this.add('-ability', pokemon, "Mécaniques 1G");
 			this.add("-message", "Le Pokémon n'est pas affecté par les mécaniques implémentées après la première génération !");
 		},
 		onSourceModifyDamage(damage, source, target, move) { // aucune faiblesse

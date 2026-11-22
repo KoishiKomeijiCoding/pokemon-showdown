@@ -7,9 +7,9 @@ crashs du simulateur, parties bloquées, invariants du système de forge, et (CL
 ```bash
 node build
 cd tools/fuzz-custom && source run.sh
-CLIENT=1 EXTRA=7 run mixed 63 1000000     # 700 combats répartis sur 11 processus, résultats dans out_mixed/ (puis : report out_mixed)
+CLIENT=1 CLIENT_DIR=/chemin/du/client/play.pokemonshowdown.com EXTRA=7 run mixed 63 1000000     # 700 combats répartis sur 11 processus, résultats dans out_mixed/ (puis : report out_mixed)
 ```
 
 `summarize.js <dossier>` regroupe les erreurs par signature ; `dbg-client.js <journal>` rejoue un journal d'échec dans le client.
-Bugs connus hors de ces ajouts : Lance Oiseau (type « Bird » absent du tableau des types), `|-ability|Mécaniques 1G` sans Pokémon,
-`|-iearthemmune|` (Earth Eater), Transform sur soi avec Pouvoir Gigamax.
+Bugs trouvés grâce à ce fuzzer et corrigés : Lance Oiseau (type « Bird » absent du tableau des types), `|-ability|Mécaniques 1G` sans Pokémon,
+`|-iearthemmune|` (Earth Eater), Transform sur soi (garde-fou dans `Pokemon.transformInto`, cause : Pouvoir Gigamax).

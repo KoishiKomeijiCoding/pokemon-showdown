@@ -1371,6 +1371,11 @@ export class Pokemon {
 	}
 
 	transformInto(pokemon: Pokemon, effect?: Effect) {
+		if (pokemon === this) {
+			// Garde-fou : une Métamorphose sur soi-même (vue avec Pouvoir Gigamax) fait planter le client ("Transforming into self")
+			this.battle.debug(`Transform sur soi empêché : ${this.name} ne peut pas se métamorphoser en lui-même (effet : ${effect ? effect.id : 'aucun'})`);
+			return false;
+		}
 		const species = pokemon.species;
 		if (
 			pokemon.fainted || pokemon.ability === 'trueemperor' || this.illusion || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||

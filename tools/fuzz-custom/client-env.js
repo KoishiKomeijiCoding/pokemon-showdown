@@ -1,7 +1,8 @@
 'use strict';
 // Charge le vrai client (code compilé + données générées) dans Node, avec la scène factice, pour rejouer des journaux de combat.
 const path = require('path');
-const C = process.env.CLIENT_DIR || path.join(__dirname, '../../../pokemon-showdown-shitpost-client/play.pokemonshowdown.com');
+const C = process.env.CLIENT_DIR;
+if (!C) throw new Error('CLIENT=1 demande CLIENT_DIR=<chemin du client>/play.pokemonshowdown.com (client compilé avec node build)');
 global.window = global;
 global.BattleStatusAnims = {}; global.BattleOtherAnims = {}; global.BattleMoveAnims = {};
 const realLog = console.log;
@@ -21,8 +22,7 @@ require(C + '/js/battle.js');
 module.exports = {
 	replay(allLines) {
 		const errs = [];
-		// Bug connu, indépendant de mes ajouts : le talent « Mécaniques 1G » envoie |-ability|Mécaniques 1G sans Pokémon -> le client plante.
-		const lines = allLines.filter(l => !/^\|-ability\|Mécaniques 1G\s*$/.test(l));
+		const lines = allLines;
 		console.log = () => {}; // le client contient des console.log de debug
 		try {
 			const b = new global.Battle({debug: true, log: lines.slice()});
