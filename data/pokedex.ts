@@ -21888,7 +21888,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 10000,
 		name: "Tesla et Einstein",
 		types: ["Electric","Stellar"],
-		baseStats: {hp: 70, atk: 150, def: 60, spa: 160, spd: 90, spe: 60 },
+		baseStats: {hp: 70, atk: 120, def: 60, spa: 130, spd: 90, spe: 60 },
 		abilities: { 0: 'aniqtoohigh'},
 		heightm: 2.00,
 		weightkg: 75.0,
