@@ -8274,6 +8274,21 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 8,
 		isNonstandard: "CAP",
 	},
+	lingotdefer: {
+		name: "Lingot de fer",
+		spritenum: 0,
+		fling: { basePower: 30 },
+		onStart(pokemon) {
+			if (pokemon.baseSpecies.name === 'Hephaistos') {
+				this.add('-message', `${pokemon.name} reforge son équipement avec le Lingot de fer !`);
+				pokemon.forgeItems(3);
+			}
+		},
+		itemUser: ["Hephaistos"],
+		num: 3070,
+		gen: 9,
+		shortDesc: "Hephaistos: forges 3 items when switching in.",
+	},
 	amisurlechemin: {
 		name: "Ami sur le chemin",
 		spritenum: 0,

@@ -67,6 +67,9 @@ export class RandomPlayerAI extends BattlePlayer {
 			this.choose(choices.join(`, `));
 		} else if (request.teamPreview) {
 			this.choose(this.chooseTeamPreview(request.side.pokemon));
+		} else if ((request as AnyObject).forge) {
+			// Hephaistos : choix d'un objet forgé
+			this.choose(`forge ${this.prng.random(1, (request as AnyObject).forge.offered.length + 1)}`);
 		} else if (request.active) {
 			// move request
 			let [canMegaEvo, canUltraBurst, canZMove, canDynamax, canTerastallize] = [true, true, true, true, true];

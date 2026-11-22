@@ -24100,6 +24100,28 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { basePower: 190 },
 		contestType: "Cool",
 	},
+	masterpiece: {
+		num: 20001,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Masterpiece",
+		pp: 5,
+		priority: 0,
+		flags: { snatch: 1, shitpost: 1 },
+		onTryHit(pokemon) {
+			if (pokemon.ability !== 'dieudelaforge') {
+				this.add('-fail', pokemon);
+				return null;
+			}
+		},
+		onHit(pokemon) {
+			pokemon.forgeItems(2);
+		},
+		target: "self",
+		type: "Fire",
+		zMove: { effect: 'clearnegativeboost' },
+	},
 	dsc: {
 		num: 3812,
 		accuracy: 100,
@@ -24338,5 +24360,92 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "all",
 		type: "Stellar",
 		contestType: "Cool",
+	},
+	lameakebab: {
+		num: 10000,
+		accuracy: 100,
+		basePower: 75,
+		category: "Physical",
+		name: "Lame a Kebab",
+		pp: 10,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, slicing: 1, heal: 1, metronome: 1, shitpost: 1 },
+		drain: [1, 2],
+		critRatio: 2,
+		onHit(target, source) {
+			if (source.hasAbility('brocherotative') && source.abilityState.tranches < 3) {
+				source.abilityState.tranches++;
+				this.add('-message', `${source.name} recharge sa broche ! (${source.abilityState.tranches} tranche(s))`);
+				source.showSlices();
+			}
+		},
+		target: "normal",
+		type: "Steel",
+		contestType: "Cool",
+	},
+	gicleedesaucealgerienne: {
+		num: 10000,
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		name: "Giclee de Sauce Algerienne",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, bullet: 1, metronome: 1, shitpost: 1 },
+		secondaries: [
+			{
+				chance: 30,
+				status: 'brn',
+			}, {
+				chance: 30,
+				boosts: {
+					spd: -1,
+				},
+			},
+		],
+		target: "normal",
+		type: "Fire",
+		contestType: "Tough",
+	},
+	durumexpress: {
+		num: 10000,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Durum Express",
+		pp: 5,
+		priority: 0,
+		flags: { snatch: 1, heal: 1, metronome: 1, shitpost: 1 },
+		heal: [1, 2],
+		boosts: {
+			atk: 1,
+		},
+		target: "self",
+		type: "Normal",
+		contestType: "Cute",
+	},
+	enquetespeciale: {
+		num: 20002,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Enquete speciale",
+		pp: 5,
+		priority: 0,
+		flags: { bypasssub: 1, metronome: 1, shitpost: 1 },
+		onHit(target, source) {
+			// Révèle l'espèce (rien d'autre) de tous les Pokémon restants de l'adversaire ciblé.
+			const side = target.side;
+			const remaining = side.pokemon.filter(pokemon => !pokemon.fainted);
+			const species = remaining.map(pokemon => pokemon.baseSpecies.name);
+			// Seuls les Pokémon jamais envoyés au combat sont cachés (pas de Team Preview) : on informe le client pour eux.
+			const hidden = remaining.filter(pokemon => !pokemon.everActive).map(pokemon => pokemon.baseSpecies.name);
+			this.add('-message', `${source.name} enquête sur l'équipe de ${side.name} : ${species.join(', ')} (${species.length} restant${species.length > 1 ? 's' : ''}).`);
+			// Avec Team Preview le client connaît déjà toutes les espèces : on ne lui envoie rien (sinon doublons).
+			if (hidden.length && !this.ruleTable.has('teampreview')) this.add('-revealteam', side.id, ...hidden);
+		},
+		target: "normal",
+		type: "Psychic",
+		contestType: "Clever",
 	},
 };

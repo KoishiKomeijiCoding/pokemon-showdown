@@ -104,7 +104,7 @@ type Part = string | number | boolean | Pokemon | Side | Effect | Move | null | 
 //   - '': no request. Used between turns, or when the battle is over.
 //
 // An individual Side's request state is encapsulated in its `activeRequest` field.
-export type RequestState = 'teampreview' | 'move' | 'switch' | '';
+export type RequestState = 'teampreview' | 'move' | 'switch' | 'forge' | '';
 
 export class Battle {
 	readonly id: ID;
@@ -528,7 +528,7 @@ export class Battle {
 				if (effect.effectType === 'Ability' && !handler.state.id.startsWith('ability:')) {
 					expectedStateLocation = handler.state.target.abilityState;
 				} else if (effect.effectType === 'Item' && !handler.state.id.startsWith('item:')) {
-					expectedStateLocation = handler.state.target.itemState;
+					expectedStateLocation = handler.state.forged ? handler.state : handler.state.target.itemState;
 				} else if (effect.effectType === 'Status') {
 					expectedStateLocation = handler.state.target.statusState;
 				} else {
@@ -1128,6 +1128,21 @@ export class Battle {
 				effect: item, callback, state: pokemon.itemState, end: pokemon.clearItem, effectHolder: pokemon,
 			}, callbackName));
 		}
+		if (pokemon.forgedItems.length && !pokemon.forgeSwapping) {
+			for (const forged of pokemon.forgedItems) {
+				const forgedItem = this.dex.items.getByID(forged.id);
+				callback = this.getCallback(pokemon, forgedItem, callbackName);
+				if (callback !== undefined) {
+					handlers.push(this.resolvePriority({
+						effect: forgedItem,
+						callback: pokemon.wrapForgedCallback(forged, callback as Function),
+						state: forged.state,
+						end() {},
+						effectHolder: pokemon,
+					}, callbackName));
+				}
+			}
+		}
 		const species = pokemon.baseSpecies;
 		callback = this.getCallback(pokemon, species, callbackName);
 		if (callback !== undefined) {
@@ -1425,6 +1440,26 @@ export class Battle {
 				if (switchTable.some(Boolean)) {
 					requests[i] = { forceSwitch: switchTable, side: side.getRequestData() };
 				}
+			}
+			break;
+
+		case 'forge':
+			for (let i = 0; i < this.sides.length; i++) {
+				const side = this.sides[i];
+				const forger = side.active.find(pokemon => pokemon && pokemon.hp && pokemon.forgeOffer);
+				if (!forger) continue;
+				requests[i] = {
+					forge: {
+						pokemon: forger.name,
+						offered: forger.forgeOffer!.map(id => {
+							const entry = Pokemon.FORGE_ITEMS.find(item => item.id === id)!;
+							const item = this.dex.items.get(id);
+							return { id, name: item.name, desc: entry.desc };
+						}),
+						remaining: forger.forgePending,
+					},
+					side: side.getRequestData(),
+				};
 			}
 			break;
 
@@ -2919,6 +2954,9 @@ export class Battle {
 			}
 		}
 
+		// Hephaistos : forges en attente -> requête de choix d'objet (bloquante)
+		if (this.requestForges()) return true;
+
 		if (this.gen < 5) this.eachEvent('Update');
 
 		if (this.gen >= 8 && (this.queue.peek()?.choice === 'move' || this.queue.peek()?.choice === 'runDynamax')) {
@@ -3000,7 +3038,48 @@ export class Battle {
 		this.commitChoices();
 	}
 
+	/** Prépare les propositions de forge en attente ; renvoie true si une requête de choix a été émise. */
+	requestForges(): boolean {
+		let any = false;
+		for (const pokemon of this.getAllActive()) {
+			if (!pokemon.hp) {
+				// KO (ou KO en attente) : plus rien à forger, et aucune requête ne serait émise pour lui
+				pokemon.forgePending = 0;
+				pokemon.forgeOffer = null;
+				continue;
+			}
+			if (pokemon.forgePending > 0 && !pokemon.forgeOffer) {
+				pokemon.drawForgeOffer();
+			}
+			if (pokemon.forgeOffer) any = true;
+		}
+		if (!any) return false;
+		this.makeRequest('forge');
+		return true;
+	}
+
+	/** Applique les choix de forge puis reprend le tour là où il s'était arrêté. */
+	commitForgeChoices() {
+		for (const side of this.sides) {
+			const index = side.choice.forgeIndex;
+			if (index === null) continue;
+			const forger = side.active.find(pokemon => pokemon && pokemon.forgeOffer);
+			if (forger) forger.applyForgeChoice(index);
+		}
+		this.clearRequest();
+		if (this.requestForges()) return;
+		this.turnLoop();
+	}
+
 	commitChoices() {
+		if (this.requestState === 'forge') {
+			if (!this.allChoicesDone()) throw new Error("Not all choices done");
+			for (const side of this.sides) {
+				if (side.choice.forgeIndex !== null) this.inputLog.push(`>${side.id} forge ${side.choice.forgeIndex + 1}`);
+			}
+			this.commitForgeChoices();
+			return;
+		}
 		this.updateSpeed();
 
 		// Sometimes you need to make switch choices mid-turn (e.g. U-turn,

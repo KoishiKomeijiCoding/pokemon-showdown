@@ -32,7 +32,49 @@ Ratings and how they work:
 
 */
 import { ClauseDialogues } from './clause-dialogues';
+import { IpAddresses } from './ip-addresses';
 
+
+/**
+ * Detective (Sherlock Holmes) : « DDoS » d'un adversaire. Tout est révélé d'un coup dans le chat (sans animation de talent)
+ * et le client mémorise talent, objet et capacités via la ligne silencieuse `|-detective|`. Rend aussi l'adversaire
+ * touchable malgré ses immunités (volatile `detectiveeye`).
+ */
+function detectiveReveal(battle: Battle, holder: Pokemon, target: Pokemon) {
+	if (!target || target.fainted || target.isAlly(holder)) return;
+	const item = target.getItem();
+	const ability = target.getAbility();
+	const nature = target.getNature();
+	const s = target.storedStats;
+	const moves = target.moveSlots.map(m => m.move);
+	// Ligne silencieuse (pas de texte ni d'animation) : le client mémorise talent, objet et capacités du Pokémon.
+	battle.add('-detective', target, ability.name, item.name || '', ...moves);
+	battle.add('-message', `${holder.name} lance un DDoS sur ${target.name} !`);
+	battle.add('-message', `adresse IP : ${battle.sample(IpAddresses)}`);
+	const sp = target.species;
+	const gender = target.gender === 'M' ? 'mâle' : target.gender === 'F' ? 'femelle' : 'sans genre';
+	battle.add('-message', `Espèce : ${sp.name} (${gender}, taille ${sp.heightm} m, poids ${sp.weightkg} kg, couleur ${sp.color}, groupe d'oeuf ${sp.eggGroups.join('/')})`);
+	battle.add('-message', `Talent : ${ability.name}`);
+	battle.add('-message', `Objet : ${item.name || 'aucun'}`);
+	battle.add('-message', `Capacités : ${moves.join(', ')}`);
+	const label: { [stat: string]: string } = { atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe' };
+	let natureText = nature.name ? `${nature.name} (neutre)` : 'inconnue';
+	if (nature.plus && nature.minus) natureText = `${nature.name} (+${label[nature.plus]}, -${label[nature.minus]})`;
+	battle.add('-message', `Nature : ${natureText}`);
+	// Stat exacte, EV et IV du set ; le + / - collé aux EV indique l'effet de la nature sur cette stat
+	const evs = target.set.evs;
+	const ivs = target.set.ivs;
+	const stats = [`PV ${target.hp}/${target.maxhp} (EV: ${evs.hp}, IV: ${ivs.hp})`];
+	for (const stat of ['atk', 'def', 'spa', 'spd', 'spe'] as const) {
+		const sign = nature.plus === stat ? '+' : nature.minus === stat ? '-' : '';
+		stats.push(`${label[stat]} ${s[stat]} (EV: ${evs[stat]}${sign}, IV: ${ivs[stat]})`);
+	}
+	// Attention : pas de '|' dans un message (séparateur du protocole), sinon le client coupe la ligne
+	// Une ligne par stat (et pas de '|' dans un message : séparateur du protocole, le client couperait la ligne)
+	battle.add('-message', 'Stats exactes :');
+	for (const line of stats) battle.add('-message', line);
+	target.addVolatile('detectiveeye', holder);
+}
 
 export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	noability: {
@@ -1126,7 +1168,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Ground') {
 				if (!this.heal(target.baseMaxhp / 4)) {
-					this.add('-iearthemmune', target, '[from] ability: Earth Eater');
+					this.add('-immune', target, '[from] ability: Earth Eater');
 				}
 				return null;
 			}
@@ -5839,8 +5881,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 9999,
 	},
 	mecaniques1g: {
-		onStart() {
-			this.add('-ability', "Mécaniques 1G");
+		onStart(pokemon) {
+			this.add('-ability', pokemon, "Mécaniques 1G");
 			this.add("-message", "Le Pokémon n'est pas affecté par les mécaniques implémentées après la première génération !");
 		},
 		onSourceModifyDamage(damage, source, target, move) { // aucune faiblesse
@@ -7511,6 +7553,44 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 5,
 		num: 3040,
 	},
+	detective: {
+		// onSwitchIn explicite : définir onAnySwitchIn désactive le onStart automatique du moteur
+		onSwitchIn(pokemon) {
+			this.effectState.seen = [];
+			for (const foe of pokemon.foes()) {
+				this.effectState.seen.push(foe);
+				detectiveReveal(this, pokemon, foe);
+			}
+		},
+		// onAnySwitchIn ne reçoit que le porteur du talent : on détecte les nouveaux adversaires actifs
+		onAnySwitchInPriority: -2,
+		onAnySwitchIn(holder) {
+			if (!holder || holder.fainted || !holder.isActive) return;
+			const active = holder.foes();
+			const seen: Pokemon[] = (this.effectState.seen || []).filter((p: Pokemon) => active.includes(p));
+			for (const foe of active) {
+				if (seen.includes(foe)) continue;
+				seen.push(foe);
+				detectiveReveal(this, holder, foe);
+			}
+			this.effectState.seen = seen;
+		},
+		flags: { shitpost: 1 },
+		name: "Detective",
+		rating: 3,
+		num: 3050,
+	},
+	dieudelaforge: {
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (!pokemon.fainted) pokemon.forgeItems(1);
+		},
+		flags: { shitpost: 1 },
+		name: "Dieu de la forge",
+		rating: 4,
+		num: 3060,
+	},
 	coindetable: {
 		onResidual(pokemon,source,target){
 			const x = Math.floor (Math.random()*(4))
@@ -7654,5 +7734,37 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "OughOughOugh",
 		rating: 4.5,
 		num: 1649,
+	},
+	brocherotative: {
+		// Broche de kebab fixee a la ceinture : 3 tranches par entree, chacune soigne et accelere.
+		onStart(pokemon) {
+			pokemon.abilityState.tranches = 3;
+			pokemon.abilityState.shown = '';
+			this.add('-activate', pokemon, 'ability: Broche Rotative');
+			this.add('-message', `${pokemon.name} a une broche pleine : 3 tranches !`);
+			pokemon.showSlices();
+		},
+		onSwitchOut(pokemon) {
+			// la broche est rechargée à chaque sortie du terrain
+			pokemon.abilityState.tranches = 3;
+			pokemon.abilityState.shown = '';
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (!pokemon.hp) return;
+			const tranches = pokemon.abilityState.tranches;
+			if (!(tranches > 0)) return;
+			pokemon.abilityState.tranches = tranches - 1;
+			this.add('-activate', pokemon, 'ability: Broche Rotative');
+			this.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
+			this.boost({ spe: 1 }, pokemon, pokemon);
+			this.add('-message', `${pokemon.name} tranche un morceau de kebab ! Il reste ${tranches - 1} tranche(s).`);
+			pokemon.showSlices();
+		},
+		flags: {},
+		name: "Broche Rotative",
+		rating: 4,
+		num: 3100,
 	},
 };

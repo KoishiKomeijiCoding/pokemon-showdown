@@ -3779,4 +3779,13 @@ export const PokedexText: { [id: IDEntry]: PokedexText } = {
 	zinedinezidane: {
 		name: "Zinedine Zidane",
 	},
+	sherlockholmes: {
+		name: "Sherlock Holmes",
+	},
+	hephaistos: {
+		name: "Hephaistos",
+	},
+	punkcybernetique: {
+		name: "Punk Cybernetique",
+	},
 };
