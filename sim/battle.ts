@@ -3042,6 +3042,12 @@ export class Battle {
 	requestForges(): boolean {
 		let any = false;
 		for (const pokemon of this.getAllActive()) {
+			if (!pokemon.hp) {
+				// KO (ou KO en attente) : plus rien à forger, et aucune requête ne serait émise pour lui
+				pokemon.forgePending = 0;
+				pokemon.forgeOffer = null;
+				continue;
+			}
 			if (pokemon.forgePending > 0 && !pokemon.forgeOffer) {
 				pokemon.drawForgeOffer();
 			}
