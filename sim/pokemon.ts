@@ -297,6 +297,8 @@ export class Pokemon {
 
 	/** Have this pokemon's Start events run yet? (Start events run every switch-in) */
 	isStarted: boolean;
+	/** Ce Pokémon a-t-il déjà été envoyé au combat ? (reste vrai après une sortie du terrain ; sert à Enquete speciale) */
+	everActive: boolean;
 	duringMove: boolean;
 
 	weighthg: number;
@@ -532,6 +534,7 @@ export class Pokemon {
 		this.syrupTriggered = false;
 		this.stellarBoostedTypes = [];
 		this.isStarted = false;
+		this.everActive = false;
 		this.duringMove = false;
 
 		this.weighthg = 1;
@@ -1730,6 +1733,13 @@ export class Pokemon {
 		state.shown = label;
 	}
 
+	/** Punk Cybernétique : affiche le nombre de tranches de kebab restantes (compteur côté client). */
+	showSlices() {
+		if (this.ability !== 'brocherotative') return;
+		const state = this.abilityState;
+		this.showCounter(state, `Tranches: ${state.tranches > 0 ? state.tranches : 0}`);
+	}
+
 	/** Affiche le bouclier d'âmes restant (compteur côté client). */
 	showShield() {
 		if (this.ability !== 'trueemperor') return;
@@ -1874,6 +1884,8 @@ export class Pokemon {
 	}
 
 	clearVolatile(includeSwitchFlags = true) {
+		// Le client efface les compteurs affichés (-start) à la sortie du terrain : on oublie l'étiquette mémorisée
+		this.abilityState.shown = '';
 		this.forgedItems = [];
 		this.forgePending = 0;
 		this.forgeOffer = null;

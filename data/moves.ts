@@ -24376,6 +24376,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (source.hasAbility('brocherotative') && source.abilityState.tranches < 3) {
 				source.abilityState.tranches++;
 				this.add('-message', `${source.name} recharge sa broche ! (${source.abilityState.tranches} tranche(s))`);
+				source.showSlices();
 			}
 		},
 		target: "normal",
@@ -24422,5 +24423,29 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "self",
 		type: "Normal",
 		contestType: "Cute",
+	},
+	enquetespeciale: {
+		num: 20002,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Enquete speciale",
+		pp: 5,
+		priority: 0,
+		flags: { bypasssub: 1, metronome: 1, shitpost: 1 },
+		onHit(target, source) {
+			// Révèle l'espèce (rien d'autre) de tous les Pokémon restants de l'adversaire ciblé.
+			const side = target.side;
+			const remaining = side.pokemon.filter(pokemon => !pokemon.fainted);
+			const species = remaining.map(pokemon => pokemon.baseSpecies.name);
+			// Seuls les Pokémon jamais envoyés au combat sont cachés (pas de Team Preview) : on informe le client pour eux.
+			const hidden = remaining.filter(pokemon => !pokemon.everActive).map(pokemon => pokemon.baseSpecies.name);
+			this.add('-message', `${source.name} enquête sur l'équipe de ${side.name} : ${species.join(', ')} (${species.length} restant${species.length > 1 ? 's' : ''}).`);
+			// Avec Team Preview le client connaît déjà toutes les espèces : on ne lui envoie rien (sinon doublons).
+			if (hidden.length && !this.ruleTable.has('teampreview')) this.add('-revealteam', side.id, ...hidden);
+		},
+		target: "normal",
+		type: "Psychic",
+		contestType: "Clever",
 	},
 };

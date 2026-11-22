@@ -133,6 +133,7 @@ export class BattleActions {
 			side.pokemon[oldActive.position] = oldActive;
 		}
 		pokemon.isActive = true;
+		pokemon.everActive = true;
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
 		pokemon.activeMoveActions = 0;

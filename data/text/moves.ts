@@ -8101,4 +8101,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Durum Express",
 		shortDesc: "Heals the user by 1/2 of its max HP and raises its Attack by 1.",
 	},
+	enquetespeciale: {
+		name: "Enquete speciale",
+		desc: "Reveals the species (nothing else) of every remaining Pokemon on the target's team. Useful in games where teams are hidden (no Team Preview).",
+		shortDesc: "Reveals the species of all of the target's remaining Pokemon.",
+	},
 };

@@ -105126,6 +105126,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	sherlockholmes: {
 		learnset: {
+			enquetespeciale: ["9M"],
 			alluringvoice: ["9M"],
 			allyswitch: ["9M"],
 			attract: ["9M"],

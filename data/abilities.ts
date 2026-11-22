@@ -51,8 +51,11 @@ function detectiveReveal(battle: Battle, holder: Pokemon, target: Pokemon) {
 	battle.add('-detective', target, ability.name, item.name || '', ...moves);
 	battle.add('-message', `${holder.name} lance un DDoS sur ${target.name} !`);
 	battle.add('-message', `adresse IP : ${battle.sample(IpAddresses)}`);
-	battle.add('-message', `Capacités : ${moves.join(', ')} | Objet : ${item.name || 'aucun'} | Talent : ${ability.name} | Nature : ${nature.name || 'inconnue'}`);
-	battle.add('-message', `PV ${target.hp}/${target.maxhp} | Atq ${s.atk} | Déf ${s.def} | AtqSpé ${s.spa} | DéfSpé ${s.spd} | Vit ${s.spe}`);
+	battle.add('-message', `Talent : ${ability.name}`);
+	battle.add('-message', `Objet : ${item.name || 'aucun'}`);
+	battle.add('-message', `Capacités : ${moves.join(', ')}`);
+	battle.add('-message', `Nature : ${nature.name || 'inconnue'}`);
+	battle.add('-message', `Stats exactes : PV ${target.hp}/${target.maxhp} | Atq ${s.atk} | Déf ${s.def} | AtqSpé ${s.spa} | DéfSpé ${s.spd} | Vit ${s.spe}`);
 	target.addVolatile('detectiveeye', holder);
 }
 
@@ -7722,8 +7725,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		// Broche de kebab fixee a la ceinture : 3 tranches par entree, chacune soigne et accelere.
 		onStart(pokemon) {
 			pokemon.abilityState.tranches = 3;
+			pokemon.abilityState.shown = '';
 			this.add('-activate', pokemon, 'ability: Broche Rotative');
 			this.add('-message', `${pokemon.name} a une broche pleine : 3 tranches !`);
+			pokemon.showSlices();
+		},
+		onSwitchOut(pokemon) {
+			// la broche est rechargée à chaque sortie du terrain
+			pokemon.abilityState.tranches = 3;
+			pokemon.abilityState.shown = '';
 		},
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
@@ -7736,6 +7746,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
 			this.boost({ spe: 1 }, pokemon, pokemon);
 			this.add('-message', `${pokemon.name} tranche un morceau de kebab ! Il reste ${tranches - 1} tranche(s).`);
+			pokemon.showSlices();
 		},
 		flags: {},
 		name: "Broche Rotative",

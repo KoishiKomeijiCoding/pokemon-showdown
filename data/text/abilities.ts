@@ -2571,7 +2571,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	detective: {
 		name: "Detective",
-		desc: "On entry and whenever a foe switches in, reveals the foe's moves, item, ability, nature and stats. Foes become hittable by Normal and Fighting moves if Ghost and Psychic moves if Dark.",
+		desc: "On entry and whenever a foe switches in, reveals the foe's moves, item, ability, nature and exact stats in the chat (with a random fake IP address). Foes become hittable by Normal and Fighting moves if Ghost and Psychic moves if Dark.",
 		shortDesc: "Reveals foes on entry/switch-in; Normal/Fighting/Psychic ignore immunities.",
 	},
 	dieudelaforge: {
