@@ -70,7 +70,9 @@ function detectiveReveal(battle: Battle, holder: Pokemon, target: Pokemon) {
 		stats.push(`${label[stat]} ${s[stat]} (EV: ${evs[stat]}${sign}, IV: ${ivs[stat]})`);
 	}
 	// Attention : pas de '|' dans un message (séparateur du protocole), sinon le client coupe la ligne
-	battle.add('-message', `Stats exactes : ${stats.join(' ; ')}`);
+	// Une ligne par stat (et pas de '|' dans un message : séparateur du protocole, le client couperait la ligne)
+	battle.add('-message', 'Stats exactes :');
+	for (const line of stats) battle.add('-message', line);
 	target.addVolatile('detectiveeye', holder);
 }
 
