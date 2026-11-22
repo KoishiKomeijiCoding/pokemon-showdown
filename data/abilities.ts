@@ -54,8 +54,19 @@ function detectiveReveal(battle: Battle, holder: Pokemon, target: Pokemon) {
 	battle.add('-message', `Talent : ${ability.name}`);
 	battle.add('-message', `Objet : ${item.name || 'aucun'}`);
 	battle.add('-message', `Capacités : ${moves.join(', ')}`);
-	battle.add('-message', `Nature : ${nature.name || 'inconnue'}`);
-	battle.add('-message', `Stats exactes : PV ${target.hp}/${target.maxhp} | Atq ${s.atk} | Déf ${s.def} | AtqSpé ${s.spa} | DéfSpé ${s.spd} | Vit ${s.spe}`);
+	const label: { [stat: string]: string } = { atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe' };
+	let natureText = nature.name ? `${nature.name} (neutre)` : 'inconnue';
+	if (nature.plus && nature.minus) natureText = `${nature.name} (+${label[nature.plus]}, -${label[nature.minus]})`;
+	battle.add('-message', `Nature : ${natureText}`);
+	// Stat exacte, EV et IV du set ; le + / - collé aux EV indique l'effet de la nature sur cette stat
+	const evs = target.set.evs;
+	const ivs = target.set.ivs;
+	const stats = [`PV ${target.hp}/${target.maxhp} (EV: ${evs.hp}, IV: ${ivs.hp})`];
+	for (const stat of ['atk', 'def', 'spa', 'spd', 'spe'] as const) {
+		const sign = nature.plus === stat ? '+' : nature.minus === stat ? '-' : '';
+		stats.push(`${label[stat]} ${s[stat]} (EV: ${evs[stat]}${sign}, IV: ${ivs[stat]})`);
+	}
+	battle.add('-message', `Stats exactes : ${stats.join(' | ')}`);
 	target.addVolatile('detectiveeye', holder);
 }
 
