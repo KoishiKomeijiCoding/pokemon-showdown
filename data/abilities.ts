@@ -48,7 +48,7 @@ function detectiveReveal(battle: Battle, holder: Pokemon, target: Pokemon) {
 	const s = target.storedStats;
 	const moves = target.moveSlots.map(m => m.move);
 	// Ligne silencieuse (pas de texte ni d'animation) : le client mémorise talent, objet et capacités du Pokémon.
-	battle.add('-detective', target, ability.name, item.name || '', ...moves);
+	//battle.add('-detective', target, ability.name, item.name || '', ...moves); //non Claude
 	battle.add('-message', `${holder.name} lance un DDoS sur ${target.name} !`);
 	battle.add('-message', `adresse IP : ${battle.sample(IpAddresses)}`);
 	const sp = target.species;
@@ -75,6 +75,8 @@ function detectiveReveal(battle: Battle, holder: Pokemon, target: Pokemon) {
 	for (const line of stats) battle.add('-message', line);
 	target.addVolatile('detectiveeye', holder);
 }
+
+//bro pk Claude a mis une fonction ici AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH
 
 export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	noability: {
@@ -6302,11 +6304,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 
 			const moveId = 'leechseed'; 
 			const move = this.dex.getActiveMove(moveId);
-			for (const target of pokemon.adjacentFoes()) {
-				if (move) {
-					this.actions.useMove(move, pokemon,{ target: target });
-				}
-			}
+			this.actions.useMove(move, pokemon);
 		},
 		onModifyMove(move, pokemon, target) { // objectif : lancer une seule fois le move pour les 3 oppos au lieu de 3 fois sur chaque
 			if (move.id !== 'leechseed' || pokemon.spreadMoveOnSwitchIn) return;
@@ -6735,14 +6733,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	ballondiscret: {	
 		onStart(pokemon) { // onStart ?
+			pokemon.spreadMoveOnSwitchIn = true;
 			const moveId = 'smokescreen'; // ← Change this to any move you want!
 			const move = this.dex.getActiveMove(moveId);
 			this.add('-ability', pokemon, 'Ballon Discret');
-			for (const target of pokemon.adjacentFoes()) {
-				if (move) {
-					this.actions.useMove(move, pokemon,{ target: target, is_from_ability: true });
-				}
-			}
+			this.actions.useMove(move, pokemon,{is_from_ability: true });
 			this.actions.useMove('celebrate', pokemon);
 		},
 		onBasePowerPriority: 30,
@@ -6753,6 +6748,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.debug('Technician boost');
 				return this.chainModify(1.5);
 			}
+		},
+		onModifyMove(move, pokemon, target) { // objectif : lancer une seule fois le move pour les 3 oppos au lieu de 3 fois sur chaque
+			if (move.id !== 'smokescreen' || pokemon.spreadMoveOnSwitchIn) return;
+			move.target = 'allAdjacentFoes';
+			pokemon.spreadMoveOnSwitchIn = true; // on a un flag pour faire en sorte que le pokemon n'ait pas le move de base en spread (autre option : créer un move particulier)
+		},
+		onEnd(pokemon) { // reset 
+			pokemon.spreadMoveOnSwitchIn = false; // on reset le flag pour le prochain switchin
 		},
 		flags: { shitpost: 1 },
 		name: "Ballon Discret",
@@ -7062,7 +7065,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 1845,
 	},
 	urrurr: {
-		onResidual(pokemon) {
+		onDamage(damage,target, source, effect) {
+			const pokemon = target;
 			if (pokemon.baseSpecies.baseSpecies !== 'Cage Gobeline' || pokemon.transformed || !pokemon.hp) return;
 			if (pokemon.hp < pokemon.maxhp / 2) {
 				if (pokemon.species.forme === 'BaseC') {
@@ -7110,12 +7114,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			// Les âmes doivent être toutes collectées
 			if (pokemon.ameCollectee !== 0) return;
 			if (!pokemon.hp || !pokemon.isActive) return;
-            this.add('-activate', pokemon, 'Ame collectee');
+            //this.add('-activate', pokemon, 'Ame collectee');
             if (this.effectState.shown) this.add('-end', pokemon, this.effectState.shown);
             this.effectState.shown = '';
 
 			// Les 1000 âmes collectées se transforment en bouclier, et le Vrai Empereur gagne +20 aux stats (hors PV)
-			pokemon.soulShield = 1000;
+			pokemon.soulShield = 500;
 			pokemon.applyEmperorBonus(20);
 			pokemon.setAbility('trueemperor', pokemon, this.effect, true);
 
@@ -7555,7 +7559,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	detective: {
 		// onSwitchIn explicite : définir onAnySwitchIn désactive le onStart automatique du moteur
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Detective');
 			this.effectState.seen = [];
 			for (const foe of pokemon.foes()) {
 				this.effectState.seen.push(foe);
@@ -7566,6 +7571,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onAnySwitchInPriority: -2,
 		onAnySwitchIn(holder) {
 			if (!holder || holder.fainted || !holder.isActive) return;
+			this.add('-ability', holder, 'Detective');
 			const active = holder.foes();
 			const seen: Pokemon[] = (this.effectState.seen || []).filter((p: Pokemon) => active.includes(p));
 			for (const foe of active) {
@@ -7666,7 +7672,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	moaiiii: {
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
-		onResidual(pokemon) {
+		onResidual(target) {
+			this.add('-ability', target, 'Moaiiii');
+
+			const r = this.random(100);
+			if (r < 11) {
+				this.field.setTerrain('mistyterrain'); 
+			} else if (r < 21) {
+				this.field.setTerrain('electricterrain');
+			} else if (r < 30) {
+				this.field.setTerrain('psychicterrain');
+			} else if (r < 40) {
+				this.field.setTerrain('grassyterrain');
+			}
+
 			for (const pokemon of this.getAllActive()) {
 				let stats: BoostID[] = [];
 				const boost: SparseBoostsTable = {};
@@ -7691,18 +7710,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				randomStat = stats.length ? this.sample(stats) : undefined;
 				if (randomStat) boost[randomStat] = -1;
 
-				this.boost(boost, pokemon, pokemon);
-			
-				const r = this.random(100);
-				if (r < 11) {
-					this.field.setTerrain('mistyterrain'); 
-				} else if (r < 21) {
-					this.field.setTerrain('electricterrain');
-				} else if (r < 30) {
-					this.field.setTerrain('psychicterrain');
-				} else if (r < 40) {
-					this.field.setTerrain('grassyterrain');
-				}
+				this.boost(boost, pokemon, null, null, true);
 			}
 		},
 		flags: {},
