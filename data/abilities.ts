@@ -7767,4 +7767,104 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 3100,
 	},
+	patriotisme: {
+		// Le Coq Francais : pose la République (Liberté, Égalité, Fraternité) tant qu'il est sur le terrain
+		onStart(pokemon) {
+			if (this.field.pseudoWeather['republique']) {
+				this.add('-activate', pokemon, 'ability: Patriotisme');
+			} else {
+				// le message -fieldstart affiche déjà la bulle du talent
+				this.field.addPseudoWeather('republique', pokemon, this.effect);
+			}
+			// Égalité : on cumule les boosts (positifs et négatifs) de tout le monde, on les supprime,
+			// puis on les redistribue un par un dans le sens horaire en commençant par le Coq,
+			// stat par stat dans l'ordre Atq, Déf, Atq. Spé, Déf. Spé, Vit, Préc, Esq.
+			// Les Pokémon qui empêchent qu'on touche à leurs boosts (True Emperor) sont exclus.
+			const protege = (p: Pokemon) => p !== pokemon && p.hasAbility('trueemperor');
+			// Sens horaire vu par le joueur du Coq (son camp en bas) : en double, son slot a est en bas à gauche,
+			// puis on remonte vers l'adversaire en haut à gauche (slot b), en haut à droite (slot a),
+			// et on redescend en bas à droite (slot b du camp du Coq). En simple : Coq, adversaire, Coq...
+			// En free for all : ordre horaire des joueurs p1, p4, p2, p3 (le même que Court Change).
+			let cercle: Pokemon[];
+			if (this.gameType === 'freeforall') {
+				cercle = [0, 3, 1, 2].map(n => this.sides[n]?.active[0]);
+			} else {
+				const camp = pokemon.side.active;
+				const adverses = this.sides.filter(side => side !== pokemon.side).flatMap(side => [...side.active].reverse());
+				cercle = [camp[0], ...adverses, ...camp.slice(1).reverse()];
+			}
+			cercle = cercle.filter(p => p?.hp && !protege(p));
+			const depart = cercle.indexOf(pokemon);
+			const participants = depart < 0 ? cercle : [...cercle.slice(depart), ...cercle.slice(0, depart)];
+			const ordreStats: BoostID[] = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
+			const nomsStats: { [k in BoostID]: string } = {
+				atk: 'Atq', def: 'Déf', spa: 'Atq. Spé', spd: 'Déf. Spé', spe: 'Vit', accuracy: 'Préc', evasion: 'Esq',
+			};
+			const cumul: { [k in BoostID]?: number } = {};
+			let aRedistribuer = false;
+			for (const p of participants) {
+				for (const stat of ordreStats) {
+					if (p.boosts[stat]) {
+						cumul[stat] = (cumul[stat] || 0) + p.boosts[stat];
+						aRedistribuer = true;
+					}
+				}
+			}
+			if (aRedistribuer && participants.length > 1) {
+				for (const p of participants) {
+					p.clearBoosts();
+					this.add('-clearboost', p, '[silent]');
+				}
+				let tour = 0;
+				for (const stat of ordreStats) {
+					const net = cumul[stat] || 0;
+					const signe = Math.sign(net);
+					for (let unite = 0; unite < Math.abs(net); unite++) {
+						// un Pokémon déjà à +6 / -6 laisse sa part au suivant
+						let essais = participants.length;
+						while (essais-- > 0) {
+							const cible = participants[tour % participants.length];
+							tour++;
+							if (Math.abs(cible.boosts[stat] + signe) <= 6) {
+								cible.boosts[stat] += signe;
+								break;
+							}
+						}
+					}
+				}
+				const resume: string[] = [];
+				for (const p of participants) {
+					const parts: string[] = [];
+					for (const stat of ordreStats) {
+						if (!p.boosts[stat]) continue;
+						this.add('-setboost', p, stat, p.boosts[stat], '[silent]');
+						parts.push(`${p.boosts[stat] > 0 ? '+' : ''}${p.boosts[stat]} ${nomsStats[stat]}`);
+					}
+					resume.push(`${p.name} : ${parts.length ? parts.join(', ') : 'rien'}`);
+				}
+				this.add('-message', `Égalité ! Les boosts de tous sont redistribués. ${resume.join(' / ')}`);
+			}
+
+			// Fraternité : Pain Split général entre tous les Pokémon sur le terrain
+			const actives = this.getAllActive().filter(p => p.hp);
+			if (actives.length < 2) return;
+			const total = actives.reduce((sum, p) => sum + p.hp, 0);
+			const average = Math.floor(total / actives.length) || 1;
+			this.add('-message', `Fraternité ! Tous les Pokémon sur le terrain partagent leurs PV.`);
+			for (const target of actives) {
+				target.sethp(average);
+				this.add('-sethp', target, target.getHealth, '[from] ability: Patriotisme', '[silent]');
+			}
+		},
+		onEnd(pokemon) {
+			for (const other of this.getAllActive()) {
+				if (other !== pokemon && other.hp && other.hasAbility('patriotisme')) return;
+			}
+			this.field.removePseudoWeather('republique');
+		},
+		flags: {},
+		name: "Patriotisme",
+		rating: 4,
+		num: 3101,
+	},
 };

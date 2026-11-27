@@ -6481,4 +6481,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	punkcybernetique: {
 		tier: "shitpostou"
 	},
+	lecoqfrancais: {
+		tier: "shitpostou",
+	},
 };

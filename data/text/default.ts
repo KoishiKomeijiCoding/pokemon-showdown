@@ -359,6 +359,13 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  Electricity's power was weakened!",
 		end: "  The effects of Mud Sport have faded.",
 	},
+	republique: {
+		start: "  La République est proclamée : Liberté, Égalité, Fraternité !",
+		end: "  La République est tombée...",
+	},
+	maillotjaune: {
+		start: "  [POKEMON] porte le Maillot Jaune !",
+	},
 	trickroom: {
 		start: "  [POKEMON] twisted the dimensions!",
 		end: "  The twisted dimensions returned to normal!",
