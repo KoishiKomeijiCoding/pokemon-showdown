@@ -23128,7 +23128,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Physical",
 		name: "Mega Uppercut",
 		pp: 10,
-		priority: 0,
+		priority: -1,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
 		forceSwitch: true,
 		target: "normal",
@@ -24226,16 +24226,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onResidualOrder: 18,
 			onResidual(pokemon)
 			 {const x = Math.floor (Math.random()*(3))
-				for (const target of pokemon.adjacentFoes()) {
-						if (x == 0) {
-						target.addVolatile('confusion', target, this.effect);
-						}
-						if (x == 1) {
-						this.actions.useMove('acid', pokemon,{ target: target });
-						}
-						if (x == 2) {
-						this.actions.useMove('zyklonb', pokemon,{ target: target });
-						}
+				if (x == 1) {
+					this.actions.useMove('acid', pokemon);
+				}
+				if (x == 2) {
+					this.actions.useMove('zyklonb', pokemon);
+				}
+				if (x == 0) {
+					for (const target of pokemon.adjacentFoes()) {
+						target.addVolatile('confusion', target, this.effect);	
+					}
 				}
 			},
 			onEnd(target) {

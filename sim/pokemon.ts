@@ -1733,7 +1733,7 @@ export class Pokemon {
 	showCounter(state: EffectState, label: string, abilityName?: string) {
 		if (state.shown === label) return;
 		if (state.shown) this.battle.add('-end', this, state.shown);
-		if (abilityName) this.battle.add('-ability', this, abilityName);
+		//if (abilityName) this.battle.add('-ability', this, abilityName); c trop long
 		this.battle.add('-start', this, label);
 		state.shown = label;
 	}
