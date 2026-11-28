@@ -1040,4 +1040,103 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (pokemon.hasType('Dark') && type === 'Psychic') return false;
 		},
 	},
+	republique: {
+		// Posée par Patriotisme (Le Coq Francais), dure tant qu'un Pokémon avec Patriotisme est sur le terrain
+		name: 'Republique',
+		onFieldStart(field, source) {
+			this.add('-fieldstart', 'Republique', '[from] ability: Patriotisme', `[of] ${source}`);
+		},
+		// Liberté : personne ne peut être piégé
+		onTrapPokemonPriority: -10,
+		onTrapPokemon(pokemon) {
+			pokemon.trapped = false;
+		},
+		onMaybeTrapPokemonPriority: -10,
+		onMaybeTrapPokemon(pokemon) {
+			pokemon.maybeTrapped = false;
+		},
+		// Égalité continue : tant que la République dure, chaque cran gagné ou perdu est redistribué un par un
+		// entre tous les Pokémon actifs. Une hausse va à celui qui a le MOINS dans cette stat, une baisse à celui
+		// qui a le PLUS ; en cas d'égalité, d'abord celui qui a provoqué l'effet, sinon au hasard.
+		// Priorité basse : les protections de la cible (Clear Body, Contrary, Maillot Jaune...) passent avant.
+		onTryBoostPriority: -100,
+		onTryBoost(boost, target, source, effect) {
+			const actifs = this.getAllActive().filter(p => p.hp);
+			if (actifs.length < 2) return;
+			const nomsStats: { [k in BoostID]: string } = {
+				atk: 'Atq', def: 'Déf', spa: 'Atq. Spé', spd: 'Déf. Spé', spe: 'Vit', accuracy: 'Préc', evasion: 'Esq',
+			};
+			const recu = new Map<Pokemon, { [k in BoostID]?: number }>();
+			let stat: BoostID;
+			for (stat in boost) {
+				const delta = boost[stat]!;
+				if (!delta) continue;
+				const signe = Math.sign(delta);
+				const pourCible = { value: 0 };
+				for (let unite = 0; unite < Math.abs(delta); unite++) {
+					const valeur = (p: Pokemon) => p.boosts[stat] + (p === target ? pourCible.value : 0);
+					const candidats = actifs.filter(p => {
+						if (Math.abs(valeur(p) + signe) > 6) return false;
+						// le Maillot Jaune ne perd jamais de Vitesse
+						if (signe < 0 && stat === 'spe' && p.volatiles['maillotjaune']) return false;
+						return true;
+					});
+					if (!candidats.length) break;
+					const meilleure = signe > 0 ?
+						Math.min(...candidats.map(valeur)) : Math.max(...candidats.map(valeur));
+					const exaequo = candidats.filter(p => valeur(p) === meilleure);
+					const elu = source && exaequo.includes(source) ? source : this.sample(exaequo);
+					if (elu === target) {
+						pourCible.value += signe;
+					} else {
+						elu.boosts[stat] += signe;
+						const parts = recu.get(elu) || {};
+						parts[stat] = (parts[stat] || 0) + signe;
+						recu.set(elu, parts);
+					}
+				}
+				boost[stat] = pourCible.value;
+			}
+			if (!recu.size) return;
+			const resume: string[] = [];
+			for (const [p, parts] of recu) {
+				for (stat in parts) {
+					const n = parts[stat]!;
+					this.add(n > 0 ? '-boost' : '-unboost', p, stat, Math.abs(n), '[silent]');
+					resume.push(`${p.name} ${n > 0 ? '+' : ''}${n} ${nomsStats[stat]}`);
+				}
+			}
+			this.add('-message', `Égalité ! La République redistribue : ${resume.join(', ')}.`);
+		},
+		onFieldEnd() {
+			this.add('-fieldend', 'Republique');
+		},
+	},
+	maillotjaune: {
+		// Gagné en réussissant les 21 étapes de Tour de France : Vitesse x2 (équivalent +2) permanente,
+		// remis à chaque entrée (voir battle-actions switchIn), hors crans de stats (Égalité ne le redistribue pas)
+		name: 'Maillot Jaune',
+		noCopy: true,
+		onStart(pokemon, source, effect) {
+			if (effect?.id === 'tourdefrance') {
+				this.add('-start', pokemon, 'Maillot Jaune');
+				this.add('-message', `${pokemon.name} remporte le Maillot Jaune ! Sa Vitesse est doublée pour le reste du combat !`);
+			} else {
+				this.add('-start', pokemon, 'Maillot Jaune', '[silent]');
+			}
+		},
+		onModifySpePriority: 5,
+		onModifySpe(spe) {
+			return this.chainModify(2);
+		},
+		// Ne peut plus perdre en Vitesse
+		onTryBoost(boost, target, source, effect) {
+			if (boost.spe && boost.spe < 0) {
+				delete boost.spe;
+				if (!(effect as ActiveMove)?.secondaries) {
+					this.add('-message', `Le Maillot Jaune empêche ${target.name} de ralentir !`);
+				}
+			}
+		},
+	},
 };

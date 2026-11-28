@@ -1,5 +1,17 @@
 
 import { ClauseDialogues } from './clause-dialogues';
+import { VillesFrancaises } from './villes-francaises';
+
+/** Tour de France (Le Coq Francais) : annonce l'étape suivante, dans une ville française pas encore visitée. */
+function tourDeFranceEtape(battle: Battle, move: ActiveMove) {
+	const tour = move as ActiveMove & { etapes?: string[] };
+	tour.etapes ||= [];
+	const dejaVisitees = tour.etapes;
+	const villes = VillesFrancaises.filter(ville => !dejaVisitees.includes(ville));
+	const ville = battle.sample(villes.length ? villes : VillesFrancaises);
+	tour.etapes.push(ville);
+	battle.add('-message', `Étape ${tour.etapes.length} : ${ville}`);
+}
 // List of flags and their descriptions can be found in sim/dex-moves.ts
 
 import { doesNotThrow } from 'node:assert';
@@ -301,7 +313,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 		},
 		target: "normal",
-		type: "Fairy",
+		type: "Sound",
 	},
 	allyswitch: {
 		num: 502,
@@ -1750,7 +1762,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
 		target: "allAdjacent",
-		type: "Normal",
+		type: "Sound",
 		contestType: "Tough",
 	},
 	bounce: {
@@ -2424,7 +2436,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			volatileStatus: 'confusion',
 		},
 		target: "any",
-		type: "Flying",
+		type: "Bird",
 		contestType: "Cute",
 	},
 	chillingwater: {
@@ -2575,7 +2587,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			spe: 1,
 		},
 		target: "self",
-		type: "Dragon",
+		type: "Sound",
 	},
 	clangoroussoulblaze: {
 		num: 728,
@@ -2601,7 +2613,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			// Sheer Force negates the selfBoost even though it is not secondary
 		},
 		target: "allAdjacentFoes",
-		type: "Dragon",
+		type: "Sound",
 		contestType: "Cool",
 	},
 	clearsmog: {
@@ -2773,7 +2785,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			spa: -1,
 		},
 		target: "normal",
-		type: "Normal",
+		type: "Sound",
 		zMove: { boost: { spd: 1 } },
 		contestType: "Cute",
 	},
@@ -3093,7 +3105,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { mirror: 1, metronome: 1 },
 		onHitField(target, source) {
 			const sideConditions = [
-				'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'luckychant', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire', 'gmaxvolcalith',
+				'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'manif', 'auroraveil', 'luckychant', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire', 'gmaxvolcalith',
 			];
 			let success = false;
 			if (this.gameType === 'freeforall') {
@@ -3510,7 +3522,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onHit(target, source, move) {
 			let success = false;
 			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({ evasion: -1 });
-			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'manif'];
 			const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', ...removeAll];
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
@@ -3778,7 +3790,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
 		target: "allAdjacentFoes",
-		type: "Fairy",
+		type: "Sound",
 		contestType: "Cute",
 	},
 	discharge: {
@@ -4489,7 +4501,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 		},
 		target: "normal",
-		type: "Normal",
+		type: "Sound",
 		contestType: "Beautiful",
 	},
 	eerieimpulse: {
@@ -7565,7 +7577,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		self: {
 			onHit(source) {
 				let success = false;
-				const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+				const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'manif'];
 				const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', ...removeAll];
 				for (const targetCondition of removeTarget) {
 					if (source.side.foe.removeSideCondition(targetCondition)) {
@@ -7702,7 +7714,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
 		status: 'slp',
 		target: "normal",
-		type: "Grass",
+		type: "Sound",
 		zMove: { boost: { spe: 1 } },
 		contestType: "Clever",
 	},
@@ -7947,7 +7959,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			atk: -1,
 		},
 		target: "allAdjacentFoes",
-		type: "Normal",
+		type: "Sound",
 		zMove: { boost: { def: 1 } },
 		contestType: "Cute",
 	},
@@ -8362,7 +8374,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return success;
 		},
 		target: "allyTeam",
-		type: "Normal",
+		type: "Sound",
 		zMove: { effect: 'heal' },
 		contestType: "Beautiful",
 	},
@@ -9115,7 +9127,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			atk: 1,
 		},
 		target: "allies",
-		type: "Normal",
+		type: "Sound",
 		zMove: { boost: { atk: 1 } },
 		contestType: "Cool",
 	},
@@ -9310,7 +9322,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
 		target: "allAdjacentFoes",
-		type: "Normal",
+		type: "Sound",
 		contestType: "Cool",
 	},
 	hypnosis: {
@@ -11827,7 +11839,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			spd: -2,
 		},
 		target: "normal",
-		type: "Steel",
+		type: "Sound",
 		zMove: { boost: { spa: 1 } },
 		contestType: "Clever",
 	},
@@ -12436,7 +12448,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (pokemon.removeVolatile('leechseed')) {
 					this.add('-end', pokemon, 'Leech Seed', '[from] move: Mortal Spin', `[of] ${pokemon}`);
 				}
-				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'manif'];
 				for (const condition of sideConditions) {
 					if (pokemon.side.removeSideCondition(condition)) {
 						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Mortal Spin', `[of] ${pokemon}`);
@@ -12452,7 +12464,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
 					this.add('-end', pokemon, 'Leech Seed', '[from] move: Mortal Spin', `[of] ${pokemon}`);
 				}
-				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'manif'];
 				for (const condition of sideConditions) {
 					if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Mortal Spin', `[of] ${pokemon}`);
@@ -12891,7 +12903,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			spa: -1,
 		},
 		target: "normal",
-		type: "Normal",
+		type: "Sound",
 		zMove: { boost: { def: 1 } },
 		contestType: "Tough",
 	},
@@ -13216,7 +13228,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, sound: 1, bypasssub: 1 },
 		target: "allAdjacentFoes",
-		type: "Electric",
+		type: "Sound",
 	},
 	overheat: {
 		num: 315,
@@ -13290,7 +13302,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		selfSwitch: true,
 		target: "normal",
-		type: "Dark",
+		type: "Sound",
 		zMove: { effect: 'healreplacement' },
 		contestType: "Cool",
 	},
@@ -13382,7 +13394,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 		},
 		target: "all",
-		type: "Normal",
+		type: "Sound",
 		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Beautiful",
 	},
@@ -14243,7 +14255,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			volatileStatus: 'healblock',
 		},
 		target: "normal",
-		type: "Psychic",
+		type: "Sound",
 	},
 	psychicterrain: {
 		num: 678,
@@ -14851,7 +14863,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (pokemon.removeVolatile('leechseed')) {
 					this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', `[of] ${pokemon}`);
 				}
-				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'manif'];
 				for (const condition of sideConditions) {
 					if (pokemon.side.removeSideCondition(condition)) {
 						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', `[of] ${pokemon}`);
@@ -14867,7 +14879,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
 					this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', `[of] ${pokemon}`);
 				}
-				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'manif'];
 				for (const condition of sideConditions) {
 					if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', `[of] ${pokemon}`);
@@ -15097,7 +15109,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		target: "allAdjacentFoes",
-		type: "Normal",
+		type: "Sound",
 		contestType: "Beautiful",
 	},
 	rest: {
@@ -15311,7 +15323,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, allyanim: 1, metronome: 1, noassist: 1, failcopycat: 1 },
 		forceSwitch: true,
 		target: "normal",
-		type: "Normal",
+		type: "Sound",
 		zMove: { boost: { def: 1 } },
 		contestType: "Cool",
 	},
@@ -15668,7 +15680,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		target: "normal",
-		type: "Normal",
+		type: "Sound",
 		contestType: "Beautiful",
 	},
 	ruination: {
@@ -16004,7 +16016,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			def: -2,
 		},
 		target: "normal",
-		type: "Normal",
+		type: "Sound",
 		zMove: { boost: { atk: 1 } },
 		contestType: "Clever",
 	},
@@ -16660,7 +16672,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
 		status: 'slp',
 		target: "normal",
-		type: "Normal",
+		type: "Sound",
 		zMove: { boost: { spe: 1 } },
 		contestType: "Cute",
 	},
@@ -17313,7 +17325,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			volatileStatus: 'flinch',
 		},
 		target: "normal",
-		type: "Normal",
+		type: "Sound",
 		contestType: "Cute",
 	},
 	snowscape: {
@@ -17529,7 +17541,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		target: "allAdjacent",
-		type: "Water",
+		type: "Sound",
 		contestType: "Tough",
 	},
 	sparklyswirl: {
@@ -18738,7 +18750,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
 		volatileStatus: 'confusion',
 		target: "normal",
-		type: "Normal",
+		type: "Sound",
 		zMove: { boost: { spe: 1 } },
 		contestType: "Clever",
 	},
@@ -19900,7 +19912,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			for (const active of this.getAllActive()) {
 				if (active.removeVolatile('substitute')) success = true;
 			}
-			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'manif'];
 			const sides = [pokemon.side, ...pokemon.side.foeSidesWithConditions()];
 			for (const side of sides) {
 				for (const sideCondition of removeAll) {
@@ -20526,7 +20538,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 		},
 		target: "randomNormal",
-		type: "Normal",
+		type: "Sound",
 		contestType: "Cute",
 	},
 	uturn: {
@@ -21703,7 +21715,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			for (const active of this.getAllActive()) {
 				if (active.removeVolatile('substitute')) success = true;
 			}
-			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'manif'];
 			const sides = [pokemon.side, ...pokemon.side.foeSidesWithConditions()];
 			for (const side of sides) {
 				for (const sideCondition of removeAll) {
@@ -21875,7 +21887,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (target.status === 'slp') target.cureStatus();
 		},
 		target: "allAdjacent",
-		type: "Normal",
+		type: "Sound",
 		zMove: { boost: { spe: 1 } },
 		contestType: "Clever",
 	},
@@ -22604,7 +22616,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			target.addVolatile('torment')
 		},
 		target: "normal",
-		type: "Ghost",
+		type: "Sound",
 		zMove: { basePower: 160 },
 		contestType: "Tough",
 	},
@@ -22951,7 +22963,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			spe: 1,
 		},
 		target: "self",
-		type: "Stellar",
+		type: "Sound",
 		zMove: { boost: { atk: 1, def: 1, spa: 1, spd: 1, spe: 1 } },
 		contestType: "Clever",
 	},
@@ -23351,7 +23363,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 		},
 		target: "all",
-		type: "Dragon",
+		type: "Sound",
 		zMove: { boost: { spe: 1 } },
 		contestType: "Clever",
 
@@ -24447,5 +24459,114 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Psychic",
 		contestType: "Clever",
+	},
+	// ===== Le Coq Francais =====
+	cocorico: {
+		num: 10000,
+		accuracy: 90,
+		basePower: 150,
+		category: "Special",
+		name: "Cocorico",
+		pp: 5,
+		priority: 0,
+		flags: { recharge: 1, protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
+		self: {
+			volatileStatus: 'mustrecharge',
+		},
+		onPrepareHit(target, source) {
+			this.add('-message', `COCORICOOOOO !`);
+		},
+		target: "normal",
+		type: "Sound",
+		contestType: "Cool",
+	},
+	tourdefrance: {
+		num: 10000,
+		accuracy: 95,
+		basePower: 5,
+		category: "Physical",
+		name: "Tour de France",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, shitpost: 1 },
+		multihit: 21,
+		multiaccuracy: true,
+		// Une étape (ville française tirée au sort, sans doublon) par coup qui touche, Substitute compris
+		onHit(target, source, move) {
+			tourDeFranceEtape(this, move);
+		},
+		onAfterSubDamage(damage, target, source, move) {
+			tourDeFranceEtape(this, move);
+		},
+		// 21 étapes sur 21 : Maillot Jaune (Vitesse x2 permanente, ne se cumule pas)
+		onAfterMove(source, target, move) {
+			const etapes = (move as ActiveMove & { etapes?: string[] }).etapes;
+			if (etapes?.length !== 21 || !source.hp || source.m.maillotJaune) return;
+			source.m.maillotJaune = true;
+			source.addVolatile('maillotjaune', source, move);
+		},
+		target: "normal",
+		type: "Bird",
+		contestType: "Tough",
+	},
+	chantducoq: {
+		num: 10000,
+		accuracy: 100,
+		basePower: 60,
+		category: "Special",
+		name: "Chant du Coq",
+		pp: 10,
+		priority: 1,
+		flags: { protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1, shitpost: 1 },
+		sleepUsable: true,
+		// Réveille tous les Pokémon endormis (alliés compris) ; ceux réveillés de force flinchent
+		onAfterMove(source) {
+			if (source.status === 'slp') {
+				source.cureStatus();
+				this.add('-message', `${source.name} se réveille en chantant !`);
+			}
+			for (const pokemon of this.getAllActive()) {
+				if (pokemon === source || !pokemon.hp || pokemon.status !== 'slp') continue;
+				pokemon.cureStatus();
+				this.add('-message', `${pokemon.name} est réveillé en sursaut par le Chant du Coq !`);
+				pokemon.addVolatile('flinch', source);
+			}
+		},
+		target: "normal",
+		type: "Sound",
+		contestType: "Beautiful",
+	},
+	manif: {
+		num: 10000,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Manif",
+		pp: 20,
+		priority: 0,
+		flags: { reflectable: 1, metronome: 1, mustpressure: 1, shitpost: 1 },
+		sideCondition: 'manif',
+		condition: {
+			// Barricades : chaque Pokémon au sol qui entre perd 1 cran de Vitesse par couche (3 couches max, comme Picots)
+			onSideStart(side) {
+				this.add('-sidestart', side, 'move: Manif');
+				this.effectState.layers = 1;
+			},
+			onSideRestart(side) {
+				if (this.effectState.layers >= 3) return false;
+				this.add('-sidestart', side, 'move: Manif');
+				this.effectState.layers++;
+			},
+			onSwitchIn(pokemon) {
+				// comme Sticky Web : Vol, Lévitation, Ballon, etc. passent au-dessus des barricades
+				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
+				this.add('-activate', pokemon, 'move: Manif');
+				this.boost({ spe: -this.effectState.layers }, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('manif'));
+			},
+		},
+		target: "foeSide",
+		type: "Sound",
+		zMove: { boost: { spe: 1 } },
+		contestType: "Tough",
 	},
 };

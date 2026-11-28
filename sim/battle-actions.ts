@@ -150,6 +150,8 @@ export class BattleActions {
 		}
 		if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
 		pokemon.previouslySwitchedIn++;
+		// Maillot Jaune (Tour de France) : reste au switch, remis avant les pièges d'entrée
+		if (pokemon.m.maillotJaune) pokemon.addVolatile('maillotjaune');
 
 		if (isDrag && this.battle.gen >= 5) {
 			// runSwitch happens immediately so that Mold Breaker can make hazards bypass Clear Body and Levitate
@@ -1516,14 +1518,19 @@ export class BattleActions {
 			const gMaxMove = this.dex.moves.get(pokemon.canGigantamax);
 			if (gMaxMove.exists && gMaxMove.type === move.type) return gMaxMove;
 		}
-		const maxMove = this.dex.moves.get(this.MAX_MOVES[move.category === 'Status' ? move.category : move.type]);
+		// Types custom (Sound, Bird) sans Max Move : on retombe sur Max Strike
+		const maxMoveName = this.MAX_MOVES[move.category === 'Status' ? move.category : move.type] || this.MAX_MOVES.Normal;
+		const maxMove = this.dex.moves.get(maxMoveName);
 		if (maxMove.exists) return maxMove;
 	}
 
 	getActiveMaxMove(move: Move, pokemon: Pokemon) {
 		if (typeof move === 'string') move = this.dex.getActiveMove(move);
 		if (move.name === 'Struggle') return this.dex.getActiveMove(move);
-		let maxMove = this.dex.getActiveMove(this.MAX_MOVES[move.category === 'Status' ? move.category : move.type]);
+		const maxMoveName = this.MAX_MOVES[move.category === 'Status' ? move.category : move.type] || this.MAX_MOVES.Normal;
+		let maxMove = this.dex.getActiveMove(maxMoveName);
+		// Types custom (Sound, Bird) : Max Strike garde le type de l'attaque d'origine
+		if (move.category !== 'Status' && !this.MAX_MOVES[move.type]) maxMove.type = move.type;
 		if (move.category !== 'Status') {
 			if (pokemon.gigantamax && pokemon.canGigantamax) {
 				const gMaxMove = this.dex.getActiveMove(pokemon.canGigantamax);

@@ -8106,4 +8106,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Reveals the species (nothing else) of every remaining Pokemon on the target's team. Useful in games where teams are hidden (no Team Preview).",
 		shortDesc: "Reveals the species of all of the target's remaining Pokemon.",
 	},
+	cocorico: {
+		name: "Cocorico",
+		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move. COCORICOOOOO!",
+		shortDesc: "User cannot move next turn. COCORICOOOOO!",
+	},
+	tourdefrance: {
+		name: "Tour de France",
+		desc: "Hits 21 times, one stage of the Tour per hit (a random French city). Each hit has its own accuracy check and the move stops at the first miss. If all 21 hits connect, the user wins the Maillot Jaune: its Speed is doubled for the rest of the battle (kept when switching, cannot stack) and its Speed can no longer be lowered.",
+		shortDesc: "Hits 21 times. All 21 hit: Maillot Jaune (Speed x2, permanent).",
+	},
+	chantducoq: {
+		name: "Chant du Coq",
+		desc: "Wakes up every sleeping Pokemon on the field, allies included; each Pokemon woken up this way flinches. Can be used while asleep, in which case the user wakes up too.",
+		shortDesc: "Usable asleep. Wakes everyone up; woken Pokemon flinch.",
+	},
+	manif: {
+		name: "Manif",
+		desc: "Sets up barricades on the opposing side of the field: each grounded opposing Pokemon that switches in loses 1 stage of Speed per layer (Flying types, Levitate, Air Balloon... are immune). Up to 3 layers, like Spikes. Removed by Rapid Spin, Defog, Mortal Spin, Tidy Up; blocked by Heavy-Duty Boots.",
+		shortDesc: "Grounded foes switching in lose 1 Speed per layer. Max 3 layers.",
+
+		start: "  Des barricades ont été dressées du côté de [TEAM] !",
+		end: "  Les barricades autour de [TEAM] ont été démontées !",
+		activate: "  [POKEMON] est ralenti par les barricades de la manif !",
+	},
 };

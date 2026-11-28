@@ -21265,7 +21265,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	sixseven: {
 		num: 10000,
 		name: "Sixseven",
-		types: ["Steel","Stellar"],
+		types: ["Stellar", "Sound"],
 		gender: "N",
 		baseStats: { hp: 67, atk: 67, def: 67, spa: 67, spd: 67, spe: 67},
 		abilities: { 0: "6767" },
@@ -21329,7 +21329,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	dodoria: {
 		num: 10000,
 		name: "Dodoria",
-		types: ["Psychic","Flying"],
+		types: ["Flying", "Sound"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 120, atk: 130, def: 80, spa: 70, spd: 75, spe: 125 },
 		abilities: { 0: "auuwoh"},
@@ -21389,6 +21389,9 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 84.5,
 		color: "Blue",
 		eggGroups: ["Water 1", "Field"],
+		baseForme: "ChatGPT",
+		cosmeticFormes: ["Chat GPT-Claude", "Chat GPT-Gemini", "Chat GPT-DeepSeek", "Chat GPT-LeChatMistral"],
+		formeOrder: ["Chat GPT", "Chat GPT-Claude", "Chat GPT-Gemini", "Chat GPT-DeepSeek", "Chat GPT-LeChatMistral"],
 	},
 	miradrip: {
 		num: 10000,
@@ -21520,7 +21523,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	boulistehero: {
 		num: 10000,
 		name: "Bouliste Hero",
-		types: ["Rock"],
+		types: ["Rock", "Sound"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 90, atk: 130, def: 100, spa: 85, spd: 100, spe: 85 },
 		abilities: { 0: "Musique Cool"},
@@ -22102,5 +22105,16 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		eggGroups: ["Human-Like"],
 	},
+	lecoqfrancais: { // coq gaulois : Liberte, Egalite, Fraternite
+		num: 10000,
+		name: "Le Coq Francais",
+		types: ["Bird", "Sound"],
+		gender: "M",
+		baseStats: { hp: 87, atk: 99, def: 78, spa: 89, spd: 98, spe: 92 },
+		abilities: { 0: "Patriotisme" },
+		heightm: 0.7,
+		weightkg: 3.5,
+		color: "Blue",
+		eggGroups: ["Flying"],
+	},
 };
-

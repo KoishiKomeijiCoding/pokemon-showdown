@@ -2583,4 +2583,9 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Broche Rotative",
 		shortDesc: "3 slices per entry: each turn eats one, healing 1/8 HP and +1 Spe (no cap).",
 	},
+	patriotisme: {
+		name: "Patriotisme",
+		desc: "While this Pokemon is active, the Republique is in effect: no Pokemon can be trapped (Liberte). On activation, all stat stage changes (positive and negative) of every active Pokemon are pooled, cleared and handed back one by one, clockwise starting with this Pokemon, in the order Atk, Def, SpA, SpD, Spe, accuracy, evasion; Pokemon with True Emperor are left out (Egalite). While the Republique lasts, every stat stage gained or lost is also handed out one stage at a time among all active Pokemon: a raise goes to whoever has the lowest stage in that stat, a drop to whoever has the highest; ties go to the Pokemon that caused the change, then at random. Then all active Pokemon share their HP equally, like a Pain Split between everyone (Fraternite).",
+		shortDesc: "While active: nobody trapped, stat changes shared out. On entry: boosts pooled and redistributed; Pain Split for all.",
+	},
 };

@@ -14,9 +14,9 @@ const [,, workerId, count, baseSeed, outDir, maxTurnsArg, modeArg] = process.arg
 const MAX_TURNS = +(maxTurnsArg || 100);
 const MODE = modeArg || 'mixed';
 
-const NEW_SPECIES = ['Sherlock Holmes', 'Hephaistos', 'Punk Cybernetique'];
-const NEW_MOVES = ['masterpiece', 'enquetespeciale', 'lameakebab', 'gicleedesaucealgerienne', 'durumexpress', 'balles'];
-const NEW_ABILITIES = ['detective', 'dieudelaforge', 'brocherotative'];
+const NEW_SPECIES = ['Sherlock Holmes', 'Hephaistos', 'Punk Cybernetique', 'Le Coq Francais', 'Dodoria', 'Sixseven', 'Bouliste Hero'];
+const NEW_MOVES = ['masterpiece', 'enquetespeciale', 'lameakebab', 'gicleedesaucealgerienne', 'durumexpress', 'balles', 'cocorico', 'tourdefrance', 'chantducoq', 'manif', 'chatter', 'hypervoice', 'boomburst'];
+const NEW_ABILITIES = ['detective', 'dieudelaforge', 'brocherotative', 'patriotisme'];
 const FORGE = Pokemon.FORGE_ITEMS.map(i => i.id);
 const allSpecies = Dex.species.all().filter(s => s.exists && !s.isNonstandard || (s.exists && s.num >= 10000));
 const customSpecies = Dex.species.all().filter(s => s.exists && s.num >= 10000 && !s.name.endsWith('-Mega'));
@@ -137,6 +137,7 @@ function makeTeam(rng, kind, minSize = 1) {
 		if (name === 'Sherlock Holmes') opts.mustMoves = ['enquetespeciale'];
 		if (name === 'Punk Cybernetique') opts.mustMoves = ['lameakebab', 'durumexpress'];
 		if (name === 'Tung Tung Tung Sahur') opts.mustMoves = ['brainrot'];
+		if (name === 'Le Coq Francais') opts.mustMoves = ['tourdefrance', 'chantducoq', 'manif'];
 		team.push(makeSet(rng, name, opts));
 	}
 	return team;
